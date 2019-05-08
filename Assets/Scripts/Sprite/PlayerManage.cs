@@ -69,13 +69,13 @@ public class PlayerManage : MonoBehaviour
     public enum PlayerAnimState
     {
         /// <summary>
-        /// 玩耍状态
-        /// </summary>
-        run,
-        /// <summary>
         /// 默认状态
         /// </summary>
         idle,
+        /// <summary>
+        /// 玩耍状态
+        /// </summary>
+        run,
         /// <summary>
         /// 张嘴状态
         /// </summary>
