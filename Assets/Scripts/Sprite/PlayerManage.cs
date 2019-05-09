@@ -10,7 +10,7 @@ public class PlayerManage : MonoBehaviour
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-        EventManage.Instance.LogWrap(">>" + Application.platform.ToString());
+        AppManage.Instance.LogWrap(">>" + Application.platform.ToString());
     }
 
     // Update is called once per frame

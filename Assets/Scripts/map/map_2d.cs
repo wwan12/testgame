@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -25,8 +26,8 @@ public class map_2d : MonoBehaviour
 
     public Vector3Int startTile;
  
-    int[,][] map;//二维地图 x纵列坐标，y横列坐标,(0道路，1墙),(展示tile序号),(结束符-1)
-    int[,][] resourcesMap;//资源地图,x纵列坐标,y横列坐标,(0无资源，1有资源)，(资源类型),(结束符-1)
+    int[,][] map;//二维地图 x纵列坐标，y横列坐标,(0道路，1墙),(展示tile序号),(结束符|分隔符,)
+    int[,][] resourcesMap;//资源地图,x纵列坐标,y横列坐标,(0无资源，1有资源)，(资源类型),(结束符|)
 
     [Range(0, 100)]
     public int probability;
@@ -50,7 +51,17 @@ public class map_2d : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenerateMap();
+        map = new int[width, height][];
+        resourcesMap = new int[width, height][];
+        if (AppManage.Instance.saveData.isNew)
+        {
+            GenerateMap();
+        }
+        else {
+            ReadMap(AppManage.Instance.saveData.mapData);
+        }
+       
+       
     }
 
     // Update is called once per frame
@@ -61,8 +72,6 @@ public class map_2d : MonoBehaviour
 
     void GenerateMap()
     {
-        map = new int[width, height][];
-        resourcesMap = new int[width, height][];
         RandomFillMap();    //随机生成地图
         RandomFillResMap();
         for (int i = 0; i < 2; i++)
@@ -87,14 +96,13 @@ public class map_2d : MonoBehaviour
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
                     //边缘是墙
-                    map[i, j] = new int[3];
+                    map[i, j] = new int[2];
                     map[i, j][0] = 1;
                 }
                 else {
-                    map[i, j] = new int[3];
+                    map[i, j] = new int[2];
                     map[i, j][0] = (pseudoRandom.Next(0, 100) < probability) ? 1 : 0;  //1是墙，0是空地
                 }
-                map[i, j][map[i, j].Length - 1] = -1;
             }
         }
     }
@@ -111,15 +119,14 @@ public class map_2d : MonoBehaviour
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
                     //边缘是不生成资源
-                    resourcesMap[i, j] = new int[3];
+                    resourcesMap[i, j] = new int[2];
                     resourcesMap[i, j][0] = 0;
                 }
                 else
                 {
-                    resourcesMap[i, j] = new int[3];
+                    resourcesMap[i, j] = new int[2];
                     resourcesMap[i, j][0] = (pseudoRandom.Next(0, 100) < resourceDensity) ? 1 : 0; 
                 }
-                resourcesMap[i, j][resourcesMap[i, j].Length - 1] = -1;
             }
         }
     }
@@ -141,21 +148,52 @@ public class map_2d : MonoBehaviour
                     else
                     {
                         wallMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), wallTile);
-                    }
-
-
-                  
+                    }          
                 }
             }
         }
     }
-    //储存地图
-    public void SaveMap() {
+
+    public void CreateMap() {
 
 
     }
+
+    //储存地图
+    public void SaveMap() {
+        StringBuilder saveData = new StringBuilder();
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                saveData.Append(i);
+                saveData.Append(",");
+                saveData.Append(j);
+                saveData.Append(",");
+                for (int c = 0; c < map[i, j].Length; c++)
+                {
+                    saveData.Append(map[i,j][c]);
+                    if (!(c== map[i, j].Length-1))
+                    {
+                        saveData.Append(",");
+                    }
+                }
+                saveData.Append("|");
+            }
+        }
+    }
     //读取地图
-    public void ReadMap() {
+    public void ReadMap(string save) {
+        string[] tileDatas= save.Split('|');
+        for (int i = 0; i < tileDatas.Length; i++)
+        {
+            string[] tileData= tileDatas[i].Split(',');
+            for (int j = 2; j < tileData.Length; j++)
+            {  
+               map[int.Parse(tileData[0]), int.Parse(tileData[1])][j]=int.Parse(tileData[j]);           
+            }
+        }
+        DrawMap();
     }
 
 

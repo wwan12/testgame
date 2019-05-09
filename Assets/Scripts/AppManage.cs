@@ -4,20 +4,23 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class EventManage
+public class AppManage
 {
-    private static readonly EventManage _instance = new EventManage();
+    private static readonly AppManage _instance = new AppManage();
     private static readonly List<EventListen> eventQueue=new List<EventListen>();
     public Dictionary<string,object> datas =new Dictionary<string, object>();
     public const string ANDROIDOS = "UNITY_ANDROID";
     public const string IOSOS = "UNITY_IOS";
     public const string WINDOWSOS = "UNITY_WINDOWS";
-    private const string SAVEFILENAME = "StreamingFile" + "/byBin.dat";
+    private const string SAVEFILENAME ="/byBin.dat";
+    //不同平台下StreamingAssets的路径是不同的，这里需要注意一下。
+    public string PathURL;
+    public event EventHandler StartSuccessCallBack;
     public event EventHandler SaveSuccessCallBack;
     public event EventHandler LoadSuccessCallBack;
     public delegate void OSListen();
     public delegate void EventListen(string l);
-    public static EventManage Instance
+    public static AppManage Instance
     {
         get
         {
@@ -25,7 +28,7 @@ public class EventManage
         }
     }
 
-    private EventManage() { Init(); }
+    private AppManage() { Init(); }
 
     /**
      * 共享属性
@@ -33,20 +36,25 @@ public class EventManage
     public string name = "world";
     public string RunOS = WINDOWSOS;
     public string systemInfo;
+    public SingleSave saveData;
+
     /// <summary>
     /// 初始化获取系统信息等
     /// </summary>
     void Init() {
 #if UNITY_IOS
        RunOS = IOSOS;
+         PathURL= Application.dataPath + "/Raw/";
 #endif
 
 #if UNITY_ANDROID
      RunOS = ANDROIDOS;
+         PathURL="jar:file://" + Application.dataPath + "!/assets/"; 
 #endif
 
-#if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
         RunOS = WINDOWSOS;
+    PathURL="file://" + Application.dataPath + "/StreamingAssets/";
 
 #endif
        
@@ -142,9 +150,16 @@ public class EventManage
         /// </summary>
     private void SaveByBin()
     {
+        Save save = LoadByBin();
         //序列化过程（将Save对象转换为字节流）
         //创建Save对象并保存当前游戏状态
-        Save save = CreateSaveGO();
+        if (save == null)
+        {
+            save = CreateSaveGO();
+        }
+        else {
+            save.singleSaves[saveData.listIndex] = saveData;
+        }       
         //创建一个二进制格式化程序
         BinaryFormatter bf = new BinaryFormatter();
         //创建一个文件流
@@ -153,7 +168,6 @@ public class EventManage
         bf.Serialize(fileStream, save);
         //关闭流
         fileStream.Close();
-
         //如果文件存在，则显示保存成功
         if (System.IO.File.Exists(Application.dataPath + SAVEFILENAME))
         {
@@ -164,7 +178,7 @@ public class EventManage
     /// <summary>
     ///二进制方法： 读档
     /// </summary>
-    private void LoadByBin()
+    private Save LoadByBin()
     {
         if (System.IO.File.Exists(Application.dataPath + SAVEFILENAME))
         {
@@ -177,27 +191,36 @@ public class EventManage
             Save save = (Save)bf.Deserialize(fileStream);
             //关闭文件流
             fileStream.Close();
-            SetGame(save);
+           // SetGame(save);
+            return save;
         }
         else
         {
-            
+            return null;
         }
     }
-
     /// <summary>
-    /// 通过读档信息重置我们的游戏状态（分数、激活状态的怪物）
+    /// 传递直接开始新游戏事件
+    /// </summary>
+    public void StartGame() {
+        saveData = CreateSaveGO().singleSaves[0];
+        StartSuccessCallBack(this, saveData);
+        SaveByBin();
+    }
+    /// <summary>
+    /// 传递读档信息重置游戏事件
     /// </summary>
     /// <param name="save"></param>
-    private void SetGame(Save save)
+    public void SetGame(int saveIndex)
     {
-        LoadSuccessCallBack(this,save);
+        saveData = LoadByBin().singleSaves[saveIndex];
+        LoadSuccessCallBack(this, saveData);
     }
     /// <summary>
     /// 创建Save对象并存储当前游戏状态信息
     /// </summary>
     /// <returns>存档对象</returns>
-    public Save CreateSaveGO()
+    private Save CreateSaveGO()
     {
         //新建Save对象
         Save save = new Save();
@@ -208,10 +231,19 @@ public class EventManage
     [System.Serializable]
     public class Save: EventArgs
     {
-        public List<int> livingTargetPositions = new List<int>();
-        public List<int> livingMonsterTypes = new List<int>();
+        public int listLe=0;//4个存档位，0是自动存档
 
-        public int shootNum = 0;
-        public int score = 0;
+        public SingleSave[] singleSaves = new SingleSave[4];
+
+    }
+    [System.Serializable]
+    public class SingleSave : EventArgs
+    {
+        public int listIndex = 0;
+        public bool isNew = true;
+        public int money = 0;
+        public int hp = 0;
+        public int mp = 0;
+        public string mapData = "";
     }
 }

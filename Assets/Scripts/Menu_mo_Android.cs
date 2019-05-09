@@ -54,7 +54,7 @@ public class Menu_mo_Android : MonoBehaviour
         {
             if (time == 0 || Time.time - time < 3000)
             {
-                EventManage.Instance.ToastAndroid("再次按下返回键退出");
+                AppManage.Instance.ToastAndroid("再次按下返回键退出");
             }
             else
             {
@@ -75,7 +75,7 @@ public class Menu_mo_Android : MonoBehaviour
             imei = telephoneyManager.Call<string>("getMeid");//电信的手机 是MEID
         }
         //imei1 = telephoneyManager.Call<string>("getImei", 1);
-        EventManage.Instance.LogWrap(imei);
+        AppManage.Instance.LogWrap(imei);
     }
 
     private IEnumerator LoadingScene()
