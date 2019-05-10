@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System;
 
 /// <summary>
-/// 物品抓取控制器，实现用鼠标拖动物品功能。
+/// 物品控制器，实现用鼠标拖动物品功能。
 /// </summary>
 public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerEnterHandler, IPointerExitHandler,IDropHandler, IPointerClickHandler
 {
@@ -25,7 +25,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     private float timer = 0f;
     private bool pointEntered = false;
 
-    private ItemInfo info;
+    public ItemInfo info;//当前的物品信息，为null即为无物品
     /// <summary>
     /// 使用当前物品的事件
     /// </summary>
@@ -39,7 +39,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     void Update()
     {
-        if (pointEntered && timer <= hoverTimer)
+        if (info!=null&&pointEntered && timer <= hoverTimer)
         {
             timer += Time.deltaTime;
             if (timer > hoverTimer)
@@ -49,6 +49,9 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         }
     }
 
+    public void AddItem(ItemInfo info) {
+        this.info = info;
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         transform.SetParent(canvas);
@@ -92,7 +95,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     public void OnDrop(PointerEventData eventData)
     {
         // 先让物品栏高亮效果消失
-        lastSlot.GetComponent<DropController>().HideColor();
+        lastSlot.GetComponent<LatticeController>().HideColor();
         var dc = eventData.pointerDrag.GetComponent<ItemInBagController>();
         var tempSlot = dc.lastSlot;
         dc.PutItem(lastSlot);

@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class ItemInfoPanel : MonoBehaviour
 {
-    public Font font;
-
     private void Start()
     {
 
@@ -30,7 +28,7 @@ public class ItemInfoPanel : MonoBehaviour
         var obj = new GameObject(objectName);
         obj.transform.SetParent(transform);
         var typeText = obj.AddComponent(typeof(Text)) as Text;
-        typeText.font = font;
+        //typeText.font = font;
         typeText.text = text;
     }
 

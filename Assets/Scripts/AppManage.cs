@@ -18,6 +18,7 @@ public class AppManage
     public event EventHandler StartSuccessCallBack;
     public event EventHandler SaveSuccessCallBack;
     public event EventHandler LoadSuccessCallBack;
+    public event EventHandler ToSaveCallBack;
     public delegate void OSListen();
     public delegate void EventListen(string l);
     public static AppManage Instance
@@ -245,5 +246,6 @@ public class AppManage
         public int hp = 0;
         public int mp = 0;
         public string mapData = "";
+        public string bagData = "";
     }
 }

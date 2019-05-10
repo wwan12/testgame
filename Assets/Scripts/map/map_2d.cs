@@ -181,6 +181,7 @@ public class map_2d : MonoBehaviour
                 saveData.Append("|");
             }
         }
+        AppManage.Instance.saveData.mapData = saveData.ToString();
     }
     //读取地图
     public void ReadMap(string save) {
