@@ -4,19 +4,22 @@ using UnityEngine.EventSystems;
 using System;
 
 /// <summary>
-/// 物品控制器，实现用鼠标拖动物品功能。
+/// 物品控制器
 /// </summary>
 public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerEnterHandler, IPointerExitHandler,IDropHandler, IPointerClickHandler
 {
+    [HideInInspector]
     public RectTransform canvas;
     // 储存物品最放的最近一个物品栏
+    [HideInInspector]
     public RectTransform lastSlot;
 
     // 这个参数用来调整鼠标点击时，鼠标坐标与物品坐标的偏移量
     private Vector3 dragOffset;
     private CanvasGroup canvasGroup;
-
+    [HideInInspector]
     public GameObject itemInfoPanel; // 物品信息面板
+    [HideInInspector]
     public Vector2 offset; // Tooltips 面板偏移量
 
     private static float hoverTimer = 0f; // 鼠标悬停时间
@@ -24,17 +27,22 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     private float timer = 0f;
     private bool pointEntered = false;
-
+    [HideInInspector]
     public ItemInfo info;//当前的物品信息，为null即为无物品
     /// <summary>
     /// 使用当前物品的事件
     /// </summary>
     public event EventHandler UseItemCallBack;
+    private Image image;
+    private Text text;
 
     private void Start()
     {
         lastSlot = transform.parent as RectTransform;
         canvasGroup = GetComponent<CanvasGroup>();
+        image = GetComponent<Image>();
+        text = GetComponentInChildren<Text>();
+
     }
 
     void Update()
@@ -50,7 +58,18 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     }
 
     public void AddItem(ItemInfo info) {
-        this.info = info;
+        if (info==null)
+        {
+            this.info = info;
+            image.sprite = info.sprite;
+            text.text = info.num.ToString();
+        }
+        else
+        {
+            this.info.num = this.info.num + info.num;
+            text.text = this.info.num.ToString();
+        }
+       
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -117,8 +136,11 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
 
     public void UseItem() {
-        UseItemCallBack(this,info);
-       // lastSlot.GetComponent<DropController>().HideColor();
+        if (info.isUse)
+        {
+            UseItemCallBack(this, info);
+        }
+        // lastSlot.GetComponent<DropController>().HideColor();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

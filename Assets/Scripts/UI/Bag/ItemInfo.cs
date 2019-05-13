@@ -8,7 +8,7 @@ public class ItemInfo: EventArgs
     public string type;
     public string note;
     public int num;
-    public bool isUse;
+    public bool isUse=true;
     public int bagNum;
     public Sprite sprite;
 }

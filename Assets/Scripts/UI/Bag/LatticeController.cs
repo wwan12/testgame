@@ -10,12 +10,16 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     private Color hightLightColor;
     private Color hideColor;
     private Image image;
+    [HideInInspector]
     public ItemInBagController item;//装在这一格的物品
+    [HideInInspector]
     public int serialNumber = 0;//格子序号
     public event EventHandler UseThisItemCallBack;
+    [HideInInspector]
     public RectTransform canvas;
+    [HideInInspector]
     public GameObject itemInfoPanel; // 物品信息面板
-
+    [HideInInspector]
     public bool isNull = true;
 
     void Start()
@@ -24,7 +28,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         hideColor = new Color(1f, 1f, 1f, 0f);
         image = GetComponent<Image>();
         item = GetComponentInChildren<ItemInBagController>();
-        if (item.info==null)
+        if (item==null||item.info==null)
         {
             isNull = true;
         }
@@ -35,6 +39,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
             item.itemInfoPanel = itemInfoPanel;
             isNull = false;
         }
+     
     }
 
     private void UseItemCallBack(object obj, EventArgs itemInfo) {
@@ -42,9 +47,12 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         UseThisItemCallBack(obj,itemInfo);
     }
 
-    public void AddItem(object obj, EventArgs itemInfo) {
+    public void AddItem(ItemInfo itemInfo) {
         isNull = false;
-        item.AddItem(itemInfo as ItemInfo);
+        item.AddItem(itemInfo);
+        item.UseItemCallBack += new EventHandler(UseItemCallBack);
+        item.canvas = canvas;
+        item.itemInfoPanel = itemInfoPanel;
     }
 
     public void RemoveItem() {
