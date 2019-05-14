@@ -73,6 +73,10 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (info == null)
+        {
+            return;
+        }
         transform.SetParent(canvas);
         canvasGroup.blocksRaycasts = false;
         Vector3 worldPos;
@@ -85,6 +89,10 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (info==null)
+        {
+            return;
+        }
         Vector3 worldPos;
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas, eventData.position, null, out worldPos))
         {
@@ -94,6 +102,10 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (info == null)
+        {
+            return;
+        }
         // 没有对齐格子时，返回原来的背包格子
         if (eventData.pointerEnter == null || eventData.pointerEnter.tag != "Slot")
         {
@@ -113,10 +125,16 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     // 当有其他物品想要放在自己这格时，双方交换一下位置
     public void OnDrop(PointerEventData eventData)
     {
+        if (info == null)
+        {
+            return;
+        }
         // 先让物品栏高亮效果消失
         lastSlot.GetComponent<LatticeController>().HideColor();
         var dc = eventData.pointerDrag.GetComponent<ItemInBagController>();
         var tempSlot = dc.lastSlot;
+        tempSlot.GetComponent<LatticeController>().isNull = lastSlot.GetComponent<LatticeController>().isNull;
+        lastSlot.GetComponent<LatticeController>().isNull = true;//
         dc.PutItem(lastSlot);
         PutItem(tempSlot);
     }

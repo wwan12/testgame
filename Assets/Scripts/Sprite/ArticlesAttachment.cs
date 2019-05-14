@@ -5,15 +5,35 @@ using UnityEngine;
 public class ArticlesAttachment : MonoBehaviour
 {
     public int id;
-    [Tooltip("是否可交互")]
-    public ArticlesType type;
+    [Tooltip("物品的类型")]
+    public Warehouse.ArticlesType type;
     public string note;
     [Tooltip("支持交互的类型")]
     public InteractiveType[] prefix;
     // Start is called before the first frame update
     void Start()
     {
-        
+        switch (type)
+        {
+            case Warehouse.ArticlesType.ARTICLES:
+                break;
+            case Warehouse.ArticlesType.BUILDS:
+                gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;           
+                gameObject.AddComponent<PolygonCollider2D>().isTrigger=true;
+                break;
+            case Warehouse.ArticlesType.ENEMYS:
+                break;
+            case Warehouse.ArticlesType.NEUTRALS:
+                gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.AddComponent<PolygonCollider2D>().isTrigger = true;
+                break;
+            case Warehouse.ArticlesType.NPCS:
+                gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.AddComponent<CapsuleCollider2D>().isTrigger = true;
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -26,17 +46,15 @@ public class ArticlesAttachment : MonoBehaviour
 
     }
 
-    public enum ArticlesType
-    {
-        NOT_INTERACTIVE=0,
-        INTERACTIVE =1,
-
-    }
+  
     public enum InteractiveType
     {
-        PLAYER = 0,
-        MAP = 1,
-        BUILD=2,
+        NOT_INTERACTIVE = 0,
+        ALL = 1,
+        PLAYER = 2,
+        MAP = 3,
+        BUILD=4,
+       
 
     }
 }

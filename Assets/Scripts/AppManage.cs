@@ -46,6 +46,7 @@ public class AppManage
     /// 初始化获取系统信息等
     /// </summary>
     void Init() {
+        saveData = new SingleSave();
 #if UNITY_IOS
        RunOS = IOSOS;
          PathURL= Application.dataPath + "/Raw/";
@@ -63,7 +64,7 @@ public class AppManage
 #endif
         SetBasicValues();
         GetDeviceInfo();
-
+        Warehouse.Instance.Initialize();//初始化仓库
     }
 
    

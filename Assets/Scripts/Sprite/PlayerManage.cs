@@ -16,8 +16,9 @@ public class PlayerManage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR||UNITY_STANDALONE_WIN
         MoveOnWindows();
+        Use();
 #endif
 
 #if UNITY_ANDROID
@@ -27,11 +28,6 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_IOS
       Debug.Log("Iphone");
 #endif
-
-#if UNITY_STANDALONE_WIN
-        MoveOnWindows();
-#endif
-
     }
 
     /// <summary>
@@ -43,22 +39,57 @@ public class PlayerManage : MonoBehaviour
         float V = Input.GetAxis("Vertical");
         Vector2 playerMove = new Vector2(H * speed, V * speed);
         m_Rigidbody2D.AddForce(playerMove);
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    this.gameObject.transform.Translate(Vector3.forward*speed * Time.deltaTime);
-        //}
-        //if (Input.GetKey(KeyCode.S))
-        //{
-        //    this.gameObject.transform.Translate(Vector3.down * speed * Time.deltaTime);
-        //}
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    this.gameObject.transform.Translate(Vector3.left * speed * Time.deltaTime);
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    this.gameObject.transform.Translate(Vector3.right * speed * Time.deltaTime);
-        //}        
+    }
+
+    private void Use() {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            GameObject.FindObjectOfType<BagManage>().gameObject.SetActive(true);
+        }
+    }
+
+    // 碰撞开始
+    void OnCollisionEnter(Collision collision)
+    {
+       
+    }
+
+    // 碰撞结束
+    void OnCollisionExit(Collision collision)
+    {
+
+    }
+
+    // 碰撞持续中
+    void OnCollisionStay(Collision collision)
+    {
+
+    }
+
+    // 开始接触
+    void OnTriggerEnter(Collider collider)
+    {
+        ArticlesAttachment articles = collider.gameObject.GetComponent<ArticlesAttachment>();
+        if (articles == null)
+        {
+            return;
+        }
+        else
+        {
+
+        }
+    }
+
+    // 接触结束
+    void OnTriggerExit(Collider collider)
+    {
+       
+    }
+
+    // 接触持续中
+    void OnTriggerStay(Collider collider)
+    {
+     
     }
 
     private void MoveOnAndroid()

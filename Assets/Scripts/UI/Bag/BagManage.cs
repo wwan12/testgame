@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using System.Text;
 
 //todo 丢弃物品，根据物品id自动寻找添加物品，多线程优化
 
@@ -74,7 +75,28 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
             bagCapacity--;
         }
-       
+    }
+    /// <summary>
+    /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false
+    /// </summary>
+    public bool BagAddItem(int serialNumber, ItemInfo itemInfo)
+    {
+        if (serialNumber>allCapacity)
+        {
+            return false;
+        }
+        if (items[serialNumber].isNull)
+        {
+            items[serialNumber].AddItem(itemInfo);
+            bagCapacity--;
+            return true;
+        }
+        if (items[serialNumber].item.info.id==itemInfo.id)
+        {
+            items[serialNumber].item.info.num+=itemInfo.num;
+            return true;
+        }
+        return false;
     }
     /// <summary>
     /// -1没有找到
@@ -189,7 +211,46 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         items[x] = item.GetComponent<LatticeController>();
         item.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);//再将它设为canvas的子物体
     }
-   
+    /// <summary>
+    /// 0在第几格，1物品id，2数量
+    /// </summary>
+    public void SaveBagData()
+    {
+        StringBuilder saveData = new StringBuilder();
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (!items[i].isNull)
+            {
+                saveData.Append(i.ToString());
+                saveData.Append(",");
+                saveData.Append(items[i].item.info.id.ToString());
+                saveData.Append(",");
+                saveData.Append(items[i].item.info.num.ToString());
+                saveData.Append("|");
+            }
+            
+        }
+        AppManage.Instance.saveData.bagData = saveData.ToString();
+    }
+
+    public void ReadBagData(string save) {
+        string[] datas = save.Split('|');
+        for (int i = 0; i < datas.Length; i++)
+        {
+            string[] data = datas[i].Split(',');
+            ArticlesAttachment articles= Warehouse.Instance.GetAtriclesInfo(int.Parse(data[1]));
+            ItemInfo itemInfo = new ItemInfo
+            {
+                id = articles.id,
+                name = articles.name,
+                note = articles.note,
+                num = int.Parse(data[2]),
+                sprite = articles.gameObject.GetComponent<SpriteRenderer>().sprite
+            };
+            BagAddItem(int.Parse(data[0]), itemInfo);
+        }
+    }
+
    // Update is called once per frame
    void Update()
     {

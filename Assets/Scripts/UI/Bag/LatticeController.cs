@@ -43,7 +43,6 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     }
 
     private void UseItemCallBack(object obj, EventArgs itemInfo) {
-        (itemInfo as ItemInfo).bagNum = serialNumber;
         UseThisItemCallBack(obj,itemInfo);
     }
 
@@ -62,6 +61,10 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (isNull)
+        {
+            return;
+        }
         GameObject item = eventData.pointerDrag;
         item.GetComponent<ItemInBagController>().PutItem(transform as RectTransform);
         HideColor();
@@ -69,6 +72,10 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (isNull)
+        {
+            return;
+        }
         if (eventData.dragging)
         {
             LightColor();
@@ -77,6 +84,10 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (isNull)
+        {
+            return;
+        }
         if (eventData.dragging)
         {
             HideColor();

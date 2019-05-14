@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-//todo 生成资源地图,摄像机视野到达边界时自动生成，与地块交互，与资源地块交互
+//todo 生成资源地图,摄像机视野到达边界时自动生成，与地块交互，与资源地块交互,兴趣点
 public class map_2d : MonoBehaviour
 {
     [Tooltip(" 道路地图")]
@@ -44,6 +44,7 @@ public class map_2d : MonoBehaviour
     public bool useRandomSeed;
     [Tooltip("是否使用覆盖式资源")]
     public bool isCover;
+    //Interest point
 
     // Start is called before the first frame update
     void Start()
