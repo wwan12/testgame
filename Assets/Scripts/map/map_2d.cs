@@ -22,6 +22,8 @@ public class map_2d : MonoBehaviour
 
     [Tooltip("墙tile")]
     public Tile wallTile;
+    [Tooltip("视野边际的碰撞体")]
+    public GameObject boundary;
 
     public Vector3Int startTile;
  
@@ -58,8 +60,8 @@ public class map_2d : MonoBehaviour
         else {
             ReadMap(AppManage.Instance.saveData.mapData);
         }
-       
-       
+        boundary.GetComponent<PolygonCollider2D>().points=new Vector2[] { new Vector2(-width / 2, height / 2), new Vector2(-width / 2, -height / 2), new Vector2(width / 2, -height / 2), new Vector2(width / 2, height / 2) };
+
     }
 
     // Update is called once per frame

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class ArticlesAttachment : MonoBehaviour
                 gameObject.AddComponent<PolygonCollider2D>().isTrigger=true;
                 break;
             case Warehouse.ArticlesType.ENEMYS:
+                gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                gameObject.AddComponent<PolygonCollider2D>().isTrigger = true;
                 break;
             case Warehouse.ArticlesType.NEUTRALS:
                 gameObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
@@ -34,6 +37,7 @@ public class ArticlesAttachment : MonoBehaviour
             default:
                 break;
         }
+        gameObject.tag = type.ToString();
     }
 
     // Update is called once per frame
@@ -46,14 +50,23 @@ public class ArticlesAttachment : MonoBehaviour
 
     }
 
-  
+    private void OnMouseEnter()
+    {
+        GameObject.FindWithTag("Player").GetComponent<PlayerManage>().available=gameObject;
+    }
+
+    private void OnMouseExit()
+    {
+        
+    }
+
+
     public enum InteractiveType
     {
-        NOT_INTERACTIVE = 0,
-        ALL = 1,
-        PLAYER = 2,
-        MAP = 3,
-        BUILD=4,
+       
+        PLAYER = 1,
+        MAP = 2,
+        BUILD=3,
        
 
     }

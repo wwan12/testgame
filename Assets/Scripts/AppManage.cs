@@ -40,6 +40,7 @@ public class AppManage
     public SingleSave saveData;
     public float width;
     public float height;
+    
 
 
     /// <summary>

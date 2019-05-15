@@ -6,11 +6,16 @@ public class PlayerManage : MonoBehaviour
 {
     private Rigidbody2D m_Rigidbody2D;
     public float speed = 1f;
+    [Tooltip("与物品的交互范围半径")]
+    public float operationRange = 0.5f;
+    [HideInInspector]
+    public GameObject available;
     // Start is called before the first frame update
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
         AppManage.Instance.LogWrap(">>" + Application.platform.ToString());
+        
     }
 
     // Update is called once per frame
@@ -18,7 +23,7 @@ public class PlayerManage : MonoBehaviour
     {
 #if UNITY_EDITOR||UNITY_STANDALONE_WIN
         MoveOnWindows();
-        Use();
+        Operate();
 #endif
 
 #if UNITY_ANDROID
@@ -41,10 +46,25 @@ public class PlayerManage : MonoBehaviour
         m_Rigidbody2D.AddForce(playerMove);
     }
 
-    private void Use() {
+    private void Operate() {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             GameObject.FindObjectOfType<BagManage>().gameObject.SetActive(true);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (available!=null)
+            {
+                foreach (var pre in available.GetComponent<ArticlesAttachment>().prefix)
+                {
+                    if (pre == ArticlesAttachment.InteractiveType.PLAYER) {
+                        if ((available.transform.position - transform.position).sqrMagnitude<operationRange*operationRange)
+                        {
+                           //todo 如何交互
+                        }                      
+                    }
+                }
+            }
         }
     }
 
@@ -69,21 +89,31 @@ public class PlayerManage : MonoBehaviour
     // 开始接触
     void OnTriggerEnter(Collider collider)
     {
-        ArticlesAttachment articles = collider.gameObject.GetComponent<ArticlesAttachment>();
-        if (articles == null)
-        {
-            return;
-        }
-        else
-        {
+        //ArticlesAttachment articles = collider.gameObject.GetComponent<ArticlesAttachment>();
+        //if (articles == null)
+        //{
+        //    return;
+        //}
+        //else
+        //{
+        //    foreach (var pre in articles.prefix)
+        //    {
+        //        if (pre== ArticlesAttachment.InteractiveType.PLAYER)
+        //        {
+        //            available = collider.gameObject;
+        //        }
+        //    }
 
-        }
+        //}
     }
 
     // 接触结束
     void OnTriggerExit(Collider collider)
     {
-       
+        //if (collider.gameObject.GetInstanceID()==available.GetInstanceID())
+        //{
+        //    available = null;
+        //}
     }
 
     // 接触持续中
@@ -110,7 +140,7 @@ public class PlayerManage : MonoBehaviour
         /// <summary>
         /// 张嘴状态
         /// </summary>
-        open,
+        use,
         /// <summary>
         /// 吞食状态
         /// </summary>
@@ -148,7 +178,7 @@ public class PlayerManage : MonoBehaviour
                 playerAnimator.SetBool("IsOpen", false);
                 playerAnimator.SetBool("IsPlay", false);
                 break;
-            case PlayerAnimState.open:
+            case PlayerAnimState.use:
                 playerAnimator.SetBool("IsOpen", true);
                 playerAnimator.SetBool("IsIdle", false);
                 break;

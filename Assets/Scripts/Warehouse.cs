@@ -13,6 +13,7 @@ public class Warehouse
     private GameObject[] neutrals;
     private GameObject[] npcs;
     public event EventHandler<ArticlesAttachment> DestroyCallBack;
+
     public static Warehouse Instance
     {
         get
