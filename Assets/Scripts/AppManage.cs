@@ -34,12 +34,15 @@ public class AppManage
     /**
      * 共享属性
      * */
-    public string name = "world";
     public string RunOS = WINDOWSOS;
     public string systemInfo;
     public SingleSave saveData;
     public float width;
     public float height;
+    /// <summary>
+    /// 上层显示的ui可以快速关闭
+    /// </summary>
+    public GameObject openUI;
     
 
 
@@ -106,6 +109,23 @@ public class AppManage
             "\nsupportsShadows：" + SystemInfo.supportsShadows + "\nsupportsSparseTextures：" + SystemInfo.supportsSparseTextures +
            "\nsupportsStencil：" + SystemInfo.supportsStencil + "\nsupportsVertexPrograms：" + SystemInfo.supportsVertexPrograms +
            "\nsupportsVibration：" + SystemInfo.supportsVibration + "\n内存大小：" + SystemInfo.systemMemorySize;
+    }
+
+    public GameObject SetOpenUI(GameObject ui) { 
+         CanvasGroup group;
+        if (openUI!=null)
+        {
+            group = openUI.GetComponent<CanvasGroup>();
+            group.alpha = 0;
+            group.interactable =  false;
+            group.blocksRaycasts = false;
+        }
+        openUI = ui;
+        group=openUI.GetComponent<CanvasGroup>()??openUI.AddComponent<CanvasGroup>();
+        group.alpha = 1;
+        group.interactable = true;
+        group.blocksRaycasts = true;
+        return openUI;
     }
 
 
@@ -273,7 +293,6 @@ public class AppManage
     public class SingleSave : EventArgs
     {
         public int listIndex = 0;
-        public bool isNew = true;
         public int money = 0;
         public int hp = 0;
         public int mp = 0;

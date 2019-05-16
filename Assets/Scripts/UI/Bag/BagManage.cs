@@ -136,7 +136,10 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     // Use this for initialization
     void Start()
     {
-        
+        CanvasGroup group= gameObject.AddComponent<CanvasGroup>();
+        group.alpha = 0;
+        group.interactable = false;
+        group.blocksRaycasts = false;
         if (isAuto)
         {
             NotExistItems();          

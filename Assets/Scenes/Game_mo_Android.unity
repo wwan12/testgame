@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &156482517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +510,7 @@ GameObject:
   - component: {fileID: 713809989}
   - component: {fileID: 713809988}
   - component: {fileID: 713809987}
+  - component: {fileID: 713809991}
   - component: {fileID: 713809986}
   - component: {fileID: 713809985}
   m_Layer: 5
@@ -637,6 +638,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &713809991
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713809984}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &772490911
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,7 +876,7 @@ TilemapRenderer:
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
-  m_SortOrder: 3
+  m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
@@ -1537,15 +1550,16 @@ MonoBehaviour:
   resMap: {fileID: 970387132}
   baseTile:
   - {fileID: 11400000, guid: 234fb906ed679e64ba9358d2e7dcd179, type: 2}
-  resourcesTiles: []
+  resourcesTiles:
+  - {fileID: 11400000, guid: bbd09fde84430ea46bda659a75ce87c2, type: 2}
   wallTile: {fileID: 11400000, guid: 91b3aed1a2ebfc84c8ded49bb604f3f9, type: 2}
   boundary: {fileID: 1742462921}
   startTile: {x: 0, y: 0, z: 0}
   probability: 45
-  resourceDensity: 0
+  resourceDensity: 10
   width: 96
   height: 96
-  seed: 
+  seed: 0
   useRandomSeed: 1
   isCover: 0
 --- !u!4 &1846244709
@@ -1710,6 +1724,7 @@ MonoBehaviour:
   speed: 1
   operationRange: 0.5
   available: {fileID: 0}
+  weight: 1.5
   playerState: 0
   playerAnimator: {fileID: 0}
 --- !u!70 &1963019099

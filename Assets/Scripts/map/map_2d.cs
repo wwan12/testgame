@@ -28,46 +28,54 @@ public class map_2d : MonoBehaviour
     public Vector3Int startTile;
  
     int[,][] map;//二维地图 x纵列坐标，y横列坐标,(0道路，1墙),(展示tile序号),(结束符|分隔符,)
-    int[,][] resourcesMap;//资源地图,x纵列坐标,y横列坐标,(0无资源，1有资源)，(资源类型),(结束符|)
+    int[,][] resourcesMap;//资源地图,x纵列坐标,y横列坐标,(0无资源，1有资源)，(资源类型序号),(资源余量)(结束符|)
+    readonly int saveMapLength = 2;//存档长度
+    readonly int saveResLength = 3;//存档长度
+    readonly char mapEnd = '|';
+    readonly char middleEnd = '>';
 
     [Range(0, 100)]
     public int probability;
     /// <summary>
     /// 资源密度
     /// </summary>
-    [Range(0, 100)] 
+    [Range(0, 60)] 
     public int resourceDensity;
     //地图的长和高
     public int width=8;
     public int height=8;
     //种子
-    public string seed;
+    public int seed;
     //是否要使用随机种子
     public bool useRandomSeed;
     [Tooltip("是否使用覆盖式资源")]
     public bool isCover;
     //Interest point
+   
 
     // Start is called before the first frame update
     void Start()
     {
         map = new int[width, height][];
         resourcesMap = new int[width, height][];
-        if (AppManage.Instance.saveData.isNew)
-        {
-            GenerateMap();
-        }
-        else {
-            ReadMap(AppManage.Instance.saveData.mapData);
-        }
-        boundary.GetComponent<PolygonCollider2D>().points=new Vector2[] { new Vector2(-width / 2, height / 2), new Vector2(-width / 2, -height / 2), new Vector2(width / 2, -height / 2), new Vector2(width / 2, height / 2) };
+        CreateMap();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < width; i++)//监控资源余量为0时销毁对应资源地块
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (resourcesMap[i, j][0] != 0&& resourcesMap[i, j][2] == 0)
+                {
+                    resourcesMap[i, j][0] = 0;
+                    resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), null);
+                }
+            }
+        }
     }
 
     void GenerateMap()
@@ -85,9 +93,9 @@ public class map_2d : MonoBehaviour
     void RandomFillMap()
     {
         if (useRandomSeed)
-            seed = DateTime.Now.ToString();
+            seed = DateTime.Now.ToString().GetHashCode();
 
-        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+        System.Random pseudoRandom = new System.Random(seed);
 
         for (int i = 0; i < width; i++)
         {
@@ -96,11 +104,11 @@ public class map_2d : MonoBehaviour
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
                     //边缘是墙
-                    map[i, j] = new int[2];
+                    map[i, j] = new int[saveMapLength];
                     map[i, j][0] = 1;
                 }
                 else {
-                    map[i, j] = new int[2];
+                    map[i, j] = new int[saveMapLength];
                     map[i, j][0] = (pseudoRandom.Next(0, 100) < probability) ? 1 : 0;  //1是墙，0是空地
                 }
             }
@@ -108,24 +116,22 @@ public class map_2d : MonoBehaviour
     }
 
     void RandomFillResMap() {
-        if (useRandomSeed)
-            seed = DateTime.Now.ToString();
-
-        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+     
+        System.Random pseudoRandom = new System.Random(seed+99);
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
+                if (map[i,j][0]==1)
                 {
-                    //边缘是不生成资源
-                    resourcesMap[i, j] = new int[2];
+                    //墙里不生成资源
+                    resourcesMap[i, j] = new int[saveResLength];
                     resourcesMap[i, j][0] = 0;
                 }
                 else
                 {
-                    resourcesMap[i, j] = new int[2];
-                    resourcesMap[i, j][0] = (pseudoRandom.Next(0, 100) < resourceDensity) ? 1 : 0; 
+                    resourcesMap[i, j] = new int[saveResLength];
+                    resourcesMap[i, j][0] = (pseudoRandom.Next(0, 100) < resourceDensity) ? 0 : 1; 
                 }
             }
         }
@@ -141,57 +147,107 @@ public class map_2d : MonoBehaviour
             {
                 for (int j = 0; j < width; j++)
                 {
-                    if (map[i, j][0] == 0)
+                    if (map[i, j][0] == 0)//画出道路和墙
                     {
                         runMap.SetTile(new Vector3Int(j-width/2, i-height/2, 0), baseTile[map[i,j][1]] );
                     }
                     else
                     {
                         wallMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), wallTile);
-                    }          
+                    }
+                    if (resourcesMap[i,j][0]==1)//画出资源
+                    {
+                        if (resourcesMap[i, j][2]==0)
+                        {
+                            resourcesMap[i, j][0] = 0;
+                        }
+                        else
+                        {
+                            resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), resourcesTiles[resourcesMap[i, j][1]]);
+                        }                      
+                    }
                 }
             }
         }
     }
-
+    /// <summary>
+    /// 创建新地图
+    /// </summary>
     public void CreateMap() {
-
-
+       
+        boundary.GetComponent<PolygonCollider2D>().points = new Vector2[] { new Vector2(-width / 2, height / 2), new Vector2(-width / 2, -height / 2), new Vector2(width / 2, -height / 2), new Vector2(width / 2, height / 2) };
+        GenerateMap();
+    }
+    /// <summary>
+    /// 创建新地图
+    /// </summary>
+    public void CreateMap(int seed)
+    {
+        this.seed = seed;
+        useRandomSeed = false;
+        CreateMap();
     }
 
-    //储存地图
+
+    /// <summary>
+    /// 储存地图
+    /// </summary>
     public void SaveMap() {
-        StringBuilder saveData = new StringBuilder();
+        StringBuilder saveMapData = new StringBuilder();
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                saveData.Append(i);
-                saveData.Append(",");
-                saveData.Append(j);
-                saveData.Append(",");
+                saveMapData.Append(i);
+                saveMapData.Append(",");
+                saveMapData.Append(j);
+                saveMapData.Append(",");
                 for (int c = 0; c < map[i, j].Length; c++)
                 {
-                    saveData.Append(map[i,j][c]);
+                    saveMapData.Append(map[i,j][c]);
                     if (!(c== map[i, j].Length-1))
                     {
-                        saveData.Append(",");
+                        saveMapData.Append(",");
                     }
                 }
-                saveData.Append("|");
+                saveMapData.Append(middleEnd);
+                for (int d = 0; d < resourcesMap[i, j].Length; d++)
+                {
+                    saveMapData.Append(resourcesMap[i, j][d]);
+                    if (!(d == resourcesMap[i, j].Length - 1))
+                    {
+                        saveMapData.Append(",");
+                    }
+                }
+
+                saveMapData.Append(mapEnd);
             }
         }
-        AppManage.Instance.saveData.mapData = saveData.ToString();
+        AppManage.Instance.saveData.mapData = saveMapData.ToString();
     }
-    //读取地图
+
+    /// <summary>
+    ///  读取地图
+    /// </summary>
+    /// <param name="save"></param>
     public void ReadMap(string save) {
-        string[] tileDatas= save.Split('|');
+        string[] tileDatas= save.Split(mapEnd);
         for (int i = 0; i < tileDatas.Length; i++)
         {
-            string[] tileData= tileDatas[i].Split(',');
+            string[] fragments = tileDatas[i].Split(middleEnd);           
+            string[] tileData= fragments[0].Split(',');//第一位地块信息
+            string[] resTileData = fragments[1].Split(',');//第二位资源信息
+            int x = int.Parse(tileData[0]);
+            int y = int.Parse(tileData[1]);
+            map[x, y] = new int[saveMapLength];
+            resourcesMap[x, y] = new int[saveResLength];
             for (int j = 2; j < tileData.Length; j++)
             {  
-               map[int.Parse(tileData[0]), int.Parse(tileData[1])][j]=int.Parse(tileData[j]);           
+               map[x,y][j]=int.Parse(tileData[j]);           
+            }
+            for (int c = 0; c < resTileData.Length; c++)
+            {
+                resourcesMap[x, y][c] = int.Parse(resTileData[c]);
             }
         }
         DrawMap();

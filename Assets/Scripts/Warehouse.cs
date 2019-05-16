@@ -31,10 +31,10 @@ public class Warehouse
 
     public void Initialize() {
         articles= Resources.LoadAll<GameObject>("Warehouse/Articles");
-        builds = Resources.LoadAll<GameObject>("Warehouse/builds");
-        enemys = Resources.LoadAll<GameObject>("Warehouse/enemys");
-        neutrals = Resources.LoadAll<GameObject>("Warehouse/neutrals");
-        npcs = Resources.LoadAll<GameObject>("Warehouse/npcs");
+        builds = Resources.LoadAll<GameObject>("Warehouse/Builds");
+        enemys = Resources.LoadAll<GameObject>("Warehouse/Enemys");
+        neutrals = Resources.LoadAll<GameObject>("Warehouse/Neutrals");
+        npcs = Resources.LoadAll<GameObject>("Warehouse/Npcs");
 
     }
     /// <summary>
@@ -119,6 +119,7 @@ public class Warehouse
         DestroyCallBack(this, gameObject.GetComponent<ArticlesAttachment>());
         GameObject.Destroy(gameObject,t);      
     }
+
 
     public enum ArticlesType
     {

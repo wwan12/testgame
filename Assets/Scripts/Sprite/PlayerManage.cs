@@ -10,12 +10,13 @@ public class PlayerManage : MonoBehaviour
     public float operationRange = 0.5f;
     [HideInInspector]
     public GameObject available;
+   
+    public float weight=1.5f;
     // Start is called before the first frame update
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-        AppManage.Instance.LogWrap(">>" + Application.platform.ToString());
-        
+        m_Rigidbody2D.gravityScale = weight;      
     }
 
     // Update is called once per frame
@@ -47,25 +48,46 @@ public class PlayerManage : MonoBehaviour
     }
 
     private void Operate() {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            GameObject.FindObjectOfType<BagManage>().gameObject.SetActive(true);
-        }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (available!=null)
+            AppManage.Instance.openUI = GameObject.Find("Bag");
+            CanvasGroup group = AppManage.Instance.openUI.GetComponent<CanvasGroup>();
+            group.alpha = group.alpha == 1 ? 0 : 1;
+            group.interactable = group.interactable ? false : true;
+            group.blocksRaycasts = group.blocksRaycasts ? false : true;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (AppManage.Instance.openUI == null)
             {
-                foreach (var pre in available.GetComponent<ArticlesAttachment>().prefix)
-                {
-                    if (pre == ArticlesAttachment.InteractiveType.PLAYER) {
-                        if ((available.transform.position - transform.position).sqrMagnitude<operationRange*operationRange)
-                        {
-                           //todo 如何交互
-                        }                      
-                    }
-                }
+                AppManage.Instance.SetOpenUI(GameObject.Find("SelectInStar"));
+            }
+            else
+            {
+                CanvasGroup group = AppManage.Instance.openUI.GetComponent<CanvasGroup>();
+                group.alpha = 0;
+                group.interactable = false;
+                group.blocksRaycasts = false;
+                AppManage.Instance.openUI = null;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+
+        }
+
+    }
+
+    public bool InOperationRange(Vector3 opv) {
+        if ((opv - transform.position).sqrMagnitude < operationRange * operationRange)
+        {
+            return true;
+        }
+        return false;
     }
 
     // 碰撞开始

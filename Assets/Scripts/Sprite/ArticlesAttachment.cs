@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
+/// <summary>
+/// 提供物品相关信息
+/// </summary>
 public class ArticlesAttachment : MonoBehaviour
 {
     public int id;
@@ -11,6 +14,9 @@ public class ArticlesAttachment : MonoBehaviour
     public string note;
     [Tooltip("支持交互的类型")]
     public InteractiveType[] prefix;
+    [Tooltip("显示的精灵")]
+    public Sprite sprite;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +43,8 @@ public class ArticlesAttachment : MonoBehaviour
             default:
                 break;
         }
-        gameObject.tag = type.ToString();
+        gameObject.AddComponent<SpriteRenderer>().sprite=sprite;
+        gameObject.name = id.ToString();
     }
 
     // Update is called once per frame
@@ -50,15 +57,12 @@ public class ArticlesAttachment : MonoBehaviour
 
     }
 
+
     private void OnMouseEnter()
     {
-        GameObject.FindWithTag("Player").GetComponent<PlayerManage>().available=gameObject;
+        GameObject.FindWithTag("Player").GetComponent<PlayerManage>().available = gameObject;
     }
 
-    private void OnMouseExit()
-    {
-        
-    }
 
 
     public enum InteractiveType
