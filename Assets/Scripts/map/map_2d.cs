@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 //todo 生成资源地图,摄像机视野到达边界时自动生成，与地块交互，与资源地块交互,兴趣点
@@ -75,6 +76,10 @@ public class map_2d : MonoBehaviour
                     resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), null);
                 }
             }
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+
         }
     }
 
@@ -169,6 +174,14 @@ public class map_2d : MonoBehaviour
                 }
             }
         }
+        BakeMap();
+    }
+
+    void BakeMap() {
+        runMap.GetComponent<NavMeshSurface>().BuildNavMesh();
+        
+
+
     }
     /// <summary>
     /// 创建新地图
@@ -307,6 +320,15 @@ public class map_2d : MonoBehaviour
             }
         }
     }
+
+    Vector3Int GetClickPosition(Tilemap map)
+    {
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 wordPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        Vector3Int cellPosition = map.WorldToCell(wordPosition);
+        return cellPosition;
+
+    }
     //空白地方创造墙体
     void DrawTile(Vector3 vector, Tile tile)
     {
@@ -327,10 +349,10 @@ public class map_2d : MonoBehaviour
 
     }
     //销毁墙体
-    void RemoveTile(Vector3 vector)
+    void RemoveTile()
     {
-        // Vector3 mousePosition = Input.mousePosition;
-        Vector3 wordPosition = Camera.main.ScreenToWorldPoint(vector);
+         Vector3 mousePosition = Input.mousePosition;
+        Vector3 wordPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         Vector3Int cellPosition = runMap.WorldToCell(wordPosition);
         //tilemap.SetTile(cellPosition, gameUI.GetSelectColor().colorData.mTile);
         TileBase tb = runMap.GetTile(cellPosition);
@@ -344,6 +366,7 @@ public class map_2d : MonoBehaviour
         runMap.SetTile(cellPosition, null);
         //tilemap.RefreshAllTiles();
     }
+    
     /// <summary>
     /// 地图生成
     /// </summary>

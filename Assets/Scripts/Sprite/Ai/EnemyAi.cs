@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -23,9 +24,11 @@ public class EnemyAi : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        cc = this.GetComponent<CharacterController>();
+        gameObject.AddComponent<NavMeshAgent>();
 
-        animator = this.GetComponent<Animator>();//控制动画状态机中的奔跑动作调用
+        cc = gameObject.GetComponent<CharacterController>();//角色控制器（无碰撞）
+
+        animator = gameObject.GetComponent<Animator>();//控制动画状态机中的奔跑动作调用
 
         attackCounter = attackTime;//一开始只要抵达目标立即攻击
 

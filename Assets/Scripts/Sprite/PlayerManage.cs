@@ -16,7 +16,7 @@ public class PlayerManage : MonoBehaviour
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-        m_Rigidbody2D.gravityScale = weight;      
+        
     }
 
     // Update is called once per frame
