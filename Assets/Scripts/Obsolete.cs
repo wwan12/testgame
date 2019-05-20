@@ -13,4 +13,21 @@ public class Obsolete
     //GetComponent<CanvasGroup>().alpha = 0;
     //            GetComponent<CanvasGroup>().interactable = false;
     //            GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+    //ArticlesAttachment articles = collider.gameObject.GetComponent<ArticlesAttachment>();
+    //if (articles == null)
+    //{
+    //    return;
+    //}
+    //else
+    //{
+    //    foreach (var pre in articles.prefix)
+    //    {
+    //        if (pre== ArticlesAttachment.InteractiveType.PLAYER)
+    //        {
+    //            available = collider.gameObject;
+    //        }
+    //    }
+
+    //}
 }

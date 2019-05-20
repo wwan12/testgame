@@ -51,14 +51,18 @@ public class map_2d : MonoBehaviour
     public bool useRandomSeed;
     [Tooltip("是否使用覆盖式资源")]
     public bool isCover;
+    private bool isExhausted;
+    private bool hasPlayer;
+    private GameObject player;
     //Interest point
-   
+
 
     // Start is called before the first frame update
     void Start()
     {
         map = new int[width, height][];
         resourcesMap = new int[width, height][];
+        player = GameObject.FindGameObjectWithTag("Player");
         CreateMap();
 
     }
@@ -77,9 +81,11 @@ public class map_2d : MonoBehaviour
                 }
             }
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-
+        if (!hasPlayer&&Input.GetMouseButtonDown(0))
+        {           
+           Vector3 vector3= GetClickPosition(runMap);
+           player.GetComponent<PlayerManage>().CreatePlayerInMap(vector3);
+           hasPlayer = true;
         }
     }
 

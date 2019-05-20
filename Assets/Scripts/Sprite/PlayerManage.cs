@@ -1,17 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManage : MonoBehaviour
 {
     private Rigidbody2D m_Rigidbody2D;
+    private string eventLog;
+    public GameObject player;
+    public GameObject playerStateLabel;
     public float speed = 1f;
     [Tooltip("与物品的交互范围半径")]
     public float operationRange = 0.5f;
     [HideInInspector]
     public GameObject available;
-   
-    public float weight=1.5f;
+    [HideInInspector]
+    public PlayerRole role;
+    public float weight=55f;
+    public int Hp;
+    public int power;
+    public float collectSpeed;
+    public enum PlayerRole
+    {
+        BUSINESSMAN,      //
+        ENGINEER,       //
+        SPY,       //
+        INVESTIGATOR,       //侦察,点亮48*48区块
+    }
+    //Technology tree
     // Start is called before the first frame update
     void Start()
     {
@@ -48,13 +64,9 @@ public class PlayerManage : MonoBehaviour
     }
 
     private void Operate() {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))//物品栏
         {
-            AppManage.Instance.openUI = GameObject.Find("Bag");
-            CanvasGroup group = AppManage.Instance.openUI.GetComponent<CanvasGroup>();
-            group.alpha = group.alpha == 1 ? 0 : 1;
-            group.interactable = group.interactable ? false : true;
-            group.blocksRaycasts = group.blocksRaycasts ? false : true;
+            AppManage.Instance.SetOpenUI(GameObject.Find("Bag"));    
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -79,7 +91,40 @@ public class PlayerManage : MonoBehaviour
         {
 
         }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+        }
 
+    }
+    /// <summary>
+    /// 接受外界赋予的状态
+    /// </summary>
+    public void Suffer(State state,float value,string note) {
+        switch (state)
+        {
+            case State.hp:
+                break;
+            case State.power:
+                break;
+            case State.collectSpeed:
+                break;
+            case State.moveSpeed:
+                break;
+            case State.increaseOrDecrease:
+                break;
+            default:
+                break;
+        }
+        eventLog += note;
+        note = "<" + note + ">";
+        playerStateLabel.GetComponent<Text>().text += note;
+
+    }
+
+    public void CreatePlayerInMap(Vector3 vector)
+    {
+        GameObject.Instantiate(player).transform.position= vector;
     }
 
     public bool InOperationRange(Vector3 opv) {
@@ -89,7 +134,7 @@ public class PlayerManage : MonoBehaviour
         }
         return false;
     }
-
+   
     // 碰撞开始
     void OnCollisionEnter(Collision collision)
     {
@@ -111,31 +156,13 @@ public class PlayerManage : MonoBehaviour
     // 开始接触
     void OnTriggerEnter(Collider collider)
     {
-        //ArticlesAttachment articles = collider.gameObject.GetComponent<ArticlesAttachment>();
-        //if (articles == null)
-        //{
-        //    return;
-        //}
-        //else
-        //{
-        //    foreach (var pre in articles.prefix)
-        //    {
-        //        if (pre== ArticlesAttachment.InteractiveType.PLAYER)
-        //        {
-        //            available = collider.gameObject;
-        //        }
-        //    }
-
-        //}
+   
     }
 
     // 接触结束
     void OnTriggerExit(Collider collider)
     {
-        //if (collider.gameObject.GetInstanceID()==available.GetInstanceID())
-        //{
-        //    available = null;
-        //}
+
     }
 
     // 接触持续中
@@ -147,6 +174,16 @@ public class PlayerManage : MonoBehaviour
     private void MoveOnAndroid()
     {
 
+    }
+
+    public enum State
+    {
+        other,
+        hp,
+        power,
+        collectSpeed,
+        moveSpeed,
+        increaseOrDecrease,
     }
 
     public enum PlayerAnimState

@@ -113,7 +113,7 @@ public class AppManage
 
     public GameObject SetOpenUI(GameObject ui) { 
          CanvasGroup group;
-        if (openUI!=null)
+        if (openUI!=null&&openUI.GetInstanceID()!=ui.GetInstanceID())
         {
             group = openUI.GetComponent<CanvasGroup>();
             group.alpha = 0;
@@ -122,9 +122,9 @@ public class AppManage
         }
         openUI = ui;
         group=openUI.GetComponent<CanvasGroup>()??openUI.AddComponent<CanvasGroup>();
-        group.alpha = 1;
-        group.interactable = true;
-        group.blocksRaycasts = true;
+        group.alpha = group.alpha == 1 ? 0 : 1;
+        group.interactable = group.interactable ? false : true;
+        group.blocksRaycasts = group.blocksRaycasts ? false : true;
         return openUI;
     }
 

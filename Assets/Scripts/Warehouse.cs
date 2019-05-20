@@ -40,13 +40,10 @@ public class Warehouse
     /// <summary>
     /// 在指定位置创建一个仓库中的物品
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
     /// <param name="id"></param>
-    /// <param name="z"></param>
     /// <param name="type">物品的类型</param>
     /// <returns>null为在指定类型中没找到</returns>
-    public GameObject Create(float x,float y, int id, float z =0,ArticlesType type=ArticlesType.ARTICLES)
+    public GameObject Create(Vector3 vector3, int id,ArticlesType type=ArticlesType.ARTICLES)
     {
         GameObject[] cache=null;
         switch (type)
@@ -66,7 +63,7 @@ public class Warehouse
         {
             if (item.GetComponent<ArticlesAttachment>().id==id)
             {
-                GameObject art =GameObject.Instantiate<GameObject>(item, new Vector3(x, y, z), Quaternion.identity);
+                GameObject art =GameObject.Instantiate<GameObject>(item, vector3, Quaternion.identity);
                 return art;
             }
         }
