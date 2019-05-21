@@ -20,13 +20,13 @@ public class AudioManage : MonoBehaviour
 
         protected static AudioManage s_Instance;
 
-        [Header("Music Settings")]
+        [Header("音频设置")]
         public AudioClip musicAudioClip;
         public AudioMixerGroup musicOutput;
         public bool musicPlayOnAwake = true;
         [Range(0f, 1f)]
         public float musicVolume = 1f;
-        [Header("Ambient Settings")]
+        [Header("背景音频设置")]
         public AudioClip ambientAudioClip;
         public AudioMixerGroup ambientOutput;
         public bool ambientPlayOnAwake = true;
@@ -127,7 +127,10 @@ public class AudioManage : MonoBehaviour
                 }
             }
         }
-
+    /// <summary>
+    /// 添加一个新音频
+    /// </summary>
+    /// <param name="clip"></param>
         public void PushClip(AudioClip clip)
         {
             m_MusicStack.Push(clip);
@@ -137,113 +140,161 @@ public class AudioManage : MonoBehaviour
             m_MusicAudioSource.clip = clip;
             m_MusicAudioSource.Play();
         }
-
+    /// <summary>
+    /// 改变正在播放的音频
+    /// </summary>
+    /// <param name="clip"></param>
         public void ChangeMusic(AudioClip clip)
         {
             musicAudioClip = clip;
             m_MusicAudioSource.clip = clip;
         }
-
+    /// <summary>
+    /// 改变正在播放的背景音频
+    /// </summary>
+    /// <param name="clip"></param>
         public void ChangeAmbient(AudioClip clip)
         {
             ambientAudioClip = clip;
             m_AmbientAudioSource.clip = clip;
         }
 
-
+    /// <summary>
+    /// 开始播放全部音频
+    /// </summary>
         public void Play()
         {
             PlayJustAmbient();
             PlayJustMusic();
         }
-
-        public void PlayJustMusic()
+    /// <summary>
+    /// 开始播放音频
+    /// </summary>
+    public void PlayJustMusic()
         {
             m_MusicAudioSource.time = 0f;
             m_MusicAudioSource.Play();
         }
-
-        public void PlayJustAmbient()
+    /// <summary>
+    /// 开始播放背景音频
+    /// </summary>
+    public void PlayJustAmbient()
         {
             m_AmbientAudioSource.Play();
         }
-
-        public void Stop()
+    /// <summary>
+    /// 停止播放全部音频
+    /// </summary>
+    public void Stop()
         {
             StopJustAmbient();
             StopJustMusic();
         }
-
+    /// <summary>
+    /// 停止播放音频
+    /// </summary>
         public void StopJustMusic()
         {
             m_MusicAudioSource.Stop();
         }
-
+    /// <summary>
+    /// 停止播放背景音频
+    /// </summary>
         public void StopJustAmbient()
         {
             m_AmbientAudioSource.Stop();
         }
-
-        public void Mute()
+    /// <summary>
+    /// 全部音频静音
+    /// </summary>
+    public void Mute()
         {
             MuteJustAmbient();
             MuteJustMusic();
         }
-
-        public void MuteJustMusic()
+    /// <summary>
+    /// 音频音量静音
+    /// </summary>
+    public void MuteJustMusic()
         {
             m_MusicAudioSource.volume = 0f;
         }
-
-        public void MuteJustAmbient()
+    /// <summary>
+    /// 背景音频静音
+    /// </summary>
+    public void MuteJustAmbient()
         {
             m_AmbientAudioSource.volume = 0f;
         }
-
-        public void Unmute()
+    /// <summary>
+    /// 全部音频取消静音
+    /// </summary>
+    public void Unmute()
         {
             UnmuteJustAmbient();
             UnmuteJustMustic();
         }
-
-        public void UnmuteJustMustic()
+    /// <summary>
+    /// 音频取消静音
+    /// </summary>
+    public void UnmuteJustMustic()
         {
             m_MusicAudioSource.volume = musicVolume;
         }
-
-        public void UnmuteJustAmbient()
+    /// <summary>
+    /// 背景音频取消静音
+    /// </summary>
+    public void UnmuteJustAmbient()
         {
             m_AmbientAudioSource.volume = ambientVolume;
         }
-
+    /// <summary>
+    /// x秒后静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
         public void Mute(float fadeTime)
         {
             MuteJustAmbient(fadeTime);
             MuteJustMusic(fadeTime);
         }
-
-        public void MuteJustMusic(float fadeTime)
+    /// <summary>
+    /// x秒后静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
+    public void MuteJustMusic(float fadeTime)
         {
             StartCoroutine(VolumeFade(m_MusicAudioSource, 0f, fadeTime));
         }
-
-        public void MuteJustAmbient(float fadeTime)
+    /// <summary>
+    /// x秒后静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
+    public void MuteJustAmbient(float fadeTime)
         {
             StartCoroutine(VolumeFade(m_AmbientAudioSource, 0f, fadeTime));
         }
-
-        public void Unmute(float fadeTime)
+    /// <summary>
+    /// x秒后取消静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
+    public void Unmute(float fadeTime)
         {
             UnmuteJustAmbient(fadeTime);
             UnmuteJustMusic(fadeTime);
         }
-
-        public void UnmuteJustMusic(float fadeTime)
+    /// <summary>
+    /// x秒后取消静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
+    public void UnmuteJustMusic(float fadeTime)
         {
             StartCoroutine(VolumeFade(m_MusicAudioSource, musicVolume, fadeTime));
         }
-
-        public void UnmuteJustAmbient(float fadeTime)
+    /// <summary>
+    /// x秒后取消静音
+    /// </summary>
+    /// <param name="fadeTime"></param>
+    public void UnmuteJustAmbient(float fadeTime)
         {
             StartCoroutine(VolumeFade(m_AmbientAudioSource, ambientVolume, fadeTime));
         }

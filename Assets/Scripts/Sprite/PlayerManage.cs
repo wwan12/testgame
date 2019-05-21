@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class PlayerManage : MonoBehaviour
 {
     private Rigidbody2D m_Rigidbody2D;
-    private string eventLog;
-    public GameObject player;
+    private List<string> eventLog;
+    [Tooltip("角色信息栏")]
     public GameObject playerStateLabel;
-    public float speed = 1f;
+    [Tooltip("多用途菜单栏（文件夹样式）")]
+    public GameObject menu;
     [Tooltip("与物品的交互范围半径")]
     public float operationRange = 0.5f;
     [HideInInspector]
@@ -17,9 +18,10 @@ public class PlayerManage : MonoBehaviour
     [HideInInspector]
     public PlayerRole role;
     public float weight=55f;
-    public int Hp;
-    public int power;
+    public float Hp;
+    public float power;
     public float collectSpeed;
+    public float moveSpeed = 1f;
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -27,12 +29,20 @@ public class PlayerManage : MonoBehaviour
         SPY,       //
         INVESTIGATOR,       //侦察,点亮48*48区块
     }
-    //Technology tree
+    public State state;
     // Start is called before the first frame update
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-        
+        eventLog = new List<string>();
+        state = new State() {
+            hp = Hp,
+            power = power,
+            collectSpeed = collectSpeed,
+            moveSpeed = moveSpeed,
+            weight = weight,
+        };
+
     }
 
     // Update is called once per frame
@@ -59,7 +69,7 @@ public class PlayerManage : MonoBehaviour
     {
         float H = Input.GetAxis("Horizontal");
         float V = Input.GetAxis("Vertical");
-        Vector2 playerMove = new Vector2(H * speed, V * speed);
+        Vector2 playerMove = new Vector2(H * moveSpeed, V * moveSpeed);
         m_Rigidbody2D.AddForce(playerMove);
     }
 
@@ -72,7 +82,7 @@ public class PlayerManage : MonoBehaviour
         {
             if (AppManage.Instance.openUI == null)
             {
-                AppManage.Instance.SetOpenUI(GameObject.Find("SelectInStar"));
+                AppManage.Instance.SetOpenUI(GameObject.Find("EscMenu"));
             }
             else
             {
@@ -91,7 +101,19 @@ public class PlayerManage : MonoBehaviour
         {
 
         }
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
         }
@@ -100,31 +122,39 @@ public class PlayerManage : MonoBehaviour
     /// <summary>
     /// 接受外界赋予的状态
     /// </summary>
-    public void Suffer(State state,float value,string note) {
-        switch (state)
+    public void Suffer(string log) {
+        if (eventLog.Count>10)
         {
-            case State.hp:
-                break;
-            case State.power:
-                break;
-            case State.collectSpeed:
-                break;
-            case State.moveSpeed:
-                break;
-            case State.increaseOrDecrease:
-                break;
-            default:
-                break;
+            eventLog.RemoveAt(0);
+        }    
+        eventLog.Add(log);
+        if (state.hp<=0)
+        {
+            //todo gameover
         }
-        eventLog += note;
-        note = "<" + note + ">";
-        playerStateLabel.GetComponent<Text>().text += note;
-
+        
     }
+    /// <summary>
+    /// 延时状态
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="log"></param>
+    /// <param name="delay"></param>
+    public void Suffer(System.Action func, string log, float delay)
+    {
+        Suffer(log);
+        StartCoroutine(DelayFunc(func,delay));
+    }
+
+    IEnumerator DelayFunc(System.Action func,float delay) {
+        yield return new WaitForSeconds(delay);
+        func.Invoke();
+    }
+
 
     public void CreatePlayerInMap(Vector3 vector)
     {
-        GameObject.Instantiate(player).transform.position= vector;
+        GameObject.Instantiate(gameObject).transform.position= vector;
     }
 
     public bool InOperationRange(Vector3 opv) {
@@ -176,15 +206,17 @@ public class PlayerManage : MonoBehaviour
 
     }
 
-    public enum State
+    public class State
     {
-        other,
-        hp,
-        power,
-        collectSpeed,
-        moveSpeed,
-        increaseOrDecrease,
-    }
+       public string other;
+        public float hp;
+        public float power;
+        public float collectSpeed;
+        public float moveSpeed;
+        public float increaseOrDecrease;
+    public float weight;
+
+}
 
     public enum PlayerAnimState
     {
@@ -214,7 +246,7 @@ public class PlayerManage : MonoBehaviour
     /// <summary>
     /// 动画状态
     /// </summary>
-    public PlayerAnimState playerState;
+    public PlayerAnimState animState;
     /// <summary>
     /// 动画控制器
     /// </summary>

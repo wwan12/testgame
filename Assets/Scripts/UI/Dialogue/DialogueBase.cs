@@ -7,6 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 读取剧本，分发剧本，提供流程方法
 /// </summary>
+[Obsolete("未实现选择肢功能，考虑使用Fungus代替")]
 public class DialogueBase : MonoBehaviour
 {
     [Tooltip("输出字的时间间隔")]
@@ -96,6 +97,9 @@ public class DialogueBase : MonoBehaviour
                 }
             }
         }
+    }
+    public void AddNextText() {
+
     }
     /**切换语句功能*/
     void TextChange(){

@@ -188,7 +188,7 @@ public class EnemyAi : Ai
         diatanceToPlayer = Vector3.Distance(playerUnit.transform.position, transform.position);
         if (diatanceToPlayer < attackRange)
         {
-            playerUnit.GetComponent<PlayerManage>().Suffer(PlayerManage.State.hp,attack,"");
+            playerUnit.GetComponent<PlayerManage>().Suffer("");
             //进入战斗状态
         }
         else if (diatanceToPlayer < defendRadius)

@@ -7,8 +7,9 @@ using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 //todo 生成资源地图,摄像机视野到达边界时自动生成，与地块交互，与资源地块交互,兴趣点
-public class map_2d : MonoBehaviour
+public class MapManage : MonoBehaviour
 {
+    [Header("资源设置")]
     [Tooltip(" 道路地图")]
     public Tilemap runMap;//引用的Tilemap
     [Tooltip(" 墙地图")]
@@ -34,6 +35,7 @@ public class map_2d : MonoBehaviour
     readonly int saveResLength = 3;//存档长度
     readonly char mapEnd = '|';
     readonly char middleEnd = '>';
+    [Header("生成参数设置")]
 
     [Range(0, 100)]
     public int probability;
