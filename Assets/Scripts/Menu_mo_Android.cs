@@ -28,7 +28,7 @@ public class Menu_mo_Android : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        QuitTip();
+       
     }
 
     public void ToGameScene() {
@@ -47,6 +47,12 @@ public class Menu_mo_Android : MonoBehaviour
          if (loadingSlider.value != 1.0f) {
                 loadingText.text = "加载中。。。" + (loadingSlider.value * 100).ToString() + "%";
             }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+
     }
 
     private void QuitTip() {

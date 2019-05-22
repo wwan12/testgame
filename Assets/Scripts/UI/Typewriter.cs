@@ -12,6 +12,7 @@ public class Typewriter : MonoBehaviour
     public int cacheNum=20;
     [Tooltip("自适应")]
     public bool isAdaption;
+    public float height;
     private ScrollRect scrollRect;
     private Queue<string> queue;
     private Text textUI;
@@ -32,7 +33,7 @@ public class Typewriter : MonoBehaviour
         }
         else
         {
-             lines = Convert.ToInt32((textUI.rectTransform.sizeDelta.y-10) / (textUI.fontSize + textUI.lineSpacing*2));
+             lines = Convert.ToInt32(height / (textUI.fontSize + textUI.lineSpacing*2));
             
         }
         
