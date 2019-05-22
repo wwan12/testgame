@@ -12,7 +12,6 @@ public class Typewriter : MonoBehaviour
     public int cacheNum=20;
     [Tooltip("自适应")]
     public bool isAdaption;
-    private string baseText;
     private ScrollRect scrollRect;
     private Queue<string> queue;
     private Text textUI;
@@ -91,11 +90,10 @@ public class Typewriter : MonoBehaviour
                 if (c.Length >= lines)
                 {
                     c[0] = "";
-                    for (int i = 1; i < c.Length; i++)
+                    for (int i = 1; i < c.Length-1; i++)
                     {
                         mText += (c[i] + "\n");
                     }
-                    Debug.Log(mText);
                 }
                 else
                 {
@@ -113,7 +111,10 @@ public class Typewriter : MonoBehaviour
             }
             textUI.text = textUI.text + "\n";
             printText = "";
-            scrollRect.verticalNormalizedPosition = 0;
+            if (isAdaption)
+            {
+                scrollRect.verticalNormalizedPosition = 0;
+            }    
             yield return new WaitForSeconds(3*pause);
            
         }
