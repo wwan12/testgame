@@ -26,6 +26,7 @@ public class Typewriter : MonoBehaviour
 
         textUI = gameObject.GetComponent<Text>();
         queue = new Queue<string>(cacheNum);
+        height = textUI.canvas.pixelRect.size.y;
 
         if (isAdaption)
         {

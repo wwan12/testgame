@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -19,6 +20,7 @@ public class AppManage
     public event EventHandler SaveSuccessCallBack;
     public event EventHandler LoadSuccessCallBack;
     public event EventHandler ToSaveCallBack;
+    public event EventHandler<int> LoadSceneCallBack;
     public delegate void OSListen();
     public delegate void EventListen(string l);
     public static AppManage Instance
@@ -128,7 +130,11 @@ public class AppManage
         return openUI;
     }
 
-
+    /// <summary>
+    /// 储存全局数据
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
     public void SaveParameter(string key,object data) {
         datas.Add(key, data);
     }
@@ -139,49 +145,6 @@ public class AppManage
 
     public E GetParameter<E>(string key) {
        return (E)datas[key];
-    }
-
-    public void SendEvent(string key) {
-        foreach (EventListen item in eventQueue)
-        {
-            item(key);
-        }
-    }
-
-    public void AndroidListen(ref OSListen osListen)
-    {
-        if (RunOS.Equals(ANDROIDOS))
-        {
-            osListen.Invoke();
-        }
-    }
-    public void WindowsListen(ref OSListen osListen)
-    {
-        if (RunOS.Equals(WINDOWSOS))
-        {
-            osListen.Invoke();
-        }
-    }
-    public void IosListen(ref OSListen osListen)
-    {
-        if (RunOS.Equals(IOSOS))
-        {
-            osListen.Invoke();
-        }
-    }
-
-    public void AddEventListen(ref EventListen eventListen) {
-        eventQueue.Add(eventListen);
-    }
-
-    public void RemoveEventListen(ref EventListen eventListen) {
-        eventQueue.Remove(eventListen);
-    }
-
-    [System.Diagnostics.Conditional("LOG")]
-    public void LogWrap(string str)
-    {
-        Debug.Log(str);
     }
     /// <summary>
     /// C#调用Android 的Toast
@@ -298,5 +261,42 @@ public class AppManage
         public int mp = 0;
         public string mapData = "";
         public string bagData = "";
+    }
+    AsyncOperation asyncOperation;
+
+    public void StartLoadScene(MonoBehaviour mono, AsyncOperation async) {
+        asyncOperation = async;
+        mono.StartCoroutine(LoadingScene());
+    }
+
+    private IEnumerator LoadingScene()
+    {
+        asyncOperation.allowSceneActivation = false;  //如果加载完成，也不进入场景
+
+        int toProgress = 0;
+        int showProgress = 0;
+
+        //测试了一下，进度最大就是0.9
+        while (asyncOperation.progress < 0.9f)
+        {
+            toProgress = (int)(asyncOperation.progress * 100);
+
+            while (showProgress < toProgress)
+            {
+                showProgress++;
+                LoadSceneCallBack(this, showProgress);
+            }
+            yield return new WaitForEndOfFrame(); //等待一帧
+        }
+        //计算0.9---1   其实0.9就是加载好了，我估计真正进入到场景是1  
+        toProgress = 100;
+
+        while (showProgress < toProgress)
+        {
+            showProgress++;
+            LoadSceneCallBack(this, showProgress);
+            yield return new WaitForEndOfFrame(); //等待一帧
+        }
+        asyncOperation.allowSceneActivation = true;  //如果加载完成，可以进入场景
     }
 }

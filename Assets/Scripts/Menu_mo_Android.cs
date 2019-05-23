@@ -36,14 +36,16 @@ public class Menu_mo_Android : MonoBehaviour
         loadingSlider = Loaddlg.transform.Find("Loading/Slider").GetComponent<Slider>();
         loadingText = Loaddlg.transform.Find("Loading/Slider/Text").GetComponent<Text>();
         asyncOperation = SceneManager.LoadSceneAsync("Game_mo_Android");
-        StartCoroutine(LoadingScene());
+        AppManage.Instance.LoadSceneCallBack += LoadProgress;
+        AppManage.Instance.StartLoadScene(this, asyncOperation);
+        //StartCoroutine(LoadingScene());
     }
 
     public void About() {
 
     }
 
-    public void LoadProgress(int progress) {
+    public void LoadProgress(object obj,int progress) {
          if (loadingSlider.value != 1.0f) {
                 loadingText.text = "加载中。。。" + (loadingSlider.value * 100).ToString() + "%";
             }
@@ -81,37 +83,5 @@ public class Menu_mo_Android : MonoBehaviour
             imei = telephoneyManager.Call<string>("getMeid");//电信的手机 是MEID
         }
         //imei1 = telephoneyManager.Call<string>("getImei", 1);
-        AppManage.Instance.LogWrap(imei);
-    }
-
-    private IEnumerator LoadingScene()
-    {
-        asyncOperation.allowSceneActivation = false;  //如果加载完成，也不进入场景
-
-        int toProgress = 0;
-        int showProgress = 0;
-
-        //测试了一下，进度最大就是0.9
-        while (asyncOperation.progress < 0.9f)
-        {
-            toProgress = (int)(asyncOperation.progress * 100);
-
-            while (showProgress < toProgress)
-            {
-                showProgress++;
-                LoadProgress(showProgress);
-            }
-            yield return new WaitForEndOfFrame(); //等待一帧
-        }
-        //计算0.9---1   其实0.9就是加载好了，我估计真正进入到场景是1  
-        toProgress = 100;
-
-        while (showProgress < toProgress)
-        {
-            showProgress++;
-            LoadProgress(showProgress);
-            yield return new WaitForEndOfFrame(); //等待一帧
-        }
-        asyncOperation.allowSceneActivation = true;  //如果加载完成，可以进入场景
     }
 }

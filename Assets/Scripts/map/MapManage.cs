@@ -26,8 +26,6 @@ public class MapManage : MonoBehaviour
     public Tile wallTile;
     [Tooltip("视野边际的碰撞体")]
     public GameObject boundary;
-
-    public Vector3Int startTile;
  
     int[,][] map;//二维地图 x纵列坐标，y横列坐标,(0道路，1墙),(展示tile序号),(结束符|分隔符,)
     int[,][] resourcesMap;//资源地图,x纵列坐标,y横列坐标,(0无资源，1有资源)，(资源类型序号),(资源余量)(结束符|)
@@ -95,7 +93,7 @@ public class MapManage : MonoBehaviour
     {
         RandomFillMap();    //随机生成地图
         RandomFillResMap();
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             SmoothMap();
             SmoothResMap();
@@ -122,7 +120,14 @@ public class MapManage : MonoBehaviour
                 }
                 else {
                     map[i, j] = new int[saveMapLength];
-                    map[i, j][0] = (pseudoRandom.Next(0, 100) < probability) ? 1 : 0;  //1是墙，0是空地
+                    if (width/2-2<i&&i<width/2-2&&height/2-2<j&&j<height/2+2)//中间空出3*3的格子
+                    {
+                        map[i, j][0] =  0;
+                    }
+                    else
+                    {
+                        map[i, j][0] = (pseudoRandom.Next(0, 100) < probability) ? 1 : 0;  //1是墙，0是空地
+                    }                 
                 }
             }
         }
@@ -155,7 +160,6 @@ public class MapManage : MonoBehaviour
     {
         if (map != null)
         {
-            map[startTile.x, startTile.y][0] = 0;
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)

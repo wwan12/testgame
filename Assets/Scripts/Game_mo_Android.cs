@@ -20,4 +20,9 @@ public class Game_mo_Android : MonoBehaviour
     private void ReadFile() {
 
     }
+
+    void OnGUI()
+    {
+        
+    }
 }

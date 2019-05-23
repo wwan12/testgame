@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 /// <summary>
 /// 穿梭机
 /// </summary>
@@ -23,8 +25,18 @@ public class Shuttle : MonoBehaviour
     }
 
     public void Action() {
-       menu= Resources.Load<GameObject>("Warehouse/Builds/Shuttle/LoadMenu.prefab");
+        menu= Resources.Load<GameObject>("Warehouse/Builds/Shuttle/LoadMenu.prefab");
         menu= GameObject.Instantiate<GameObject>(menu);
+        menu.GetComponent<Button>().onClick.AddListener(ToEventPointScene);
+    }
+    private void Progress(object o,int progress) {
+
+    }
+
+    void ToEventPointScene() {
+        AppManage.Instance.SaveParameter("ToMapName", ToMapName);
+        AppManage.Instance.LoadSceneCallBack += Progress;
+        AppManage.Instance.StartLoadScene(this, SceneManager.LoadSceneAsync("EventPointScene", LoadSceneMode.Additive));
     }
 
     private void OnMouseOver()
