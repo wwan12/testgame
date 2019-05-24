@@ -76,7 +76,7 @@ public class PlayerManage : MonoBehaviour
     private void Operate() {
         if (Input.GetKeyDown(KeyCode.E))//物品栏
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("Bag"));    
+            AppManage.Instance.SetOpenUI(GameObject.FindGameObjectWithTag("Bag"));    
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {

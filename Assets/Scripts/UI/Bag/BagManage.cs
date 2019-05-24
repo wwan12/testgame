@@ -217,7 +217,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 0在第几格，1物品id，2数量
     /// </summary>
-    public void SaveBagData()
+    public string SaveBagData()
     {
         StringBuilder saveData = new StringBuilder();
         for (int i = 0; i < items.Length; i++)
@@ -233,7 +233,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
             
         }
-        AppManage.Instance.saveData.bagData = saveData.ToString();
+        return saveData.ToString();
     }
 
     public void ReadBagData(string save) {

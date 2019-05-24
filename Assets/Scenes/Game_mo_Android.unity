@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 156482521}
   m_Layer: 5
   m_Name: Bag
-  m_TagString: Untagged
+  m_TagString: Bag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1276,7 +1276,7 @@ PrefabInstance:
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -350
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
@@ -1286,12 +1286,12 @@ PrefabInstance:
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -700
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -800
+      value: -86
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
@@ -1301,17 +1301,17 @@ PrefabInstance:
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.24800001
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0.21900001
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.75200003
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
@@ -1959,7 +1959,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bbd09fde84430ea46bda659a75ce87c2, type: 2}
   wallTile: {fileID: 11400000, guid: 91b3aed1a2ebfc84c8ded49bb604f3f9, type: 2}
   boundary: {fileID: 1742462921}
-  startTile: {x: 0, y: 0, z: 0}
   probability: 45
   resourceDensity: 10
   width: 96

@@ -16,7 +16,8 @@ public class AppManage
     private const string SAVEFILENAME ="/byBin.dat";
     //不同平台下StreamingAssets的路径是不同的，这里需要注意一下。
     public string PathURL;
-    public event EventHandler StartSuccessCallBack;
+    public event EventHandler StartCallBack;
+    public event EventHandler ExitCallBack;
     public event EventHandler SaveSuccessCallBack;
     public event EventHandler LoadSuccessCallBack;
     public event EventHandler ToSaveCallBack;
@@ -52,7 +53,6 @@ public class AppManage
     /// 初始化获取系统信息等
     /// </summary>
     void Init() {
-        saveData = new SingleSave();
 #if UNITY_IOS
        RunOS = IOSOS;
          PathURL= Application.dataPath + "/Raw/";
@@ -216,12 +216,24 @@ public class AppManage
         }
     }
     /// <summary>
-    /// 传递直接开始新游戏事件
+    /// 传递开始新游戏事件
     /// </summary>
-    public void StartGame() {
-        saveData = CreateSaveGO().singleSaves[0];
-        StartSuccessCallBack(this, saveData);
+    public void StartGame(MonoBehaviour mono,int index) {
+        saveData = CreateSaveGO().singleSaves[index];
+        StartCallBack(this, saveData);
         SaveByBin();
+        mono.StartCoroutine(AutoSave());//启动自动存档
+        
+    }
+    /// <summary>
+    /// 传递退出游戏事件
+    /// </summary>
+    public void ExitGame()
+    {
+        ExitCallBack(this, saveData);
+        SaveByBin();
+        saveData = null;
+
     }
     /// <summary>
     /// 传递读档信息重置游戏事件
@@ -247,9 +259,9 @@ public class AppManage
     [System.Serializable]
     public class Save: EventArgs
     {
-        public int listLe=0;//4个存档位，0是自动存档
+        public int listLe=0;//3个存档位
 
-        public SingleSave[] singleSaves = new SingleSave[4];
+        public SingleSave[] singleSaves = new SingleSave[3];
 
     }
     [System.Serializable]
@@ -261,8 +273,18 @@ public class AppManage
         public int mp = 0;
         public string mapData = "";
         public string bagData = "";
+        public string buildLocation = "";
+        public string otherData = "";
     }
     AsyncOperation asyncOperation;
+
+    private IEnumerator AutoSave() {
+        while (saveData!=null) {
+            yield return new WaitForSeconds(60 * 2);
+            SaveByBin();
+        }
+       
+    }
 
     public void StartLoadScene(MonoBehaviour mono, AsyncOperation async) {
         asyncOperation = async;

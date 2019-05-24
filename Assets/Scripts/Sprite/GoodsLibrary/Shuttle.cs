@@ -15,7 +15,8 @@ public class Shuttle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        gameObject.AddComponent<Rigidbody2D>().bodyType=RigidbodyType2D.Static;
+        gameObject.AddComponent<PolygonCollider2D>();
     }
 
     // Update is called once per frame
