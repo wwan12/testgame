@@ -11,6 +11,7 @@ public class Menu_mo_Android : MonoBehaviour
     string imei;
     public GameObject Loaddlg;
     long time=0;
+    AppManage.SingleSave[] saves;
     /// <summary>
     /// 加载进度条
     /// </summary>
@@ -29,6 +30,14 @@ public class Menu_mo_Android : MonoBehaviour
     void Update()
     {
        
+    }
+
+    public void InitLoadMenu() {
+        saves= AppManage.Instance.LoadAllGame().singleSaves;
+    }
+
+    public void SaveSelect(int i) {
+        AppManage.Instance.LoadGame(i);
     }
 
     public void ToGameScene() {

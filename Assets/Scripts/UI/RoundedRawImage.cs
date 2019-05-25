@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class RoundedRawImage : RawImage
 {
 
-    public float Radius = 10f;//内切圆半径 图片的一半差不多就是一个圆了 这里相当于图片十分之一的长度
-    public int TriangleNum = 8;//每个扇形三角形个数 个数越大弧度越平滑
+    public float Radius = 2f;//内切圆半径 图片的一半差不多就是一个圆了 这里相当于图片十分之一的长度
+    public int TriangleNum = 12;//每个扇形三角形个数 个数越大弧度越平滑
     protected override void OnPopulateMesh(VertexHelper vh)
     {
         vh.Clear();

@@ -8,7 +8,6 @@ using UnityEngine;
 public class AppManage
 {
     private static readonly AppManage _instance = new AppManage();
-    private static readonly List<EventListen> eventQueue=new List<EventListen>();
     public Dictionary<string,object> datas =new Dictionary<string, object>();
     public const string ANDROIDOS = "UNITY_ANDROID";
     public const string IOSOS = "UNITY_IOS";
@@ -22,8 +21,7 @@ public class AppManage
     public event EventHandler LoadSuccessCallBack;
     public event EventHandler ToSaveCallBack;
     public event EventHandler<int> LoadSceneCallBack;
-    public delegate void OSListen();
-    public delegate void EventListen(string l);
+    private Save allSave;
     public static AppManage Instance
     {
         get
@@ -236,16 +234,34 @@ public class AppManage
 
     }
     /// <summary>
-    /// 传递读档信息重置游戏事件
+    /// 读取存档游戏事件
     /// </summary>
     /// <param name="save"></param>
-    public void SetGame(int saveIndex)
+    public Save LoadAllGame()
+    {
+        allSave = LoadByBin();
+        return allSave;
+    }
+    /// <summary>
+    /// 读取指定序号存档游戏事件
+    /// </summary>
+    /// <param name="save"></param>
+    public void LoadGame(int saveIndex)
     {
         saveData = LoadByBin().singleSaves[saveIndex];
         LoadSuccessCallBack(this, saveData);
     }
     /// <summary>
-    /// 创建Save对象并存储当前游戏状态信息
+    /// 触发一次手动存档
+    /// </summary>
+    /// <param name="save"></param>
+    public void SaveGame()
+    {
+        SaveByBin();
+        
+    }
+    /// <summary>
+    /// 创建Save对象
     /// </summary>
     /// <returns>存档对象</returns>
     private Save CreateSaveGO()
@@ -268,6 +284,7 @@ public class AppManage
     public class SingleSave : EventArgs
     {
         public int listIndex = 0;
+        public string portraitName = "";
         public int money = 0;
         public int hp = 0;
         public int mp = 0;
