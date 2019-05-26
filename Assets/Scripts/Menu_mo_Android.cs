@@ -9,7 +9,10 @@ public class Menu_mo_Android : MonoBehaviour
 
     AsyncOperation asyncOperation;
     string imei;
-    public GameObject Loaddlg;
+    [Tooltip("进入加载界面")]
+    public GameObject loaddlg;
+    [Tooltip("存档界面")]
+    public GameObject saveMenu;
     long time=0;
     AppManage.SingleSave[] saves;
     /// <summary>
@@ -34,16 +37,43 @@ public class Menu_mo_Android : MonoBehaviour
 
     public void InitLoadMenu() {
         saves= AppManage.Instance.LoadAllGame().singleSaves;
+        Image[] images= saveMenu.GetComponentsInChildren<Image>();
+        for (int i = 0; i < saves.Length; i++)
+        {
+            if (saves[i] != null)
+            {
+               images[i].sprite= Resources.Load<Sprite>("Save/"+saves[i].portraitName+".png");
+            }
+            else
+            {
+                images[i].sprite = Resources.Load<Sprite>("Save/Null.png");
+            }          
+        }
+        AppManage.Instance.SetOpenUI(saveMenu);
     }
 
     public void SaveSelect(int i) {
-        AppManage.Instance.LoadGame(i);
+        if (saves[i] == null)
+        {
+            AppManage.Instance.LoadGame(i);
+            ToGameScene();
+        }
+        else
+        {
+           GameObject role= GameObject.Find("RoleSelectMenu");
+            AppManage.Instance.SetOpenUI(role);
+        }
     }
 
-    public void ToGameScene() {
-        Loaddlg.SetActive(true);
-        loadingSlider = Loaddlg.transform.Find("Loading/Slider").GetComponent<Slider>();
-        loadingText = Loaddlg.transform.Find("Loading/Slider/Text").GetComponent<Text>();
+    public void RoleSelect(int i) {
+        AppManage.Instance.saveData.roleId = i;
+        ToGameScene();
+    }
+
+    private void ToGameScene() {
+        loaddlg.SetActive(true);
+        loadingSlider = loaddlg.transform.Find("Loading/Slider").GetComponent<Slider>();
+        loadingText = loaddlg.transform.Find("Loading/Slider/Text").GetComponent<Text>();
         asyncOperation = SceneManager.LoadSceneAsync("Game_mo_Android");
         AppManage.Instance.LoadSceneCallBack += LoadProgress;
         AppManage.Instance.StartLoadScene(this, asyncOperation);

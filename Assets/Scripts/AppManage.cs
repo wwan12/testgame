@@ -18,7 +18,7 @@ public class AppManage
     public event EventHandler StartCallBack;
     public event EventHandler ExitCallBack;
     public event EventHandler SaveSuccessCallBack;
-    public event EventHandler LoadSuccessCallBack;
+    public event EventHandler<SingleSave> LoadSuccessCallBack;
     public event EventHandler ToSaveCallBack;
     public event EventHandler<int> LoadSceneCallBack;
     private Save allSave;
@@ -240,6 +240,10 @@ public class AppManage
     public Save LoadAllGame()
     {
         allSave = LoadByBin();
+        if (allSave==null)
+        {
+            allSave = CreateSaveGO();
+        }     
         return allSave;
     }
     /// <summary>
@@ -248,7 +252,7 @@ public class AppManage
     /// <param name="save"></param>
     public void LoadGame(int saveIndex)
     {
-        saveData = LoadByBin().singleSaves[saveIndex];
+        saveData = allSave==null? LoadByBin().singleSaves[saveIndex]:allSave.singleSaves[saveIndex];
         LoadSuccessCallBack(this, saveData);
     }
     /// <summary>
@@ -283,6 +287,7 @@ public class AppManage
     [System.Serializable]
     public class SingleSave : EventArgs
     {
+        public int roleId = 0;
         public int listIndex = 0;
         public string portraitName = "";
         public int money = 0;
