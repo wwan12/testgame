@@ -53,14 +53,15 @@ public class Menu_mo_Android : MonoBehaviour
     }
 
     public void SaveSelect(int i) {
-        if (saves[i] == null)
+        if (saves[i] != null)
         {
             AppManage.Instance.LoadGame(i);
             ToGameScene();
         }
         else
         {
-           GameObject role= GameObject.Find("RoleSelectMenu");
+            AppManage.Instance.CreateSingleSave(i);
+            GameObject role= GameObject.Find("RoleSelectMenu");
             AppManage.Instance.SetOpenUI(role);
         }
     }

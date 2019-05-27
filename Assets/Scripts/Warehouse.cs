@@ -28,7 +28,7 @@ public class Warehouse
     {
       
     }
-
+    [Obsolete]
     public void Initialize() {
         articles= Resources.LoadAll<GameObject>("Warehouse/Articles");
         builds = Resources.LoadAll<GameObject>("Warehouse/Builds");
@@ -43,6 +43,7 @@ public class Warehouse
     /// <param name="id"></param>
     /// <param name="type">物品的类型</param>
     /// <returns>null为在指定类型中没找到</returns>
+    [Obsolete]
     public GameObject Create(Vector3 vector3, int id,ArticlesType type=ArticlesType.ARTICLES)
     {
         GameObject[] cache=null;
@@ -69,16 +70,42 @@ public class Warehouse
         }
         return null;
     }
+    /// <summary>
+    /// 在指定位置创建一个仓库中的物品
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>null为在指定类型中没找到</returns>
+    public GameObject Create(Vector3 vector3, string name, [DefaultValue(ArticlesType.ARTICLES)]ArticlesType type)
+    {
+        string pex = "";
+        switch (type)
+        {
+            case ArticlesType.ARTICLES:pex = "Warehouse/Articles/";
+                break;
+            case ArticlesType.BUILDS:
+                pex = "Warehouse/Builds/";
+                break;
+            case ArticlesType.ENEMYS:
+                pex = "Warehouse/Enemys/";
+                break;    
+            case ArticlesType.NEUTRALS:
+                pex = "Warehouse/Neutrals/";
+                break;     
+            case ArticlesType.NPCS:
+                pex = "Warehouse/Npcs/";
+                break;
+            
+        }
+        GameObject art = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(pex + name+".prefab"), vector3, Quaternion.identity);
+        return art;
+    }
 
     /// <summary>
     /// 通过id获取仓库里物品的详细信息
     /// </summary>
     /// <param name="id"></param>
+    [Obsolete]
     public ArticlesAttachment GetAtriclesInfo(int id, ArticlesType type = ArticlesType.ARTICLES) {
-        //用unity的内存指针去找，效率待测
-        //string p= System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Enum.GetName(typeof(ArticlesType), type));
-        //return Resources.Load<GameObject>("Warehouse/" + p + "/" + id.ToString()).GetComponent<ArticlesAttachment>();
-
         GameObject[] cache = null;
         switch (type)
         {
@@ -107,6 +134,18 @@ public class Warehouse
         }
         return null;
     }
+    /// <summary>
+    /// 通过名称获取仓库里物品的详细信息
+    /// </summary>
+    /// <param name="id"></param>
+    public ArticlesAttachment GetAtriclesInfo(string name, [DefaultValue(ArticlesType.ARTICLES)]ArticlesType type)
+    {
+        //用unity的内存指针去找，效率待测
+        string p= System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Enum.GetName(typeof(ArticlesType), type));
+        return Resources.Load<GameObject>("Warehouse/" + p + "/" + name+".prefab").GetComponent<ArticlesAttachment>();
+    }
+
+
     /// <summary>
     /// 回收一个任意物品
     /// </summary>

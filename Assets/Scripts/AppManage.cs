@@ -68,7 +68,7 @@ public class AppManage
 #endif
         SetBasicValues();
         GetDeviceInfo();
-        Warehouse.Instance.Initialize();//初始化仓库
+       
     }
 
    
@@ -250,10 +250,28 @@ public class AppManage
     /// 读取指定序号存档游戏事件
     /// </summary>
     /// <param name="save"></param>
-    public void LoadGame(int saveIndex)
+    public SingleSave LoadGame(int saveIndex)
     {
         saveData = allSave==null? LoadByBin().singleSaves[saveIndex]:allSave.singleSaves[saveIndex];
-        LoadSuccessCallBack(this, saveData);
+       
+        Debug.Log(saveData.roleId.ToString());
+        if (LoadSuccessCallBack!=null)
+        {
+            LoadSuccessCallBack(this, saveData);
+        }     
+        return saveData;
+    }
+
+    public SingleSave CreateSingleSave(int saveIndex)
+    {
+        if (saveData == null)
+        {
+            allSave.singleSaves[saveIndex] = new SingleSave();
+            saveData = allSave.singleSaves[saveIndex];
+        }
+
+        return saveData;
+
     }
     /// <summary>
     /// 触发一次手动存档

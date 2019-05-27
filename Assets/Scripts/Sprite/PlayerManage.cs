@@ -21,7 +21,7 @@ public class PlayerManage : MonoBehaviour
     public float Hp;
     public float power;
     public float collectSpeed;
-    public float moveSpeed = 1f;
+    public float moveSpeed = 10f;
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -69,8 +69,10 @@ public class PlayerManage : MonoBehaviour
     {
         float H = Input.GetAxis("Horizontal");
         float V = Input.GetAxis("Vertical");
-        Vector2 playerMove = new Vector2(H * moveSpeed, V * moveSpeed);
+        Vector2 playerMove = new Vector2(H * moveSpeed , V * moveSpeed );
         m_Rigidbody2D.AddForce(playerMove);
+        //   Vector2 playerMove = new Vector2(H * moveSpeed*0.1f, V * moveSpeed * 0.1f);
+        //   m_Rigidbody2D.MovePosition(m_Rigidbody2D.position+playerMove*Time.deltaTime);
     }
 
     private void Operate() {
@@ -166,37 +168,37 @@ public class PlayerManage : MonoBehaviour
     }
    
     // 碰撞开始
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-       
+        
     }
 
     // 碰撞结束
-    void OnCollisionExit(Collision collision)
+    void OnCollisionExit2D(Collision2D collision)
     {
 
     }
 
     // 碰撞持续中
-    void OnCollisionStay(Collision collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
 
     }
 
     // 开始接触
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
    
     }
 
     // 接触结束
-    void OnTriggerExit(Collider collider)
+    void OnTriggerExit2D(Collider2D collider)
     {
 
     }
 
     // 接触持续中
-    void OnTriggerStay(Collider collider)
+    void OnTriggerStay2D(Collider2D collider)
     {
      
     }

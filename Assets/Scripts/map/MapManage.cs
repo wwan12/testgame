@@ -64,7 +64,7 @@ public class MapManage : MonoBehaviour
         resourcesMap = new int[width, height][];
         player = GameObject.FindGameObjectWithTag("Player");
         CreateMap();
-
+        ChangeTile();
     }
 
     // Update is called once per frame
@@ -81,12 +81,12 @@ public class MapManage : MonoBehaviour
                 }
             }
         }
-        if (!hasPlayer&&Input.GetMouseButtonDown(0))
-        {           
-           Vector3 vector3= GetClickPosition(runMap);
-           player.GetComponent<PlayerManage>().CreatePlayerInMap(vector3);
-           hasPlayer = true;
-        }
+        //if (!hasPlayer&&Input.GetMouseButtonDown(0))
+        //{           
+        //   Vector3 vector3= GetClickPosition(runMap);
+        //   player.GetComponent<PlayerManage>().CreatePlayerInMap(vector3);
+        //   hasPlayer = true;
+        //}
     }
 
     void GenerateMap()
@@ -120,7 +120,7 @@ public class MapManage : MonoBehaviour
                 }
                 else {
                     map[i, j] = new int[saveMapLength];
-                    if (width/2-2<i&&i<width/2-2&&height/2-2<j&&j<height/2+2)//中间空出3*3的格子
+                    if (width/2-2<i&&i<width/2+2&&height/2-2<j&&j<height/2+2)//中间空出3*3的格子
                     {
                         map[i, j][0] =  0;
                     }
@@ -199,8 +199,8 @@ public class MapManage : MonoBehaviour
     /// 创建新地图
     /// </summary>
     public void CreateMap() {
-       
-        boundary.GetComponent<PolygonCollider2D>().points = new Vector2[] { new Vector2(-width / 2, height / 2), new Vector2(-width / 2, -height / 2), new Vector2(width / 2, -height / 2), new Vector2(width / 2, height / 2) };
+        float deviation = 2.5f;
+        boundary.GetComponent<PolygonCollider2D>().points = new Vector2[] { new Vector2(-width / 2+ deviation, height / 2- deviation), new Vector2(-width / 2+ deviation, -height / 2+ deviation), new Vector2(width / 2- deviation, -height / 2+ deviation), new Vector2(width / 2- deviation, height / 2- deviation) };
         GenerateMap();
     }
     /// <summary>
@@ -377,6 +377,12 @@ public class MapManage : MonoBehaviour
         //某个地方设置为空，就是把那个地方小格子销毁了
         runMap.SetTile(cellPosition, null);
         //tilemap.RefreshAllTiles();
+    }
+
+    public void ChangeTile()
+    {
+        runMap.SetColor(new Vector3Int(width/2,height/2,0),Color.blue);
+        runMap.SetColor(new Vector3Int(width / 2-1, height / 2-1, 0), Color.blue);
     }
     
     /// <summary>
