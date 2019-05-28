@@ -216,12 +216,24 @@ public class AppManage
     /// <summary>
     /// 传递开始新游戏事件
     /// </summary>
-    public void StartGame(MonoBehaviour mono,int index) {
-        saveData = CreateSaveGO().singleSaves[index];
+    public void StartNewGame(MonoBehaviour mono) {
         StartCallBack(this, saveData);
+        saveData.mapData = GameObject.Find("----Map----").GetComponent<MapManage>().SaveMap();//获取地图数据
+        saveData.mapData = GameObject.Find("Bag").GetComponent<BagManage>().SaveBagData();//获取背包数据
+        saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
+        saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
+        saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
         SaveByBin();
-        mono.StartCoroutine(AutoSave());//启动自动存档
-        
+        mono.StartCoroutine(AutoSave());//启动自动存档      
+    }
+    /// <summary>
+    /// 继续游戏
+    /// </summary>
+    public void ContinueGame(MonoBehaviour mono) {
+        GameObject.Find("----Map----").GetComponent<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
+        GameObject.Find("Bag").GetComponent<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
+        GameObject.FindGameObjectWithTag("Player").transform.position=new Vector3(saveData.playerLocation[0],saveData.playerLocation[1],saveData.playerLocation[2]);//恢复人物位置
+        mono.StartCoroutine(AutoSave());//启动自动存档      
     }
     /// <summary>
     /// 传递退出游戏事件
@@ -311,6 +323,7 @@ public class AppManage
         public int money = 0;
         public int hp = 0;
         public int mp = 0;
+        public float[] playerLocation = new float[3];
         public string mapData = "";
         public string bagData = "";
         public string buildLocation = "";

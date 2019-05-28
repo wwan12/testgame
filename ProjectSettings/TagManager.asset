@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bag
+  - UIController
   layers:
   - Default
   - TransparentFX
@@ -15,6 +16,8 @@ TagManager:
   - 
   - 
   - 
+  - Map
+  - MiniMap
   - 
   - 
   - 
@@ -34,8 +37,6 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - map_bottom
   - 
   - sky
   m_SortingLayers:

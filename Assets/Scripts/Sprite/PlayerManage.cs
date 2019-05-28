@@ -21,7 +21,8 @@ public class PlayerManage : MonoBehaviour
     public float Hp;
     public float power;
     public float collectSpeed;
-    public float moveSpeed = 10f;
+    public float moveSpeed = 1f;
+    private GameObject miniMapCamera;
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -42,6 +43,7 @@ public class PlayerManage : MonoBehaviour
             moveSpeed = moveSpeed,
             weight = weight,
         };
+        miniMapCamera = GameObject.Find("MapCamera");
 
     }
 
@@ -51,6 +53,7 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_EDITOR||UNITY_STANDALONE_WIN
         MoveOnWindows();
         Operate();
+        miniMapCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y,-10);
 #endif
 
 #if UNITY_ANDROID

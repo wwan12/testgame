@@ -51,9 +51,17 @@ public class MapManage : MonoBehaviour
     public bool useRandomSeed;
     [Tooltip("是否使用覆盖式资源")]
     public bool isCover;
+    [Header("小地图设置")]
+    [Tooltip("小地图，设置minimap图层")]
+    public Tilemap miniMap;
+    [Tooltip("代表墙的tile")]
+    public Tile miniWallTile;
+    [Tooltip("代表道路的tile")]
+    public Tile miniRunTile;
+
     private bool isExhausted;
-    private bool hasPlayer;
-    private GameObject player;
+    //private bool hasPlayer;
+    //private GameObject player;
     //Interest point
 
 
@@ -62,9 +70,9 @@ public class MapManage : MonoBehaviour
     {
         map = new int[width, height][];
         resourcesMap = new int[width, height][];
-        player = GameObject.FindGameObjectWithTag("Player");
-        CreateMap();
-        ChangeTile();
+       // player = GameObject.FindGameObjectWithTag("Player");
+      //  CreateMap();
+      //  ChangeTile();
     }
 
     // Update is called once per frame
@@ -99,6 +107,7 @@ public class MapManage : MonoBehaviour
             SmoothResMap();
         }
         DrawMap();
+        DrawMiniMap();
     }
     //用墙和道路填充地图
     void RandomFillMap()
@@ -189,6 +198,28 @@ public class MapManage : MonoBehaviour
         BakeMap();
     }
 
+    void DrawMiniMap()
+    {
+        if (miniMap==null)
+        {
+            return;
+        }
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (map[i, j][0] == 0)//画出道路和墙
+                {
+                    miniMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), miniRunTile);
+                }
+                else
+                {
+                    miniMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), miniWallTile);
+                }
+            }
+        }
+    }
+
     void BakeMap() {
         runMap.GetComponent<NavMeshSurface>().BuildNavMesh();
         
@@ -199,7 +230,7 @@ public class MapManage : MonoBehaviour
     /// 创建新地图
     /// </summary>
     public void CreateMap() {
-        float deviation = 2.5f;
+        float deviation = 3f;
         boundary.GetComponent<PolygonCollider2D>().points = new Vector2[] { new Vector2(-width / 2+ deviation, height / 2- deviation), new Vector2(-width / 2+ deviation, -height / 2+ deviation), new Vector2(width / 2- deviation, -height / 2+ deviation), new Vector2(width / 2- deviation, height / 2- deviation) };
         GenerateMap();
     }
@@ -217,7 +248,7 @@ public class MapManage : MonoBehaviour
     /// <summary>
     /// 储存地图
     /// </summary>
-    public void SaveMap() {
+    public string SaveMap() {
         StringBuilder saveMapData = new StringBuilder();
         for (int i = 0; i < width; i++)
         {
@@ -248,7 +279,7 @@ public class MapManage : MonoBehaviour
                 saveMapData.Append(mapEnd);
             }
         }
-        AppManage.Instance.saveData.mapData = saveMapData.ToString();
+        return saveMapData.ToString();
     }
 
     /// <summary>
@@ -276,6 +307,7 @@ public class MapManage : MonoBehaviour
             }
         }
         DrawMap();
+        DrawMiniMap();
     }
 
 
@@ -381,6 +413,7 @@ public class MapManage : MonoBehaviour
 
     public void ChangeTile()
     {
+        
         runMap.SetColor(new Vector3Int(width/2,height/2,0),Color.blue);
         runMap.SetColor(new Vector3Int(width / 2-1, height / 2-1, 0), Color.blue);
     }

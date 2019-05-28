@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Menu_mo_Android : MonoBehaviour
+public class Menu_mo_UI : MonoBehaviour
 {
 
     AsyncOperation asyncOperation;
@@ -55,12 +55,12 @@ public class Menu_mo_Android : MonoBehaviour
     public void SaveSelect(int i) {
         if (saves[i] != null)
         {
-            AppManage.Instance.LoadGame(i);
+            AppManage.Instance.LoadGame(i).listIndex=i;
             ToGameScene();
         }
         else
         {
-            AppManage.Instance.CreateSingleSave(i);
+            AppManage.Instance.CreateSingleSave(i).listIndex=i;
             GameObject role= GameObject.Find("RoleSelectMenu");
             AppManage.Instance.SetOpenUI(role);
         }

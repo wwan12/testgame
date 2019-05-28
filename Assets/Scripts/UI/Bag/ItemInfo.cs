@@ -8,6 +8,7 @@ public class ItemInfo: EventArgs
     public string type;
     public string note;
     public int num;
+    public float weight;
     public bool isUse=true;
     public Sprite sprite;
 }
