@@ -138,7 +138,7 @@ public class Warehouse
     /// 通过名称获取仓库里物品的详细信息
     /// </summary>
     /// <param name="id"></param>
-    public ArticlesAttachment GetAtriclesInfo(string name, [DefaultValue(ArticlesType.ARTICLES)]ArticlesType type)
+    public ArticlesAttachment GetAtriclesInfo(string name, ArticlesType type = ArticlesType.ARTICLES)
     {
         //用unity的内存指针去找，效率待测
         string p= System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(Enum.GetName(typeof(ArticlesType), type));

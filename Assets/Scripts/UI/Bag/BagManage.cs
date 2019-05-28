@@ -215,7 +215,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         item.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);//再将它设为canvas的子物体
     }
     /// <summary>
-    /// 0在第几格，1物品id，2数量
+    /// 0在第几格，1物品名称，2数量
     /// </summary>
     public string SaveBagData()
     {
@@ -226,7 +226,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 saveData.Append(i.ToString());
                 saveData.Append(",");
-                saveData.Append(items[i].item.info.id.ToString());
+                saveData.Append(items[i].item.info.name.ToString());
                 saveData.Append(",");
                 saveData.Append(items[i].item.info.num.ToString());
                 saveData.Append("|");
@@ -241,7 +241,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         for (int i = 0; i < datas.Length; i++)
         {
             string[] data = datas[i].Split(',');
-            ArticlesAttachment articles= Warehouse.Instance.GetAtriclesInfo(int.Parse(data[1]));
+            ArticlesAttachment articles= Warehouse.Instance.GetAtriclesInfo(data[1]);
             ItemInfo itemInfo = new ItemInfo
             {
                 id = articles.id,
