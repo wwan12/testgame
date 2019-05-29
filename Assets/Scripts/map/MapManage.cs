@@ -78,17 +78,21 @@ public class MapManage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < width; i++)//监控资源余量为0时销毁对应资源地块
+        if (resourcesMap[0,0]!=null)
         {
-            for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++)//监控资源余量为0时销毁对应资源地块
             {
-                if (resourcesMap[i, j][0] != 0&& resourcesMap[i, j][2] == 0)
+                for (int j = 0; j < height; j++)
                 {
-                    resourcesMap[i, j][0] = 0;
-                    resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), null);
+                    if (resourcesMap[i, j][0] != 0 && resourcesMap[i, j][2] == 0)
+                    {
+                        resourcesMap[i, j][0] = 0;
+                        resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), null);
+                    }
                 }
             }
         }
+        
         //if (!hasPlayer&&Input.GetMouseButtonDown(0))
         //{           
         //   Vector3 vector3= GetClickPosition(runMap);

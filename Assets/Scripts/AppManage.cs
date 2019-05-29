@@ -38,8 +38,6 @@ public class AppManage
     public string RunOS = WINDOWSOS;
     public string systemInfo;
     public SingleSave saveData;
-    public float width;
-    public float height;
     /// <summary>
     /// 上层显示的ui可以快速关闭
     /// </summary>
@@ -66,30 +64,8 @@ public class AppManage
     PathURL="file://" + Application.dataPath + "/StreamingAssets/";
 
 #endif
-        SetBasicValues();
         GetDeviceInfo();
        
-    }
-
-   
-
-    void SetBasicValues()
-    {
-
-        float leftBorder;
-        float rightBorder;
-        float topBorder;
-        float downBorder;
-        //the up right corner
-        Vector3 cornerPos = Camera.main.ViewportToWorldPoint(new Vector3(1f, 1f, Mathf.Abs(Camera.main.transform.position.z)));
-
-        leftBorder = Camera.main.transform.position.x - (cornerPos.x - Camera.main.transform.position.x);
-        rightBorder = cornerPos.x;
-        topBorder = cornerPos.y;
-        downBorder = Camera.main.transform.position.y - (cornerPos.y - Camera.main.transform.position.y);
-
-        width = rightBorder - leftBorder;
-        height = topBorder - downBorder;
     }
 
     void GetDeviceInfo() {

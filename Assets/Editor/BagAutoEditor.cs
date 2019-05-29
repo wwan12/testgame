@@ -18,14 +18,17 @@ public class BagAutoEditor : Editor
          m_Target = target as BagManage;
 
         m_Target.itemInfoPanel = EditorGUILayout.ObjectField("itemInfoPanel", m_Target.itemInfoPanel, typeof(GameObject), true) as GameObject;
+        m_Target.itemInBag = EditorGUILayout.ObjectField("itemInBag", m_Target.itemInBag, typeof(GameObject), true) as GameObject;
         m_Target.isAuto = EditorGUILayout.Toggle("isAuto", m_Target.isAuto);
         if (m_Target.isAuto)
          {
              m_Target.Lattice = EditorGUILayout.ObjectField("Lattice", m_Target.Lattice, typeof(GameObject), true) as GameObject;
             m_Target.allCapacity = EditorGUILayout.IntField("allCapacity", m_Target.allCapacity);
-            m_Target.devier = EditorGUILayout.IntField("devier", m_Target.devier);
-            m_Target.autoTop = EditorGUILayout.IntField("autoTop", m_Target.autoTop);
-            m_Target.autoLeft = EditorGUILayout.IntField("autoLeft", m_Target.autoLeft);
+            m_Target.top = EditorGUILayout.FloatField("top", m_Target.top);
+            m_Target.left = EditorGUILayout.FloatField("left", m_Target.left);
+            m_Target.autoTop = EditorGUILayout.FloatField("autoTop", m_Target.autoTop);
+            m_Target.autoLeft = EditorGUILayout.FloatField("autoLeft", m_Target.autoLeft);
+            m_Target.autoSize = EditorGUILayout.FloatField("autoSize", m_Target.autoSize);
             m_Target.lineNum = EditorGUILayout.IntField("lineNum", m_Target.lineNum);
         }
      }

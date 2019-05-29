@@ -14,7 +14,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     public ItemInBagController item;//装在这一格的物品
     [HideInInspector]
     public int serialNumber = 0;//格子序号
-    public event EventHandler UseThisItemCallBack;
+    public event EventHandler<ItemInfo> UseThisItemCallBack;
     [HideInInspector]
     public RectTransform canvas;
     [HideInInspector]
@@ -22,19 +22,21 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     [HideInInspector]
     public bool isNull = true;
 
+    //public 
+
     void Start()
     {
         hightLightColor = new Color(1f, 1f, 1f, 0.2f);
         hideColor = new Color(1f, 1f, 1f, 0f);
         image = GetComponent<Image>();
         item = GetComponentInChildren<ItemInBagController>();
-        if (item==null||item.info==null)
+        if (item==null)
         {
             isNull = true;
         }
         else
         {
-            item.UseItemCallBack += new EventHandler(UseItemCallBack);
+            item.UseItemCallBack += UseItemCallBack;
             item.canvas = canvas;
             item.itemInfoPanel = itemInfoPanel;
             isNull = false;
@@ -42,41 +44,53 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
      
     }
 
-    private void UseItemCallBack(object obj, EventArgs itemInfo) {
+    private void UseItemCallBack(object obj, ItemInfo itemInfo) {
         UseThisItemCallBack(obj,itemInfo);
     }
-
+    /// <summary>
+    /// 背包有这个物品添加时调用
+    /// </summary>
+    /// <param name="itemInfo"></param>
     public void AddItem(ItemInfo itemInfo) {
         isNull = false;
-        item.AddItem(itemInfo);
-        item.UseItemCallBack += new EventHandler(UseItemCallBack);
+        item.AddNum(itemInfo);
+    }
+    /// <summary>
+    /// 添加一个新物品
+    /// </summary>
+    /// <param name="item"></param>
+    public void AddItem(GameObject itemController)
+    {
+        isNull = false;
+        item = itemController.GetComponent<ItemInBagController>();
+        itemController.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+        item.UseItemCallBack += UseItemCallBack;
         item.canvas = canvas;
         item.itemInfoPanel = itemInfoPanel;
+        item.offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x/2, gameObject.GetComponent<RectTransform>().sizeDelta.y / 2);
+        item.AddItem();     
     }
 
     public void RemoveItem() {
         isNull = true;
         item.info = null;
+        Destroy(item);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (isNull)
+        if (!isNull)
         {
-            return;
+            GameObject item = eventData.pointerDrag;
+            item.GetComponent<ItemInBagController>().PutItem(transform as RectTransform);
+            HideColor();
         }
-        GameObject item = eventData.pointerDrag;
-        item.GetComponent<ItemInBagController>().PutItem(transform as RectTransform);
-        HideColor();
+      
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isNull)
-        {
-            return;
-        }
-        if (eventData.dragging)
+        if (!isNull&&eventData.dragging)
         {
             LightColor();
         }
@@ -84,11 +98,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (isNull)
-        {
-            return;
-        }
-        if (eventData.dragging)
+        if (!isNull && eventData.dragging)
         {
             HideColor();
         }

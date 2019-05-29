@@ -28,26 +28,28 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     private float timer = 0f;
     private bool pointEntered = false;
     [HideInInspector]
-    public ItemInfo info;//当前的物品信息，为null即为无物品
+    public ItemInfo info;//当前的物品信息
     /// <summary>
     /// 使用当前物品的事件
     /// </summary>
-    public event EventHandler UseItemCallBack;
-    private Image image;
-    private Text text;
+    public event EventHandler<ItemInfo> UseItemCallBack;
+    [HideInInspector]
+    public Image image;
+    [HideInInspector]
+    public Text text;
 
-    private void Start()
+     void Start()
     {
+   
         lastSlot = transform.parent as RectTransform;
         canvasGroup = GetComponent<CanvasGroup>();
-        image = GetComponent<Image>();
-        text = GetComponentInChildren<Text>();
+      
 
     }
 
     void Update()
     {
-        if (info!=null&&pointEntered && timer <= hoverTimer)
+        if (pointEntered && timer <= hoverTimer)
         {
             timer += Time.deltaTime;
             if (timer > hoverTimer)
@@ -57,20 +59,20 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         }
     }
 
-    public void AddItem(ItemInfo info) {
-        if (info==null)
-        {
-            this.info = info;
-            image.sprite = info.sprite;
-            text.text = info.num.ToString();
-        }
-        else
-        {
-            this.info.num = this.info.num + info.num;
-            text.text = this.info.num.ToString();
-        }
-       
+    public void AddNum(ItemInfo info)
+    {
+        this.info.num = this.info.num + info.num;
+        text.text = this.info.num.ToString();       
     }
+
+    public void AddItem()
+    {
+        image = GetComponent<Image>();
+        text = GetComponentInChildren<Text>();
+        image.sprite = info.sprite;
+        text.text = info.num.ToString();
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (info == null)
@@ -161,6 +163,19 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         // lastSlot.GetComponent<DropController>().HideColor();
     }
 
+    public void DiscardItem()
+    {
+        Destroy(gameObject);
+    }
+
+    public void DiscardItem(int num) {
+        info.num = info.num - num;
+        if (num<=0)
+        {
+            DiscardItem();
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         pointEntered = true;
@@ -168,7 +183,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         {
             if (tooltips != null)
             {
-                tooltips.SetActive(false);
+              //  tooltips.SetActive(false);
             }
         }
     }
@@ -179,7 +194,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         timer = 0f;
         if (tooltips != null)
         {
-            tooltips.SetActive(false);
+          //  tooltips.SetActive(false);
         }
     }
 
@@ -188,7 +203,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         Vector3 initPos = new Vector3(transform.position.x + offset.x, transform.position.y + offset.y, transform.position.z);
         if (tooltips == null)
         {
-            tooltips = Instantiate(itemInfoPanel, initPos, Quaternion.identity);
+            tooltips = GameObject.Instantiate(itemInfoPanel, initPos, Quaternion.identity);
             tooltips.transform.SetParent(canvas);
         }
         tooltips.transform.position = initPos;
