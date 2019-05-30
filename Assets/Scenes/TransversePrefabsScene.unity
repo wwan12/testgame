@@ -410,7 +410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &545558729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,7 +947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!225 &843801824
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -977,11 +977,15 @@ MonoBehaviour:
     type: 3}
   isAuto: 1
   Lattice: {fileID: 3103660340716083447, guid: d4dedb1a8bae1434ea5910fc86955796, type: 3}
+  itemInBag: {fileID: 4404096848197245771, guid: ae79bc21cf42b724eaa9d87b62dffcd8,
+    type: 3}
   allCapacity: 48
   lineNum: 8
-  devier: 10
+  top: 0
+  left: 0
   autoTop: 12
   autoLeft: 12
+  autoSize: 0
 --- !u!114 &843801826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1886,11 +1890,14 @@ MonoBehaviour:
   itemInfoPanel: {fileID: 0}
   isAuto: 1
   Lattice: {fileID: 3103660340716083447, guid: d4dedb1a8bae1434ea5910fc86955796, type: 3}
+  itemInBag: {fileID: 0}
   allCapacity: 6
   lineNum: 3
-  devier: 10
+  top: 0
+  left: 0
   autoTop: 16
   autoLeft: 16
+  autoSize: 0
 --- !u!114 &1768259743
 MonoBehaviour:
   m_ObjectHideFlags: 0
