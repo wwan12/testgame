@@ -127,16 +127,12 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     // 当有其他物品想要放在自己这格时，双方交换一下位置
     public void OnDrop(PointerEventData eventData)
     {
-        if (info == null)
-        {
-            return;
-        }
         // 先让物品栏高亮效果消失
         lastSlot.GetComponent<LatticeController>().HideColor();
         var dc = eventData.pointerDrag.GetComponent<ItemInBagController>();
         var tempSlot = dc.lastSlot;
-        tempSlot.GetComponent<LatticeController>().isNull = lastSlot.GetComponent<LatticeController>().isNull;
-        lastSlot.GetComponent<LatticeController>().isNull = true;//
+        tempSlot.GetComponent<LatticeController>().item = lastSlot.GetComponent<LatticeController>().item;
+        lastSlot.GetComponent<LatticeController>().item = null;//
         dc.PutItem(lastSlot);
         PutItem(tempSlot);
     }
@@ -194,7 +190,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         timer = 0f;
         if (tooltips != null)
         {
-          //  tooltips.SetActive(false);
+            tooltips.SetActive(false);
         }
     }
 

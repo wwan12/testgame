@@ -20,7 +20,10 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     [HideInInspector]
     public GameObject itemInfoPanel; // 物品信息面板
     [HideInInspector]
+    [Obsolete("拖动物品兼容不好")]
     public bool isNull = true;
+    [Tooltip("支持的tag类型，默认为全支持")]
+    public string[] tagOfSupport;
 
     //public 
 
@@ -61,36 +64,80 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     /// <param name="item"></param>
     public void AddItem(GameObject itemController)
     {
-        isNull = false;
-        item = itemController.GetComponent<ItemInBagController>();
-        itemController.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
-        item.UseItemCallBack += UseItemCallBack;
-        item.canvas = canvas;
-        item.itemInfoPanel = itemInfoPanel;
-        item.offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x/2, gameObject.GetComponent<RectTransform>().sizeDelta.y / 2);
-        item.AddItem();     
+        if (IsInTags(itemController.tag))
+        {
+            isNull = false;
+            item = itemController.GetComponent<ItemInBagController>();
+            item.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+            item.UseItemCallBack += UseItemCallBack;
+            item.canvas = canvas;
+            item.itemInfoPanel = itemInfoPanel;
+            item.offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x, -gameObject.GetComponent<RectTransform>().sizeDelta.y);
+            item.AddItem();
+        }
+        
     }
-
-    public void RemoveItem() {
+    /// <summary>
+    /// 使用完，丢弃指定数量的物品
+    /// </summary>
+    /// <param name="num"></param>
+    public void DiscardItem(int num) {
         isNull = true;
         item.info = null;
-        Destroy(item);
+        item.DiscardItem(num);
     }
+    
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (!isNull)
+        GameObject dragItem = eventData.pointerDrag;
+        if (IsInTags(dragItem.tag))
         {
-            GameObject item = eventData.pointerDrag;
-            item.GetComponent<ItemInBagController>().PutItem(transform as RectTransform);
+            isNull = false;          
+            item= dragItem.GetComponent<ItemInBagController>();
+            item.PutItem(transform as RectTransform);
             HideColor();
+        }   
+    }
+
+    bool IsInTags(string tagName)
+    {
+        if (tagOfSupport == null)
+        {
+            return true;
         }
-      
+        else
+        {
+            foreach (var tag in tagOfSupport)
+            {
+                if (tag.Equals(tagName))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool IsNull() {
+        if (item==null)
+        {
+            item = GetComponentInChildren<ItemInBagController>();
+            if (item == null)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+        return true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!isNull&&eventData.dragging)
+        if (eventData.dragging)
         {
             LightColor();
         }
@@ -98,7 +145,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!isNull && eventData.dragging)
+        if (eventData.dragging)
         {
             HideColor();
         }

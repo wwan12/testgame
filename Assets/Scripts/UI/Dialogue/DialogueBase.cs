@@ -74,11 +74,10 @@ public class DialogueBase : MonoBehaviour
             //检测对话显示完没有 i = j 就是还没有显示完
             if (i == j)
             {
-                pause = 0.0f; //加快显的速度，让对话速度显示完
+                pause = 0.0f;
             }
             else
             {
-                //检测对话语句是否超出了最大限制，超出了就DO STH.
                 if (i < Text.Length - 1)
                 {
                     pause = letterPause;
@@ -92,7 +91,6 @@ public class DialogueBase : MonoBehaviour
                     group.alpha = 0;
                     group.interactable = false;
                     group.blocksRaycasts = false;
-                    //DO STH.
 
                 }
             }
@@ -139,7 +137,7 @@ public class DialogueBase : MonoBehaviour
             showText.text = printText;
         }
         printText += "  ▼"; //标记可按键的提示
-        j = i;                //避免出现下一句不显示的情况将对话记录+1
+        j = i;             
     }
 
     public class BranchInfo

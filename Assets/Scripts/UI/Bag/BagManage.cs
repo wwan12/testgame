@@ -67,18 +67,6 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         (itemInfo as ItemInfo).num--;
     }
     /// <summary>
-    /// 给背包添加一个存在的物品，提供给外部调用
-    /// </summary>
-    public bool BagAddItem(ItemInfo itemInfo) {
-        int index = HasItemInBag(itemInfo.name);
-        if (index >= 0)
-        {
-            items[index].AddItem(itemInfo);
-            return true;
-        }
-        return false;
-    }
-    /// <summary>
     /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false
     /// </summary>
     public bool BagAddItem(int serialNumber, ItemInfo itemInfo)
@@ -87,7 +75,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             return false;
         }
-        if (items[serialNumber].isNull)
+        if (items[serialNumber].item==null)
         {
             GameObject item =GameObject.Instantiate(itemInBag);
             item.name = itemInfo.name;
@@ -107,7 +95,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 给背包添加一个新的物品，提供给外部调用
     /// </summary>
-    public void AddItem(ItemInfo itemInfo)
+    public void BagAddItem(ItemInfo itemInfo)
     {
         int index = HasItemInBag(itemInfo.name);
         if (index >= 0)
@@ -121,7 +109,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             item.GetComponent<ItemInBagController>().info = itemInfo;         
             for (int i = 0; i < items.Length; i++)
             {
-                if (items[i].isNull)
+                if (items[i].item==null)
                 {
                     items[i].AddItem(item);
                 }
@@ -229,7 +217,9 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             sprite = Resources.Load<Sprite>("Palette/2.5dmap_03_111.asset")
         });
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     void NotExistItems() {
         items = new LatticeController[allCapacity];
         int existIndex = GetComponentsInChildren<LatticeController>().Length;
@@ -267,7 +257,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
        
     }
     /// <summary>
-    /// 
+    /// 自动设置格子信息
     /// </summary>
     /// <param name="x"> 第几个</param>
     /// <param name="y">第几行</param>
@@ -281,7 +271,6 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         //实例化
         GameObject item = Instantiate(Lattice) as GameObject;
         item.name = x.ToString();
-        //恢复四锚点
         RectTransform trans = item.GetComponent<RectTransform>();
     
             trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, left+ autoLeft +(autoLeft+ autoSize) *(x%lineNum), autoSize);
@@ -299,7 +288,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         StringBuilder saveData = new StringBuilder();
         for (int i = 0; i < items.Length; i++)
         {
-            if (!items[i].isNull)
+            if (!items[i].IsNull())
             {
                 saveData.Append(i.ToString());
                 saveData.Append(",");
@@ -334,6 +323,20 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             sprite = articles.gameObject.GetComponent<SpriteRenderer>().sprite
         };
         return itemInfo;
+    }
+    /// <summary>
+    /// 添加其他交互页面
+    /// </summary>
+    /// <param name="perfabName"></param>
+    public GameObject AddOtherUI(string prefabName)
+    {
+        GameObject gameObject= Resources.Load<GameObject>("prefab/"+prefabName);
+        gameObject= GameObject.Instantiate(gameObject);
+        gameObject.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+        // RectTransform trans = gameObject.GetComponent<RectTransform>();
+        // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, , trans.sizeDelta.x);
+        // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, top + autoTop, trans.sizeDelta.y);
+        return gameObject;
     }
 
    // Update is called once per frame
