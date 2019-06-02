@@ -124,6 +124,11 @@ public class PlayerManage : MonoBehaviour
         }
 
     }
+
+    public bool IsSeeIt()
+    {
+        return true;
+    }
     /// <summary>
     /// 接受外界赋予的状态
     /// </summary>
