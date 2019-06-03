@@ -129,27 +129,27 @@ namespace Node.AI
             this.def = taskData.def;
             if (this.def.taskType == TaskType.Sleep)
             {
-                this.task = new TaskSleep(taskData, this);
+              //  this.task = new TaskSleep(taskData, this);
             }
             else if (this.def.taskType == TaskType.Idle)
             {
-                this.task = new TaskIdle(taskData, this);
+              //  this.task = new TaskIdle(taskData, this);
             }
             else if (this.def.taskType == TaskType.Eat)
             {
-                this.task = new TaskEat(taskData, this);
+             //   this.task = new TaskEat(taskData, this);
             }
             else if (this.def.taskType == TaskType.Cut)
             {
-                this.task = new TaskCut(taskData, this);
+              //  this.task = new TaskCut(taskData, this);
             }
             else if (this.def.taskType == TaskType.Dirt)
             {
-                this.task = new TaskDirt(taskData, this);
+              //  this.task = new TaskDirt(taskData, this);
             }
             else if (this.def.taskType == TaskType.Sow)
             {
-                this.task = new TaskSow(taskData, this);
+             //   this.task = new TaskSow(taskData, this);
             }
 
             this.running = true;
@@ -192,7 +192,7 @@ namespace Node.AI
 
             if (this.taskRunner.def.targetType == TargetType.Adjacent)
             {
-                this.targets.current.GetClosestAdj(this.character.position);
+              //  this.targets.current.GetClosestAdj(this.character.position);
             }
 
             this.Start();

@@ -63,7 +63,7 @@ public class CharacterBrain : MonoBehaviour
         }
     }
 
-    /// Get the next task data in tree.
+    /// 获取树中的下一个任务数据。
     public void GetNextTaskData()
     {
         TaskData nextTaskData = this.brainNode.GetTaskData();

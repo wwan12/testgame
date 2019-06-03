@@ -22,8 +22,8 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     [HideInInspector]
     public Vector2 offset; // Tooltips 面板偏移量
 
-    private static float hoverTimer = 0f; // 鼠标悬停时间
-    private static GameObject tooltips = null; // 属性面板的唯一引用
+    private float hoverTimer = 0f; // 鼠标悬停时间
+    private GameObject tooltips = null; // 属性面板的唯一引用
 
     private float timer = 0f;
     private bool pointEntered = false;

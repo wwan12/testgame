@@ -44,7 +44,6 @@ public class PlayerManage : MonoBehaviour
             weight = weight,
         };
         miniMapCamera = GameObject.Find("MapCamera");
-
     }
 
     // Update is called once per frame
@@ -53,7 +52,7 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_EDITOR||UNITY_STANDALONE_WIN
         MoveOnWindows();
         Operate();
-        miniMapCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y,-10);
+      
 #endif
 
 #if UNITY_ANDROID
@@ -63,6 +62,11 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_IOS
       Debug.Log("Iphone");
 #endif
+    }
+
+     void LateUpdate()
+    {
+        miniMapCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -10);
     }
 
     /// <summary>
@@ -178,7 +182,9 @@ public class PlayerManage : MonoBehaviour
     // 碰撞开始
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if(collision.gameObject.name.Equals("Boundary")){
+            GameObject.FindObjectOfType<MapManage>().ExpandMap();
+        }
     }
 
     // 碰撞结束

@@ -1,4 +1,5 @@
 ﻿using Node.AI;
+using Path.AI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -96,7 +97,7 @@ public class CharacterMovement
     {
         if (this._hasDestination == false)
         {
-            PathResult pathResult = AI.PathFinder.GetPath(this.position, task.targets.currentPosition);
+            PathResult pathResult = PathFinder.GetPath(GameObject.FindObjectOfType<MapManage>(), this.position, task.targets.currentPosition);
 
             if (pathResult.success == false)
             {

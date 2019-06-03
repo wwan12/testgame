@@ -42,13 +42,14 @@ public class AppManage
     /// 上层显示的ui可以快速关闭
     /// </summary>
     public GameObject openUI;
-    
+
 
 
     /// <summary>
     /// 初始化获取系统信息等
     /// </summary>
-    void Init() {
+    void Init()
+    {
 #if UNITY_IOS
        RunOS = IOSOS;
          PathURL= Application.dataPath + "/Raw/";
@@ -61,11 +62,11 @@ public class AppManage
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
         RunOS = WINDOWSOS;
-    PathURL="file://" + Application.dataPath + "/StreamingAssets/";
+        PathURL = "file://" + Application.dataPath + "/StreamingAssets/";
 
 #endif
         GetDeviceInfo();
-       
+
     }
 
     void GetDeviceInfo() {
@@ -195,7 +196,7 @@ public class AppManage
     public void StartNewGame(MonoBehaviour mono) {
         StartCallBack(this, saveData);
         saveData.mapData = GameObject.Find("----Map----").GetComponent<MapManage>().SaveMap();//获取地图数据
-        saveData.mapData = GameObject.Find("Bag").GetComponent<BagManage>().SaveBagData();//获取背包数据
+        saveData.bagData = GameObject.Find("Bag").GetComponent<BagManage>().SaveBagData();//获取背包数据
         saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
         saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;

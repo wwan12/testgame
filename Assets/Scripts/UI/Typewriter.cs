@@ -37,11 +37,8 @@ public class Typewriter : MonoBehaviour
              lines = Convert.ToInt32(height / (textUI.fontSize + textUI.lineSpacing*2));
             
         }
-        
-        for (int i = 0; i < 14; i++)
-        {
-            AddQueue(i.ToString()+":abcd");
-        }
+
+        InitBaseText();
     }
 
     // Update is called once per frame
