@@ -65,14 +65,16 @@ namespace Path.AI
                         break;
                     }
                     closedSet.Add(current);
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 8; i++)//按次序取出8个角的格子
                     {
+
                         //MapTile neighbour = Loki.map[current.position + DirectionUtils.neighbours[i]];
-                        //if (neighbour == null || neighbour.blockPath || closedSet.Contains(neighbour))
-                        //{
-                        //    continue;
-                        //}
-                        //float neighbourCost = current.gCost + Distance(current.position, neighbour.position) + neighbour.pathCost;
+                      //  MapTile neighbour = manage.map[];
+                     //   if (neighbour == null || neighbour.isWall || closedSet.Contains(neighbour))
+                      //  {
+                      //      continue;
+                      //  }
+                      //  float neighbourCost = current.g + Distance(current.position, neighbour.position) + neighbour.pathCost;
                         //if (neighbourCost > neighbour.gCost || !openSet.Contains(neighbour))
                         //{
                         //    neighbour.gCost = neighbourCost;

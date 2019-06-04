@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeInfo
+namespace AI
 {
-    
+    public class Task
+    {
+      
+    }
 }
+

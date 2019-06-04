@@ -12,8 +12,7 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     public NodeUI[] nextNodes;
     [Tooltip("前提的节点")]
     public NodeUI[] lastNodes;
-    [Tooltip("物品信息面板")]
-    public GameObject itemInfoPanel;
+    
     [Tooltip("完成的时间")]
     public float completeTime=1.0f;
     [Header("节点信息")]
@@ -34,12 +33,19 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     private Vector2 offset; // Tooltips 面板偏移量
     private Image musk;
     private IEnumerator nodeTask;
-    public NodeInfo info;
+    [HideInInspector]
+    public float lineWidth=4f;
+    [HideInInspector]
+    public Image lineImage;
+    [HideInInspector]
+    public GameObject itemInfoPanel;
+
     // Start is called before the first frame update
     void Start()
     {
         offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x, -gameObject.GetComponent<RectTransform>().sizeDelta.y);
         musk = gameObject.GetComponent<Image>();
+        NextLinksPaths();
     }
 
     // Update is called once per frame
@@ -58,36 +64,53 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     void NextLinksPaths()
     {
         foreach (var node in nextNodes)
-        {
-            Vector3 vector = (gameObject.transform.position + node.gameObject.transform.position)/2;
-            float width= gameObject.GetComponent<RectTransform>().sizeDelta.x;
-            float height = gameObject.GetComponent<RectTransform>().sizeDelta.y;
-            float startX = gameObject.transform.position.x + width / 2;
-            float startY = gameObject.transform.position.y + height / 2;
-            float endX = node.gameObject.transform.position.x + width / 2;
-            float endY = node.gameObject.transform.position.y - height / 2;
-            List<Vector3> paths = new List<Vector3>(4);
+        {           
+            float startX = gameObject.transform.position.x ;
+            float startY = gameObject.transform.position.y  ;
+            float endX = node.gameObject.transform.position.x;
+            float endY = node.gameObject.transform.position.y;
+            List<Vector3> paths = new List<Vector3>();
             if (startX == endX)
             {
-                paths.Add(new Vector3(startX, startY));//起点
-                paths.Add(new Vector3(endX, endY));//结束点
+                paths.Add(new Vector3(startX, startY,0));//起点
+                paths.Add(new Vector3(endX, endY,0));//结束点
             }
             else
             {
-                paths.Add(new Vector3(startX, startY));//起点
-                paths.Add(new Vector3(vector.x + width / 2, vector.y));//中继点a
-                paths.Add(new Vector3(vector.x + width / 2, vector.y));//中继点b
-                paths.Add(new Vector3(endX, endY));//结束点
+               
+                paths.Add(new Vector3(startX, - Screen .height+ startY,0));//起点
+                paths.Add(new Vector3(startX,-Screen.height+( startY +endY)/2, 0));//中继点a
+                paths.Add(new Vector3(endX,-Screen.height + (startY + endY) / 2, 0));//中继点b
+                paths.Add(new Vector3(endX,- Screen.height+endY, 0));//结束点
             }
-          
+             DrawPaths(paths);
         }
 
     }
 
+
     void DrawPaths(List<Vector3> paths)
     {
+        for (int i = 0; i < paths.Count-1; i++)
+        {
+            lineImage = GameObject.Instantiate(Resources.Load<GameObject>("prefabs/Node/LineImage")).GetComponent<Image>();         
+            if (paths[i].y - paths[i + 1].y==0)//判断画的是横线还是竖线
+            {
+                lineImage.transform.position = new Vector2(paths[i].x - (paths[i].x - paths[i + 1].x)/2, paths[i].y);
+                lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(paths[i].x - paths[i + 1].x)+lineWidth, lineWidth);
+            }
+            else
+            {
+                lineImage.transform.position = new Vector2(paths[i].x, paths[i].y - (paths[i].y - paths[i + 1].y) / 2);
+                lineImage.GetComponent<RectTransform>().sizeDelta = new Vector2(lineWidth,Mathf.Abs(paths[i].y - paths[i + 1].y));
+            }         
+            lineImage.transform.SetParent(canvas, false);
+            lineImage.transform.SetAsFirstSibling();
+            //line= GameObject.Instantiate<GameObject>(line);
+        }
 
     }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -158,7 +181,8 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             tooltips.transform.SetParent(canvas);
         }
         tooltips.transform.position = initPos;
-       // tooltips.GetComponent<ItemInfoPanel>().SetInfoPanel(info);
+        tooltips.AddComponent<AddTextInfo>().AddInfo(nodeName);
+        tooltips.AddComponent<AddTextInfo>().AddInfo(nodeNote);
         tooltips.SetActive(true);
     }
 
@@ -173,5 +197,7 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         AudioManage.Instance.PushClip(clip);
         passEvent.Invoke();
     }
+
+
    
 }

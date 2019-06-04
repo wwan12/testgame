@@ -231,9 +231,7 @@ namespace Node.AI
             }
             else
             {
-                if (
-                    this.character.position == this.targets.currentPosition
-                )
+                if (this.character.position == this.targets.currentPosition)
                 {
                     this._inRange = true;
                     return;

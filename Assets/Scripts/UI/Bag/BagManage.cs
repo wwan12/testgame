@@ -200,7 +200,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
-        StartCoroutine(test());
+       // StartCoroutine(test());
     }
 
     IEnumerator test()

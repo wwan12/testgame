@@ -12,20 +12,6 @@ public class QueueAiControl : MonoBehaviour
     {
         this.characters.Add(character);
     }
-
-    /// Update drawing for our characters
-    public void DrawCharacters()
-    {
-        foreach (BaseCharacter character in this.characters)
-        {
-            if (player.IsSeeIt())
-            {
-                character.UpdateDraw();
-            }
-        }
-    }
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +21,13 @@ public class QueueAiControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        foreach (BaseCharacter character in this.characters)
+        {
+            if (player.IsSeeIt())
+            {
+                character.UpdateDraw();
+            }
+        }
     }
 
     public delegate void TickDelegate();
