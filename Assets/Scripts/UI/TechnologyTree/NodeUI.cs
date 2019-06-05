@@ -61,6 +61,8 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         }
     }
 
+
+
     void NextLinksPaths()
     {
         foreach (var node in nextNodes)

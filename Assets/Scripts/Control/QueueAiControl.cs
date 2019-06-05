@@ -7,7 +7,7 @@ public class QueueAiControl : MonoBehaviour
     public List<BaseCharacter> characters { get; protected set; }
     PlayerManage player;
     public static Tick tick { get; }
-    /// Spawn a Character
+
     public void SpawnCharacter(BaseCharacter character)
     {
         this.characters.Add(character);

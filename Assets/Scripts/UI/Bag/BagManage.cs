@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-//todo 丢弃物品，根据物品id自动寻找添加物品，多线程优化
+//todo 丢弃物品，多线程优化,动态添加的格子无法管理
 
 public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 {

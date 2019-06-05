@@ -16,12 +16,12 @@ public class MapTile
     public Vector3 pos;
     public MapTile parentNode;
 
-    public int costG;
-    public int costH;
+    public float costG;
+    public float costH;
 
     
 
-    public int CostF
+    public float CostF
     {
         get { return costG + costH; }
     }

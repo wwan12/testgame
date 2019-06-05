@@ -1,5 +1,6 @@
 ﻿using Node.AI;
 using Path.AI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,164 +9,167 @@ using UnityEngine;
 public class CharacterMovement
 {
     /* 当改变方向时调用了回调*/
-    public System.Action<MeshPool.Direction> onChangeDirection;
+    public Action<MeshPool.Direction> onChangeDirection;
 
-    /* Current tile */
-    public Vector2Int position { get; protected set; }
+    /// <summary>
+    /// 当前地块
+    /// </summary>
+    public Vector2Int position { get; private set; }
 
-    /* Direction we are looking at */
-    public MeshPool.Direction lookingAt { get; protected set; }
+    /// <summary>
+    /// 观看方向
+    /// </summary>
+    public MeshPool.Direction lookAt { get; private set; }
 
-    /* Final destination */
-    public Vector2Int destination { get; protected set; }
-
-    /* Current path queue, list of tile positions */
-    public Queue<Vector2Int> path { get { return this._path; } }
-
+    /// <summary>
+    /// 最终目的地
+    /// </summary>
+    public Vector2Int destination { get; private set; }
     private MapManage Map;
 
-    /* Character position on screen */
+    /// <summary>
+    /// 目前的位置
+    /// </summary>
     public Vector3 visualPosition
     {
         get
         {
             return new Vector3(
-                Mathf.Lerp(this.position.x, this._nextPosition.x, this._movementPercent),
-                Mathf.Lerp(this.position.y, this._nextPosition.y, this._movementPercent),
+                Mathf.Lerp(position.x, nextPosition.x, movementPercent),
+                Mathf.Lerp(position.y, nextPosition.y, movementPercent),
                 0
             );
         }
     }
 
-    /* 当前位置和下一位置之间的移动百分比 */
-    private float _movementPercent;
+    /// <summary>
+    /// 当前位置和下一位置之间的移动百分比
+    /// </summary>
+    private float movementPercent;
 
-    /* Next tile */
-    private Vector2Int _nextPosition;
+    /// <summary>
+    /// 下一个地块
+    /// </summary>
+    private Vector2Int nextPosition;
 
-    /* Do we have a destionation ? */
-    private bool _hasDestination;
+    /// <summary>
+    /// 是否有目的地
+    /// </summary>
+    private bool hasDestination;
 
-    /* 当前路径队列，平铺位置列表 */
-    private Queue<Vector2Int> _path;
+    /// <summary>
+    /// 当前路径队列，平铺位置列表
+    /// </summary>
+    public Queue<Vector2Int> path { get; private set; }
 
-    /* Character speed. TODO: definine this using character.stats */
-    private float _speed = .1f;
+    private float speed = .1f;
 
-    /* Character */
-    private BaseCharacter _character;
+    private BaseCharacter character;
 
     public CharacterMovement(Vector2Int position, BaseCharacter character)
     {
         this.position = position;
-        this._character = character;
-        Map.characters.Add(this._character);
+        this.character = character;
+        Map.characters.Add(this.character);
         this.ResetMovement();
     }
 
-    // 检查lookingat是否相同如果不相同，调用onChangedDirection。
-    private void UpdateLookingAt(Vector2Int nextPos)
+    // 检查视角方向是否相同如果不相同，调用onChangedDirection。
+    private void UpdateLookAt(Vector2Int nextPos)
     {
-        MeshPool.Direction original = this.lookingAt;
+        MeshPool.Direction original = this.lookAt;
         Vector2Int t = nextPos - this.position;
 
         if (t.x > 0)
         {
-            this.lookingAt = MeshPool.Direction.E;
+            lookAt = MeshPool.Direction.E;
         }
         else if (t.x < 0)
         {
-            this.lookingAt = MeshPool.Direction.W;
+            lookAt = MeshPool.Direction.W;
         }
         else if (t.y > 0)
         {
-            this.lookingAt = MeshPool.Direction.N;
+           lookAt = MeshPool.Direction.N;
         }
         else
         {
-            this.lookingAt = MeshPool.Direction.S;
+            lookAt = MeshPool.Direction.S;
         }
 
-        if (this.lookingAt != original && this.onChangeDirection != null)
+        if (lookAt != original && onChangeDirection != null)
         {
-            this.onChangeDirection(this.lookingAt);
+            onChangeDirection(lookAt);
         }
     }
 
-    /// 检查我们是否有一条路径，如果没有，请尝试获取一条路径。然后一个一个地向目的地移动。
+    /// <summary>
+    /// 检查是否有一条路径，如果没有，尝试获取一条路径。然后一个一个地向目的地移动。
+    /// </summary>
+    /// <param name="task"></param>
     public void Move(Task task)
     {
-        if (this._hasDestination == false)
+        if (hasDestination == false)
         {
             PathResult pathResult = PathFinder.GetPath(GameObject.FindObjectOfType<MapManage>(), this.position, task.targets.currentPosition);
 
             if (pathResult.success == false)
             {
-                task.taskStatus = TaskStatus.Failed; // Maybe a special failed condition;
+                task.taskStatus = TaskStatus.Failed; 
                 this.ResetMovement();
                 return;
             }
 
-            this._hasDestination = true;
-            this._path = new Queue<Vector2Int>(pathResult.path);
-            this.destination = task.targets.currentPosition;
+            hasDestination = true;
+            path = new Queue<Vector2Int>(pathResult.path);
+            destination = task.targets.currentPosition;
         }
-        // Are we on our final destination 
-        if (this.destination == this.position)
+        //判断到最后目的地了吗
+        if (destination == position)
         {
-            this.ResetMovement();
+            ResetMovement();
             return;
         }
 
-        if (this.position == this._nextPosition)
+        if (position == nextPosition)
         {
-            this._nextPosition = this._path.Dequeue();
-            this.UpdateLookingAt(this._nextPosition);
+            nextPosition = path.Dequeue();
+            UpdateLookAt(nextPosition);
         }
 
-        float distance = Distance(this.position, this._nextPosition);
-       // float distanceThisFrame = this._speed * Loki.map[this.position].pathCost;路径成本
-        this._movementPercent +=  distance/10;
+        float distance = Distance(position,nextPosition);
+       // float distanceThisFrame = _speed * map.f;路径成本
+        movementPercent +=  distance/10;
 
-        if (this._movementPercent >= 1f)
+        if (movementPercent >= 1f)
         {
-          //  map.characters.Remove(this._character);
-          //  Loki.map[this._nextPosition].characters.Add(this._character);
-            this.position = this._nextPosition;
-            this._movementPercent = 0f;
+            position = nextPosition;
+            movementPercent = 0f;
         }
     }
 
-    // Reset all data about the movement (used at the end of a path)
+    // 重置有关移动的所有数据（在路径末尾使用）
     private void ResetMovement()
     {
-        this.destination = this.position;
-        this._hasDestination = false;
-        this._nextPosition = this.position;
-        this._movementPercent = 0f;
-        this._path = new Queue<Vector2Int>();
+        destination = position;
+        hasDestination = false;
+        nextPosition = position;
+        movementPercent = 0f;
+        path = new Queue<Vector2Int>();
     }
 
     public  float Distance(Vector2Int a, Vector2Int b)
     {
-        if (
-            Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) == 1
-        )
+        if (Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) == 1)
         {
             return 1f;
         }
 
-        if (
-            Mathf.Abs(a.x - b.x) == 1 &&
-            Mathf.Abs(a.y - b.y) == 1
-        )
+        if (Mathf.Abs(a.x - b.x) == 1 && Mathf.Abs(a.y - b.y) == 1)
         {
             return 1.41121356237f;
         }
 
-        return Mathf.Sqrt(
-            Mathf.Pow((float)a.x - (float)b.x, 2) +
-            Mathf.Pow((float)a.y - (float)b.y, 2)
-        );
+        return Mathf.Sqrt(Mathf.Pow((float)a.x - (float)b.x, 2) +Mathf.Pow((float)a.y - (float)b.y, 2));
     }
 }

@@ -67,7 +67,7 @@ public class MapManage : MonoBehaviour
     [Tooltip("代表道路的tile")]
     public Tile miniRunTile;
 
-    private bool isExhausted;
+    //private bool isExhausted;
     private System.Random pseudoRandom;
     private System.Random pseudoRandomRes;
     [HideInInspector]
