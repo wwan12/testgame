@@ -22,8 +22,8 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     [HideInInspector]
     [Obsolete("拖动物品兼容不好")]
     public bool isNull = true;
-    [Tooltip("支持的tag类型，默认为全支持")]
-    public string[] tagOfSupport;
+    [Tooltip("支持的item类型，默认为全支持")]
+    public ItemType[] tagOfSupport;
 
     //public 
 
@@ -64,7 +64,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     /// <param name="item"></param>
     public void AddItem(GameObject itemController)
     {
-        if (IsInTags(itemController.tag))
+        if (IsInTags(item.GetComponent<ItemInBagController>().info.type))
         {
             isNull = false;
             item = itemController.GetComponent<ItemInBagController>();
@@ -91,7 +91,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dragItem = eventData.pointerDrag;
-        if (IsInTags(dragItem.tag))
+        if (IsInTags(dragItem.GetComponent<ItemInBagController>().info.type))
         {
             isNull = false;          
             item= dragItem.GetComponent<ItemInBagController>();
@@ -100,7 +100,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         }   
     }
 
-    bool IsInTags(string tagName)
+    bool IsInTags(ItemType type)
     {
         if (tagOfSupport == null)
         {
@@ -110,7 +110,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         {
             foreach (var tag in tagOfSupport)
             {
-                if (tag.Equals(tagName))
+                if (tag.Equals(type))
                 {
                     return true;
                 }

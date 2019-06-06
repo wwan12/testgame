@@ -22,6 +22,7 @@ public class PlayerManage : MonoBehaviour
     public float power;
     public float collectSpeed;
     public float moveSpeed = 1f;
+    public float v;
     private GameObject miniMapCamera;
     public enum PlayerRole
     {
@@ -78,6 +79,7 @@ public class PlayerManage : MonoBehaviour
         float V = Input.GetAxis("Vertical");
         Vector2 playerMove = new Vector2(H * moveSpeed , V * moveSpeed );
         m_Rigidbody2D.AddForce(playerMove);
+        v = Vector2.Distance(new Vector2(H*moveSpeed,0),new Vector2(0,v*moveSpeed));
         //   Vector2 playerMove = new Vector2(H * moveSpeed*0.1f, V * moveSpeed * 0.1f);
         //   m_Rigidbody2D.MovePosition(m_Rigidbody2D.position+playerMove*Time.deltaTime);
     }
@@ -171,8 +173,8 @@ public class PlayerManage : MonoBehaviour
         GameObject.Instantiate(gameObject).transform.position= vector;
     }
 
-    public bool InOperationRange(Vector3 opv) {
-        if ((opv - transform.position).sqrMagnitude < operationRange * operationRange)
+    public bool InOperationRange(Vector3 opv) {        
+        if (Vector3.Distance(transform.position, opv) < operationRange)
         {
             return true;
         }

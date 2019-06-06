@@ -11,6 +11,7 @@ using System.Collections;
 public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
 	private Vector3 dragOffset;
+    private GameObject extUI;
 
    // public GameObject bagItem;
 
@@ -62,7 +63,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="obj"></param>
     /// <param name="itemInfo"></param>
     [Obsolete]
-    public void BagUsedItem(object obj, EventArgs itemInfo)
+    public void BagUsedItem(object obj, ItemInfo itemInfo)
     {
         (itemInfo as ItemInfo).num--;
     }
@@ -200,6 +201,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
+        AddOtherUI("PlayerEquip");
        // StartCoroutine(test());
     }
 
@@ -330,13 +332,18 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="perfabName"></param>
     public GameObject AddOtherUI(string prefabName)
     {
-        GameObject gameObject= Resources.Load<GameObject>("prefab/"+prefabName);
-        gameObject= GameObject.Instantiate(gameObject);
-        gameObject.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+        if (extUI!=null)
+        {
+            extUI = null;
+            Destroy(extUI);
+        }
+        extUI= Resources.Load<GameObject>("prefab/"+prefabName);
+        extUI = GameObject.Instantiate(gameObject);
+        extUI.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
         // RectTransform trans = gameObject.GetComponent<RectTransform>();
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, , trans.sizeDelta.x);
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, top + autoTop, trans.sizeDelta.y);
-        return gameObject;
+        return extUI;
     }
 
    // Update is called once per frame
