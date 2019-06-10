@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class AddTextInfo : MonoBehaviour
 {
     public int defSize=14;
+    public Transform canvas;
     private float left=4;
     private float top;
     // Start is called before the first frame update
@@ -60,7 +61,7 @@ public class AddTextInfo : MonoBehaviour
     private void AddText(string objectName, string text,int fontSize ,Color color)
     {
         var obj = new GameObject(objectName);
-        obj.transform.SetParent(transform);
+        obj.transform.SetParent(canvas==null?transform:canvas);
     
         var typeText = obj.AddComponent<Text>();
         typeText.fontSize = fontSize;

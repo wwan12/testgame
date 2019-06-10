@@ -87,7 +87,11 @@ public class AppManage
            "\nsupportsStencil：" + SystemInfo.supportsStencil + "\nsupportsVertexPrograms：" + SystemInfo.supportsVertexPrograms +
            "\nsupportsVibration：" + SystemInfo.supportsVibration + "\n内存大小：" + SystemInfo.systemMemorySize;
     }
-
+    /// <summary>
+    /// 显示一个ui控件，若已显示则隐藏
+    /// </summary>
+    /// <param name="ui"></param>
+    /// <returns></returns>
     public GameObject SetOpenUI(GameObject ui) { 
          CanvasGroup group;
         if (openUI!=null&&openUI.GetInstanceID()!=ui.GetInstanceID())
