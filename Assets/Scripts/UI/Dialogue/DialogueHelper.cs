@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 读取剧本，分发剧本，提供流程方法
 /// </summary>
-public class DialogueBase : MonoBehaviour
+public class DialogueHelper
 {
     [Tooltip("输出字的时间间隔")]
     public float letterPause = 0.1f;//时间间隔
@@ -23,7 +23,7 @@ public class DialogueBase : MonoBehaviour
     [Tooltip("在那个canvas上绘制")]
     public RectTransform gameUI;
     public bool isAuto;
-    private Type lastType;
+    private DialogeType lastType;
     string readInAsset;
     bool isStart;
     float pause;
@@ -36,23 +36,7 @@ public class DialogueBase : MonoBehaviour
     public event EventHandler<string> WriterOverCallBack;
     //  private Queue<string> queue;
     private GameObject[] choiceItems; 
-    public enum Type
-    {
-        general,
-        choice,
-        aside,
-
-    }
-
-
-    /// <summary>
-    /// 0>事件id,1>类型,2>主体,3>附加
-    /// 类型：0保留，1普通对话，2选择支，3跳转
-    /// 附加：^0(无)，^1(无),^2^选项，3^要跳转的行号
-    /// </summary>
-    /// 改为json
-      private BranchInfo[] Text;
-
+   
     // Use this for initialization
     void Start()
     {
@@ -64,36 +48,16 @@ public class DialogueBase : MonoBehaviour
      //   Text= readInAsset.Split('|');
     }
 
-    public void Ext() {
-        foreach (var t in Text)
-        {
-            switch (t.type)
-            {
-                case Type.general:
-                    AddNextText(t.text);
-                    break;
-                case Type.choice:
-                    AddChoiceText(t.question, t.answer);
-                    break;
-                case Type.aside:
-                    AddAside(t.text);
-                    break;
-                default:
-                    break;
-            }
+    
 
-
-        }
-    }
-
-     void ShowDialogue(string text)
+     void ShowDialogue(string text, MonoBehaviour mono)
     {
         GameObject.Instantiate(showTextLabel.gameObject);      
         word = text;
         showText = showTextLabel.gameObject.GetComponent<Text>();
         pause = letterPause;
         isStart = true;
-        TextChange();
+        TextChange(mono);
         AppManage.Instance.SetOpenUI(showTextLabel.gameObject);
     }
 
@@ -129,7 +93,7 @@ public class DialogueBase : MonoBehaviour
         }
         foreach (var item in choiceItems)
         {
-            Destroy(item);
+           GameObject.Destroy(item);
         }
     }
 
@@ -166,43 +130,35 @@ public class DialogueBase : MonoBehaviour
         //    }
         //}
     }
-    public void AddNextText(string text) {
+    public void AddNextText(string text,MonoBehaviour mono) {
 
         //CloseText();
         switch (lastType)
         {         
-            case Type.choice:
+            case DialogeType.choice:
                 showTextLabel = generalTextLabel;
-                ShowDialogue(text);
+                ShowDialogue(text, mono);
                 break;       
 
             default:
                 word = text;
-                TextChange();
+                TextChange(mono);
                 break;
         }
-        lastType = Type.general;
+        lastType = DialogeType.general;
        // queue.Enqueue(text);
     }
-    [Obsolete]
-    public void AddNextTexts(string[] texts)
-    {
-        foreach (var item in texts)
-        {
-            AddNextText(item);
-           
-        }
-    }
+   
 
     public void AddChoiceText(string question, string[] answerItems)
     {
         switch (lastType)
         {
-            case Type.general:
+            case DialogeType.general:
                 break;
-            case Type.choice:
+            case DialogeType.choice:
                 break;
-            case Type.aside:
+            case DialogeType.aside:
                 break;
             default:
                 break;
@@ -219,11 +175,12 @@ public class DialogueBase : MonoBehaviour
     public void CloseText()
     {
         isStart = false;
-        Destroy(showTextLabel.gameObject);
+        GameObject.Destroy(showTextLabel.gameObject);
     }
 
     /**切换语句功能*/
-    void TextChange(){
+    void TextChange(MonoBehaviour mono)
+    {
         if (letterPause==0)
         {
             printText = word;
@@ -235,7 +192,7 @@ public class DialogueBase : MonoBehaviour
            // word = "";
            // word = line[2];
             printText = "";
-            StartCoroutine(TypeText());
+            mono.StartCoroutine(TypeText());
         }
     }
     /**输出文本功能*/
@@ -254,10 +211,18 @@ public class DialogueBase : MonoBehaviour
 
     public class BranchInfo
     {
-        public Type type;
+        public DialogeType type;
         public int id;
         public string text;
         public string question;
         public string[] answer;
     }
+}
+
+public enum DialogeType
+{
+    general,
+    choice,
+    aside,
+
 }

@@ -184,9 +184,7 @@ public class PlayerManage : MonoBehaviour
     // 碰撞开始
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.name.Equals("Boundary")){
-            GameObject.FindObjectOfType<MapManage>().ExpandMap();
-        }
+      
     }
 
     // 碰撞结束
@@ -204,13 +202,18 @@ public class PlayerManage : MonoBehaviour
     // 开始接触
     void OnTriggerEnter2D(Collider2D collider)
     {
-   
+       
+       
     }
 
     // 接触结束
     void OnTriggerExit2D(Collider2D collider)
     {
-
+    
+        if (collider.gameObject.name.Equals("Boundary"))
+        {
+              GameObject.FindObjectOfType<MapManage>().ExpandMap();
+        }
     }
 
     // 接触持续中

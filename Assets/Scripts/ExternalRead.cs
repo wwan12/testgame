@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
+using System;
 
 public class ExternalRead 
 {
     private TextAsset textasset;
+    public readonly string ITEMTABLE_PATH= "ExternalConfigurationTable/ItemTable.xlsx";
     // Use this for initialization
     void Start () {
         
@@ -16,27 +18,27 @@ public class ExternalRead
     {
     }
 
-    public void ReadItems(MonoBehaviour mono ) {
+    public void ReadItems(MonoBehaviour mono) {
         mono.StartCoroutine(ReadTextToFormJson());
     }
     IEnumerator ReadTextToFormJson()
     {
-        //一种读取本地工程中文件的方法		
-        textasset = Resources.Load<TextAsset>("ItemsJson");
-        //注意，这里文本文件的后缀txt不能写进去，否则读不出来	
+        textasset = Resources.Load<TextAsset>(ITEMTABLE_PATH);
         JsonData jd;
         List<Item> items = new List<Item>();
         if (textasset != null) {
             jd = JsonMapper.ToObject(textasset.text);
-          
+
             for (int i = 0; i < jd.Count; i++)
             {
                 Item bitem = new Item();
                 bitem.id = jd[i]["id"].ToString();
-                bitem.name = jd[i]["name"].ToString();
-                bitem.cost = jd[i]["cost"].ToString();
-                bitem.icon = jd[i]["icon"].ToString();
-                bitem.note = jd[i]["note"].ToString();
+                bitem.name = jd[i]["名称"].ToString();
+                bitem.cost = float.Parse(jd[i]["价值"].ToString()) ;
+                bitem.icon = jd[i]["图标"].ToString();
+                bitem.note = jd[i]["说明"].ToString();
+                bitem.superposition = int.Parse(jd[i]["叠加数量"].ToString());
+                bitem.type= (ItemType)Enum.ToObject(typeof(ItemType), int.Parse(jd[i]["物品类型"].ToString())) ;
                 items.Add(bitem);
             }
         }
@@ -71,8 +73,10 @@ public class ExternalRead
     public class Item {
        public string name;
         public string id;
-        public string cost;
+        public float cost;
+        public int superposition;
         public string icon;
         public string note;
+        public ItemType type;
     }
 }

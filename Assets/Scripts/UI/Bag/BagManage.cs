@@ -201,7 +201,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
-        AddOtherUI("PlayerEquip");
+        //AddOtherUI("PlayerEquip");
        // StartCoroutine(test());
     }
 
@@ -234,8 +234,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         {    
             AutoAddLattice(i,j==0?0:j/lineNum);
             j++;
-        }
-        
+        }       
         for (int i = 0; i < items.Length; i++)
          {         
             items[i].serialNumber = i;

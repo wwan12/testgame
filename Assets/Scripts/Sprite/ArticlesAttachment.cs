@@ -6,6 +6,7 @@ using UnityEngine.Events;
 /// <summary>
 /// 提供物品相关信息
 /// </summary>
+[Obsolete("物品信息改为外部读取")]
 public class ArticlesAttachment : MonoBehaviour
 {
     public int id;
