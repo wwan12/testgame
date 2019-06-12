@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class EquipControl : MonoBehaviour
 {
+    [Tooltip("要连接的对象")]
     public RectTransform[] connects;
-    public ItemType[] notInput;
+    [Tooltip("可以放入的类型")]
+    public ItemType[] canInput;
     public float lineWidth;
     private Image lineImage;
     private LatticeController lattice;
@@ -15,9 +17,9 @@ public class EquipControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       lattice= gameObject.AddComponent<LatticeController>();
-        lattice.tagOfSupport = notInput;
-       lattice.itemInfoPanel= GameObject.FindObjectOfType<BagManage>().itemInfoPanel;
+        lattice = gameObject.AddComponent<LatticeController>();
+        lattice.tagOfSupport = canInput;
+        lattice.itemInfoPanel = GameObject.FindObjectOfType<BagManage>().itemInfoPanel;
         canvas = gameObject.GetComponent<Image>().canvas.gameObject.GetComponent<RectTransform>();
         lattice.canvas = canvas;
         lattice.UseThisItemCallBack += UseEquip;

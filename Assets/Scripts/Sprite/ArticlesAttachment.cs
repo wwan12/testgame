@@ -9,7 +9,7 @@ using UnityEngine.Events;
 [Obsolete("物品信息改为外部读取")]
 public class ArticlesAttachment : MonoBehaviour
 {
-    public int id;
+    public string id;
     [Tooltip("物品的类型")]
     public Warehouse.ArticlesType type;
     public string note;

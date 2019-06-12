@@ -21,7 +21,7 @@ public class PlayerManage : MonoBehaviour
     public float Hp;
     public float power;
     public float collectSpeed;
-    public float moveSpeed = 1f;
+    public float moveSpeed = 0.1f;
     public float v;
     private GameObject miniMapCamera;
     public enum PlayerRole
@@ -75,13 +75,17 @@ public class PlayerManage : MonoBehaviour
     /// </summary>
     private void MoveOnWindows()
     {
-        float H = Input.GetAxis("Horizontal");
-        float V = Input.GetAxis("Vertical");
-        Vector2 playerMove = new Vector2(H * moveSpeed , V * moveSpeed );
-        m_Rigidbody2D.AddForce(playerMove);
+        float H = Input.GetAxis("Horizontal")/10;
+        float V = Input.GetAxis("Vertical")/10;
+        Vector2 now = new Vector2(transform.position.x, transform.position.y);
+        Vector2 playerMove =now + new Vector2(H * moveSpeed , V * moveSpeed );
+       // m_Rigidbody2D.AddForce(playerMove);
         v = Vector2.Distance(new Vector2(H*moveSpeed,0),new Vector2(0,v*moveSpeed));
-        //   Vector2 playerMove = new Vector2(H * moveSpeed*0.1f, V * moveSpeed * 0.1f);
-        //   m_Rigidbody2D.MovePosition(m_Rigidbody2D.position+playerMove*Time.deltaTime);
+        m_Rigidbody2D.MovePosition(Vector2.Lerp(playerMove, now, 1.5f * Time.deltaTime));
+        //Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
+        //Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+        //Quaternion newRotation = Quaternion.Lerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
+        //GetComponent<Rigidbody>().MoveRotation(newRotation);
     }
 
     private void Operate() {

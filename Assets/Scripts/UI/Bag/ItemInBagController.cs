@@ -27,8 +27,11 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     private float timer = 0f;
     private bool pointEntered = false;
+    /// <summary>
+    /// 当前的物品信息，仅供读取方便，尽量不要在背包中直接操作
+    /// </summary>
     [HideInInspector]
-    public ItemInfo info;//当前的物品信息
+    public ItemInfo info;
     /// <summary>
     /// 使用当前物品的事件
     /// </summary>
@@ -58,14 +61,24 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
             }
         }
     }
-
-    public void AddNum(ItemInfo info)
+    /// <summary>
+    /// 改变物品数量
+    /// </summary>
+    /// <param name="num"></param>
+    public void AddNum(int num)
     {
-        this.info.num = this.info.num + info.num;
-        text.text = this.info.num.ToString();       
+        info.num += num;
+        if (info.num<0)
+        {
+            Destroy(this);
+            return;
+        }
+        text.text = info.num.ToString();       
     }
-
-    public void AddItem()
+    /// <summary>
+    /// 将物品图标以及数量显示出来
+    /// </summary>
+    public void ShowItem()
     {
         image = GetComponent<Image>();
         text = GetComponentInChildren<Text>();
@@ -162,14 +175,6 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     public void DiscardItem()
     {
         Destroy(gameObject);
-    }
-
-    public void DiscardItem(int num) {
-        info.num = info.num - num;
-        if (num<=0)
-        {
-            DiscardItem();
-        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -56,7 +56,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     /// <param name="itemInfo"></param>
     public void AddItem(ItemInfo itemInfo) {
         isNull = false;
-        item.AddNum(itemInfo);
+        item.AddNum(itemInfo.num);
     }
     /// <summary>
     /// 添加一个新物品
@@ -64,34 +64,24 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
     /// <param name="item"></param>
     public void AddItem(GameObject itemController)
     {
-        if (IsInTags(item.GetComponent<ItemInBagController>().info.type))
+        if (IsInTypes(itemController.GetComponent<ItemInBagController>().info.type))
         {
             isNull = false;
             item = itemController.GetComponent<ItemInBagController>();
-            item.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+            item.gameObject.transform.SetParent(gameObject.transform, false);
             item.UseItemCallBack += UseItemCallBack;
             item.canvas = canvas;
             item.itemInfoPanel = itemInfoPanel;
             item.offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x, -gameObject.GetComponent<RectTransform>().sizeDelta.y);
-            item.AddItem();
+            item.ShowItem();
         }
-        
-    }
-    /// <summary>
-    /// 使用完，丢弃指定数量的物品
-    /// </summary>
-    /// <param name="num"></param>
-    public void DiscardItem(int num) {
-        isNull = true;
-        item.info = null;
-        item.DiscardItem(num);
-    }
-    
+
+    } 
 
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dragItem = eventData.pointerDrag;
-        if (IsInTags(dragItem.GetComponent<ItemInBagController>().info.type))
+        if (IsInTypes(dragItem.GetComponent<ItemInBagController>().info.type))
         {
             isNull = false;          
             item= dragItem.GetComponent<ItemInBagController>();
@@ -100,9 +90,9 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         }   
     }
 
-    bool IsInTags(ItemType type)
+    bool IsInTypes(ItemType type)
     {
-        if (tagOfSupport == null)
+        if (tagOfSupport == null||tagOfSupport.Length==0)
         {
             return true;
         }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using External;
 
 public class Warehouse
 {
@@ -12,7 +13,10 @@ public class Warehouse
     private GameObject[] enemys;
     private GameObject[] neutrals;
     private GameObject[] npcs;
+    public  List<Item> itemTable;
+    [Obsolete]
     public event EventHandler<ArticlesAttachment> DestroyCallBack;
+
 
     public static Warehouse Instance
     {
@@ -26,7 +30,7 @@ public class Warehouse
 
     private void Init()
     {
-      
+       
     }
     [Obsolete]
     public void Initialize() {
@@ -62,7 +66,7 @@ public class Warehouse
         }
         foreach (var item in cache)
         {
-            if (item.GetComponent<ArticlesAttachment>().id==id)
+            if (item.GetComponent<ArticlesAttachment>().id.Equals(id))
             {
                 GameObject art =GameObject.Instantiate<GameObject>(item, vector3, Quaternion.identity);
                 return art;
@@ -75,6 +79,7 @@ public class Warehouse
     /// </summary>
     /// <param name="id"></param>
     /// <returns>null为在指定类型中没找到</returns>
+    [Obsolete]
     public GameObject Create(Vector3 vector3, string name, [DefaultValue(ArticlesType.ARTICLES)]ArticlesType type)
     {
         string pex = "";
@@ -127,7 +132,7 @@ public class Warehouse
         }
         foreach (var item in cache)
         {
-            if (item.GetComponent<ArticlesAttachment>().id == id)
+            if (item.GetComponent<ArticlesAttachment>().id.Equals(id) )
             {
                 return item.GetComponent<ArticlesAttachment>();
             }
@@ -138,6 +143,7 @@ public class Warehouse
     /// 通过名称获取仓库里物品的详细信息
     /// </summary>
     /// <param name="id"></param>
+    [Obsolete]
     public ArticlesAttachment GetAtriclesInfo(string name, ArticlesType type = ArticlesType.ARTICLES)
     {
         //用unity的内存指针去找，效率待测
@@ -145,11 +151,39 @@ public class Warehouse
         return Resources.Load<GameObject>("Warehouse/" + p + "/" + name+".prefab").GetComponent<ArticlesAttachment>();
     }
 
+    /// <summary>
+    /// 通过名称获取仓库物品的详细信息
+    /// </summary>
+    /// <param name="id"></param>
+    public ItemInfo GetItemInfo(string name)
+    {
+        foreach (var item in itemTable)
+        {
+            if (item.name.Equals(name))
+            {
+                return new ItemInfo() {
+                    name = item.name,
+                    id = item.id,
+                    note = item.note,
+                    type = item.type,
+                    maxNum = item.superposition,
+                    cost = item.cost,
+                    sprite = Resources.Load<Sprite>(item.icon), 
+                };
+            }
+           
+        }
+        return new ItemInfo()
+        {
+            name = name,
+        }; 
+    }
 
     /// <summary>
     /// 回收一个任意物品
     /// </summary>
     /// <param name="gameObject"></param>
+     [Obsolete]
     public void Destroy(GameObject gameObject, [DefaultValue("1.0F")] float t)
     {
         DestroyCallBack(this, gameObject.GetComponent<ArticlesAttachment>());

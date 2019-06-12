@@ -40,16 +40,18 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     public float autoSize = 0;
 
     /// <summary>
-    /// 使用某一个物品
+    /// 回调方法，注册UseBagItemCallBack
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="itemInfo"></param>
-    public void UseItem(object obj, ItemInfo itemInfo)
+    private void UseItemCallBack(object obj, ItemInfo itemInfo)
     {
         UseBagItemCallBack(obj, itemInfo);
     }
+
+
     /// <summary>
-    /// 丢弃某一个物品
+    /// 丢弃物品，不可用，注册DiscardBagItemCallBack
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="itemInfo"></param>
@@ -58,14 +60,17 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         bagCapacity++;
     }
     /// <summary>
+    /// 删除一个物品，无视数量
+    /// </summary>
+    public void BagUsedItem(string name) {
+        GetLatticeItem(name).DiscardItem();
+    }
+    /// <summary>
     /// 使用完某一个物品，提供给外部调用
     /// </summary>
-    /// <param name="obj"></param>
-    /// <param name="itemInfo"></param>
-    [Obsolete]
-    public void BagUsedItem(object obj, ItemInfo itemInfo)
+    public void BagUsedItem(string name, int num)
     {
-        (itemInfo as ItemInfo).num--;
+        GetLatticeItem(name).AddNum(num);
     }
     /// <summary>
     /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false
@@ -113,19 +118,35 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
                 if (items[i].item==null)
                 {
                     items[i].AddItem(item);
+                    return;
                 }
             }
         }
     }
-
+    /// <summary>
+    /// 根据名称获取物品
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="itemInfo"></param>
+    public ItemInBagController GetLatticeItem(string name)
+    {
+        foreach (var item in items)
+        {
+            if (item.item != null && item.item.info.name.Equals(name))
+            {
+                return item.item;
+            }
+        }
+        return null;
+    }
     /// <summary>
     /// 根据序号获取物品
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public ItemInfo GetLatticeItem(int index)
+    public ItemInBagController GetLatticeItem(int index)
     {
-        return items[index].item==null?null: items[index].item.info;
+        return items[index].item==null?null: items[index].item;
     }
     /// <summary>
     /// -1没有找到
@@ -152,7 +173,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].item.info!=null)
+            if (items[i].item!=null)
             {
                 if (items[i].item.info.name.Equals(infoName) )
                 {
@@ -201,24 +222,11 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
-        //AddOtherUI("PlayerEquip");
+        AddOtherUI("PlayerEquip");
        // StartCoroutine(test());
     }
 
-    IEnumerator test()
-    {
-        yield return new WaitForSeconds(2);
-        BagAddItem(0,new ItemInfo()
-        {
-            name = "aaa" + 0,
-            sprite = Resources.Load<Sprite>("Palette/2.5dmap_03_111.asset")
-        });
-        BagAddItem(1,new ItemInfo()
-        {
-            name = "aaa" + 1,
-            sprite = Resources.Load<Sprite>("Palette/2.5dmap_03_111.asset")
-        });
-    }
+   
     /// <summary>
     /// 
     /// </summary>
@@ -240,7 +248,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             items[i].serialNumber = i;
             items[i].canvas = gameObject.GetComponent<RectTransform>();
             items[i].itemInfoPanel = itemInfoPanel;
-            items[i].UseThisItemCallBack += UseItem;
+            items[i].UseThisItemCallBack += UseItemCallBack;
          }
        
     }
@@ -253,7 +261,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             items[i].serialNumber = i;
             items[i].canvas = gameObject.GetComponent<RectTransform>();
             items[i].itemInfoPanel = itemInfoPanel;
-            items[i].UseThisItemCallBack += UseItem;
+            items[i].UseThisItemCallBack += UseItemCallBack;
         }
        
     }
@@ -302,17 +310,25 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         return saveData.ToString();
     }
-
+    /// <summary>
+    /// 读取并恢复背包数据
+    /// </summary>
+    /// <param name="save"></param>
     public void ReadBagData(string save) {
         string[] datas = save.Split('|');
         for (int i = 0; i < datas.Length; i++)
         {
             string[] data = datas[i].Split(',');
-            ArticlesAttachment articles= Warehouse.Instance.GetAtriclesInfo(data[1]);          
-            BagAddItem(int.Parse(data[0]), ArticlesToItem(articles, int.Parse(data[2])));
+            BagAddItem(int.Parse(data[0]), DataToItem(data));
         }
     }
 
+    private ItemInfo DataToItem(string[] data) {
+        ItemInfo itemInfo = Warehouse.Instance.GetItemInfo(data[1]);
+        itemInfo.num = int.Parse(data[2]);
+        return itemInfo;
+    }
+    [Obsolete]
     public ItemInfo ArticlesToItem(ArticlesAttachment articles,int num)
     {
         ItemInfo itemInfo = new ItemInfo
@@ -337,8 +353,12 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
             Destroy(extUI);
         }
         extUI= Resources.Load<GameObject>("prefab/"+prefabName);
-        extUI = GameObject.Instantiate(gameObject);
-        extUI.transform.SetParent(gameObject.GetComponent<RectTransform>().transform, false);
+        if (extUI==null)
+        {
+            return null;
+        }
+        extUI = GameObject.Instantiate(extUI);
+        extUI.transform.SetParent(gameObject.transform, false);
         // RectTransform trans = gameObject.GetComponent<RectTransform>();
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, , trans.sizeDelta.x);
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, top + autoTop, trans.sizeDelta.y);

@@ -18,12 +18,14 @@ public class ItemInfo
 {
   
 
-    public int id;
+    public string id;
     public string name="";
     public ItemType type;
     public string note="";
     public int num=0;
     public float weight=0;
+    public float cost;
     public bool isUse=true;
     public Sprite sprite;
+    public int maxNum;
 }
