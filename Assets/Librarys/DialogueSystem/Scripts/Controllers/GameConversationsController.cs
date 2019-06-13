@@ -29,8 +29,8 @@
         }
 
         /// <summary>
-        /// Creates a Key on the PendingConversations with the name of the Conversation if it doesn't exists already.
-        /// Adds the first element in ConversationsToAdd to the Value PendingConversations with the correct key and sorts the list.
+        /// 在挂起的会话上创建一个键，该键的名称为会话的名称（如果尚未存在）
+        ///添加conversations中的第一个元素，使用正确的键添加到挂起的值conversations中，并对列表进行排序。
         /// </summary>
         public void AddConversation()
         {

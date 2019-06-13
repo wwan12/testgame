@@ -9,7 +9,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Component of all the Pending Conversations in the Game
+    /// 游戏中所有挂载对话的组件
     /// </summary>
     public class GameConversationsComponent : MonoBehaviour
     {

@@ -5,7 +5,9 @@
     using DialogueManager.Models;
     using UnityEngine;
     using UnityEngine.UI;
-
+    /// <summary>
+    /// 对话控制器
+    /// </summary>
     public class DialogueManagerController : MonoBehaviour
     {
         private Queue<string> sentences;
@@ -40,9 +42,9 @@
         }
 
         /// <summary>
-        /// Start new dialogue, and reset all data from previous dialogues
+        /// 启动新对话，并重置以前对话中的所有数据
         /// </summary>
-        /// <param name="dialogue">Dialogue that will be displayed</param>
+        /// <param name="dialogue">将显示的对话</param>
         public void StartDialogue()
         {
             Dialogue dialogue = this.Model.DialogueToShow;
@@ -62,9 +64,9 @@
         }
 
         /// <summary>
-        /// Display next sentence in dialogue
+        /// 在对话中显示下一句话
         /// </summary>
-        /// <returns>If there was a Sentence to be displayed or not</returns>
+        /// <returns>是否有要显示的句子</returns>
         public bool DisplayNextSentence()
         {
             foreach (LetterComponent letter in this.letters)
@@ -96,11 +98,11 @@
             {
                 if (this.sentence[i] == '[')
                 {
-                    i = this.changeSpeed( i );
+                    i = this.ChangeSpeed( i );
                 }
                 else if (this.sentence[i] == '<')
                 {
-                    i = this.changeEffect( i );
+                    i = this.ChangeEffect( i );
                 }
                 else
                 {
@@ -167,8 +169,12 @@
             }
             return true;
         }
-
-        public int changeSpeed( int i )
+        /// <summary>
+        /// 改变速度
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public int ChangeSpeed( int i )
         {
             i++;
             string speed = string.Empty;
@@ -180,8 +186,12 @@
             this.currentSpeed = float.Parse( speed );
             return i;
         }
-
-        public int changeEffect( int i )
+        /// <summary>
+        /// 改变显示效果
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public int ChangeEffect( int i )
         {
             i++;
             string effect = string.Empty;
@@ -203,7 +213,7 @@
         }
 
         /// <summary>
-        /// Method that will be typing and displaying the sentence and checking for [time] indicators
+        ///将要键入和显示句子并检查[时间]指示器的方法
         /// </summary>
         /// <returns>Necessary for the WaitForSeconds function</returns>
         public IEnumerator TypeSentence()
@@ -225,7 +235,7 @@
         }
 
         /// <summary>
-        /// Hides dialogue box
+        /// 隐藏对话框
         /// </summary>
         public void EndDialogue()
         {
@@ -233,10 +243,10 @@
         }
 
         /// <summary>
-        /// Parses the sentence, for fully displaying it.
+        /// 分析句子，以便充分显示它。
         /// </summary>
-        /// <param name="sentence">Sentence to be parsed.</param>
-        /// <returns>Returns the complete sentence witout the [time] labels</returns>
+        /// <param name="sentence">要分析的句子.</param>
+        /// <returns>返回带有[时间]标签的完整句子</returns>
         private string ParseSentence( string sentence )
         {
             string parsedSentence = "";

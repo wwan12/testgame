@@ -19,7 +19,7 @@ public class EquipControl : MonoBehaviour
     {
         lattice = gameObject.AddComponent<LatticeController>();
         lattice.tagOfSupport = canInput;
-        lattice.itemInfoPanel = GameObject.FindObjectOfType<BagManage>().itemInfoPanel;
+        lattice.itemInfoPanel = GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().itemInfoPanel;
         canvas = gameObject.GetComponent<Image>().canvas.gameObject.GetComponent<RectTransform>();
         lattice.canvas = canvas;
         lattice.UseThisItemCallBack += UseEquip;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EasyAnimation {
 
-    [AddComponentMenu("EasyAnimation/移动效果")]
+    [AddComponentMenu("UI简单动画/移动效果")]
     public class EasyAnimation_Move : EasyAnimationTemplateMethod
     {
         [Header("移动增量")]

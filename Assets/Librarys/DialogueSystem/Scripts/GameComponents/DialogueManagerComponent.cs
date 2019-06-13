@@ -12,14 +12,16 @@
     /// </summary>
     public class DialogueManagerComponent : MonoBehaviour
     {
-        /// <summary> Model of the Dialogue Manager </summary>
+        /// <summary> 对话管理器模型</summary>
         public DialogueManager Model;
 
-        /// <summary> Controller of the Dialogue Manager </summary>
+        /// <summary> 对话管理器的控制器 </summary>
         private DialogueManagerController controller;
 
+       
+
         /// <summary>
-        /// Is excecuted when the object is instantiated
+        /// 在对象被实例化时被摘录
         /// </summary>
         private void Awake()
         {
@@ -27,7 +29,7 @@
             gameConversations.name = "GameConversations";
 
            
-            Transform canvasObject = GameObject.Find( "DialogueCanvas" ).GetComponent<Transform>();
+            Transform canvasObject = Model.Canvas ?? GameObject.Find("DialogueCanvas").GetComponent<Transform>();
             GameObject dialogueBox = Instantiate( this.Model.CanvasObjectsPrefab );
             dialogueBox.transform.position = new Vector3( -250, 0, 0 );
             dialogueBox.name = "DialogueBox";
@@ -44,7 +46,7 @@
         }
 
         /// <summary>
-        /// Checks if there is something in the model to display and if there was an input
+        /// 检查模型中是否有要显示的内容以及是否有输入
         /// </summary>
         private void Update()
         {
@@ -64,10 +66,15 @@
                 this.Model.Finished = true;
                 this.DisplayNextSentence();
             }
+            if (Model.IsAuto && this.Model.Finished)
+            {
+                this.DisplayNextSentence();
+                this.Model.Finished = false;
+            }
         }
 
         /// <summary>
-        /// Start new dialogue, and reset all data from previous dialogues
+        ///启动新对话，并重置以前对话中的所有数据
         /// </summary>
         private void StartDialogue()
         {
@@ -76,7 +83,7 @@
         }
 
         /// <summary>
-        /// Display next sentence in dialogue
+        /// 在对话中显示下一句话
         /// </summary>
         private void DisplayNextSentence()
         {

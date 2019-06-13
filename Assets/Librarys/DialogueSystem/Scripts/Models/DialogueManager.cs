@@ -13,10 +13,15 @@
     [Serializable]
     public class DialogueManager
     {
-        /// <summary> 对话框、文本和图像的前言 . </summary>
+        /// <summary>
+        /// 显示对话的画布
+        /// </summary>
+        public RectTransform Canvas;
+
+        /// <summary> 对话框、文本和图像的文本框 . </summary>
         public GameObject CanvasObjectsPrefab;
 
-        /// <summary> 游戏对话的序言。 </summary>
+        /// <summary> 游戏对话的载体。 </summary>
         public GameObject GameConversationsPrefab;
 
         /// <summary> 每个字母之间的时间。  </summary>
@@ -49,10 +54,14 @@
         /// <summary> Gets or sets the Audio that the current dialogue is showing. </summary>
         public AudioSource Source { get; set; }
 
-        /// <summary> Gets or sets a value indicating whether the Dialogue has finished or not. </summary>
+        /// <summary> 获取或设置一个值，该值指示对话是否已完成。. </summary>
         public bool Finished { get; set; }
 
         /// <summary> Gets or sets the <see cref="Dialogue"/> that will be displayed. </summary>
         public Dialogue DialogueToShow { get; set; }
+
+        public bool IsAuto { get; set; }
+
+       
     }
 }

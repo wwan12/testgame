@@ -1,50 +1,50 @@
 ﻿/*
- * Advanced C# messenger by Ilya Suzdalnitski. V1.0
- * 
- * Based on Rod Hyde's "CSharpMessenger" and Magnus Wolffelt's "CSharpMessenger Extended".
- * 
- * Features:
-     * Prevents a MissingReferenceException because of a reference to a destroyed message handler.
-     * Option to log all messages
-     * Extensive error detection, preventing silent bugs
- * 
- * Usage examples:
-     1. Messenger.AddListener<GameObject>("prop collected", PropCollected);
-        Messenger.Broadcast<GameObject>("prop collected", prop);
-     2. Messenger.AddListener<float>("speed changed", SpeedChanged);
-        Messenger.Broadcast<float>("speed changed", 0.5f);
- * 
- * Messenger cleans up its evenTable automatically upon loading of a new level.
- * 
- * Don't forget that the messages that should survive the cleanup, should be marked with Messenger.MarkAsPermanent(string)
+*Ilya Suzdalnitski的高级C#信使。V1.0
+*
+*基于罗德·海德的《CSharpmessenger》和马格纳斯·沃尔菲特的《CSharpmessenger extended》。
+*
+*特点：
+*阻止MissingReferenceException，因为引用了已销毁的消息处理程序。
+*记录所有消息的选项
+*广泛的错误检测，防止沉默的错误
+*
+*用法示例：
+1。messenger.addlistener<gameobject>（prop collected，propcollected）；
+messenger.broadcast<gameobject>（prop collected，prop）；
+2。messenger.addlistener<float>（"speed changed"，SpeedChanged）；
+messenger.broadcast<float>（"speed changed"，0.5f）；
+*
+*在加载新级别时，messenger会自动清除其可能发生的事件。
+*
+*不要忘记，应该在清理之后保留的消息应该用messenger.MarkAsPermanent（string）标记。
  * 
  */
- 
+
 //#define LOG_ALL_MESSAGES
 //#define LOG_ADD_LISTENER
 //#define LOG_BROADCAST_MESSAGE
 //#define REQUIRE_LISTENER 是否必须添加接收监听
- 
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
  
 static internal class Messenger {
     #region Internal variables
- 
-    //Disable the unused variable warning
+
+    //禁用未使用的变量警告
 #pragma warning disable 0414
-    //Ensures that the MessengerHelper will be created automatically upon start of the game.
-    static private MessengerHelper messengerHelper = ( new GameObject("MessengerHelper") ).AddComponent< MessengerHelper >();
+    //确保messengerhelper将在游戏开始时自动创建。
+    private static  MessengerHelper messengerHelper = ( new GameObject("MessengerHelper") ).AddComponent< MessengerHelper >();
 #pragma warning restore 0414
- 
-    static public Dictionary<string, Delegate> eventTable = new Dictionary<string, Delegate>();
- 
-    //Message handlers that should never be removed, regardless of calling Cleanup
-    static public List< string > permanentMessages = new List< string > ();
+
+    public static Dictionary<string, Delegate> eventTable = new Dictionary<string, Delegate>();
+
+    //不应删除的消息处理程序，无论调用清理
+    public static  List<string> permanentMessages = new List< string > ();
     #endregion
     #region Helper methods
-    //Marks a certain message as permanent.
+    //将某条消息标记为永久消息。
     static public void MarkAsPermanent(string eventType) {
 #if LOG_ALL_MESSAGES
         Debug.Log("Messenger MarkAsPermanent \t\"" + eventType + "\"");
@@ -317,15 +317,15 @@ static internal class Messenger {
     }
     #endregion
 }
- 
-//This manager will ensure that the messenger's eventTable will be cleaned up upon loading of a new level.
+
+//此管理器将确保在加载新级别时清理信使的事件表。
 public sealed class MessengerHelper : MonoBehaviour {
     void Awake ()
     {
         DontDestroyOnLoad(gameObject);    
     }
- 
-    //Clean up eventTable every time a new level loads.
+
+    //每次加载新级别时清理事件表。
     public void OnDisable() {
         Messenger.Cleanup();
     }

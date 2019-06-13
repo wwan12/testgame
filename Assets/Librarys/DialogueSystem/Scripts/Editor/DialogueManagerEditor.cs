@@ -8,6 +8,7 @@
     [CustomEditor( typeof( DialogueManagerComponent ) )]
     public class DialogueManagerEditor : Editor
     {
+        DialogueManagerComponent m_Target;
         private SerializedProperty gameConversationsProperty;
         private SerializedProperty canvasObjectsProperty;
         private SerializedProperty waitTimeProperty;
@@ -16,6 +17,8 @@
         private SerializedProperty nextKeyProperty;
         private SerializedProperty fontProperty;
         private SerializedProperty materialProperty;
+        private SerializedProperty auto;
+        private SerializedProperty canvas;
         void OnEnable()
         {
             gameConversationsProperty = serializedObject.FindProperty("Model.GameConversationsPrefab");
@@ -26,11 +29,15 @@
             nextKeyProperty = serializedObject.FindProperty( "Model.NextKey" );
             fontProperty = serializedObject.FindProperty( "Model.Font" );
             materialProperty = serializedObject.FindProperty( "Model.Material" );
+          //  auto = serializedObject.FindProperty("Model.IsAuto");
+          //  canvas = serializedObject.FindProperty("Model.Canvas");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+            m_Target = target as DialogueManagerComponent;
+            m_Target.Model.Canvas = EditorGUILayout.ObjectField("canvas", m_Target.Model.Canvas, typeof(RectTransform), true) as RectTransform;
             EditorGUILayout.PropertyField(gameConversationsProperty, false);
             EditorGUILayout.PropertyField( canvasObjectsProperty, false );
             EditorGUILayout.PropertyField( waitTimeProperty, true );
@@ -39,7 +46,8 @@
             EditorGUILayout.PropertyField( nextKeyProperty, true );
             EditorGUILayout.PropertyField( fontProperty, false );
             EditorGUILayout.PropertyField( materialProperty, false );
+            m_Target.Model.IsAuto = EditorGUILayout.Toggle("auto", m_Target.Model.IsAuto);
             serializedObject.ApplyModifiedProperties();
-        }
+        }     
     }
 }

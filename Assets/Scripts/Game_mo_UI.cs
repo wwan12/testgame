@@ -12,7 +12,8 @@ public class Game_mo_UI : MonoBehaviour
         //Physics.gravity = new Vector3(0, -1.0F, 0);
         ExternalRead read = new ExternalRead();
         read.ReadItems(this);
-        StartCoroutine(test());  
+        StartCoroutine(test());
+        
     }
 
     IEnumerator test()

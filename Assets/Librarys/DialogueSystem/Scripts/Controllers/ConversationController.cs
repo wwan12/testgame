@@ -1,18 +1,14 @@
 ﻿namespace DialogueManager.Controllers
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
-    using DialogueManager.GameComponents;
     using DialogueManager.Models;
-    using UnityEngine;
 
     /// <summary>
-    /// Controller for the Conversation Component
+    /// 会话组件的控制器
     /// </summary>
     public class ConversationController
     {
-        /// <summary> Model of the Conversation </summary>
+        /// <summary>对话的模型</summary>
         private Conversation model;
 
         /// <summary>
@@ -24,11 +20,11 @@
             conversation.ActiveStatus = conversation.Status[conversation.ActiveStatusIndex];
             this.model = conversation;
         }
-        
+
         /// <summary>
-        /// Triggers a Conversation, checking if there is an unlocked Conversation Status and Triggering the correct Status
+        /// 触发对话，检查是否存在未锁定的对话状态并触发正确的状态
         /// </summary>
-        /// <param name="dialogueManager">Dialogue Manager where the Dialogue will be displayed</param>
+        /// <param name="dialogueManager">显示对话的对话管理器</param>
         public void Trigger(DialogueManager dialogueManager)
         {
             var conversations = this.model.GameConversations.PendingConversations;
@@ -57,9 +53,9 @@
         }
 
         /// <summary>
-        /// Triggers the ActiveStatus and changes it to the NextStatus
+        ///触发ActiveStatus并将其更改为NextStatus
         /// </summary>
-        /// <param name="dialogueManager">Dialogue Manager where the Dialogue will be displayed</param>
+        /// <param name="dialogueManager">显示对话的对话管理器</param>
         private void TriggerStatus(DialogueManager dialogueManager)
         {
             ConversationStatus status = this.model.ActiveStatus;

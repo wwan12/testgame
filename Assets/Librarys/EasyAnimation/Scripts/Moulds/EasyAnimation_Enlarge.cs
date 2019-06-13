@@ -2,7 +2,7 @@
 
 namespace EasyAnimation {
 
-    [AddComponentMenu("EasyAnimation/缩放效果")]
+    [AddComponentMenu("UI简单动画/缩放效果")]
     public class EasyAnimation_Enlarge : EasyAnimationTemplateMethod
     {
 

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace UnityEngine.UI {
 
     [ExecuteInEditMode]
-    [AddComponentMenu("UI/Procedural Image")]
+    [AddComponentMenu("UI/≥Ã–Ú–‘Image")]
 	public class ProceduralImage : ImageProxy {
         public Sprite sprite//procedualSprite
         {

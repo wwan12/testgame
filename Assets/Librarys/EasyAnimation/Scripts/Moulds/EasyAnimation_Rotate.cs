@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace EasyAnimation {
-    [AddComponentMenu("EasyAnimation/旋转效果")]
+    [AddComponentMenu("UI简单动画/旋转效果")]
     public class EasyAnimation_Rotate : EasyAnimationTemplateMethod
     {
         [Header("旋转增量")]

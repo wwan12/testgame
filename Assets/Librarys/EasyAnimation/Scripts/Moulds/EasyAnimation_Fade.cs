@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace EasyAnimation
 {
-    [AddComponentMenu("EasyAnimation/透明渐变效果")]
+    [AddComponentMenu("UI简单动画/透明渐变效果")]
     public class EasyAnimation_Fade : EasyAnimationTemplateMethod
     {
         [Header("起始透明度"), Range(0, 1)]

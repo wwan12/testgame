@@ -10,7 +10,7 @@
     [System.Serializable]
     public class Conversation
     {
-        /// <summary> Name of the conversation. </summary>
+        /// <summary> 对话的名称。 </summary>
         public string Name;
 
         /// <summary> <see cref="ConversationStatus"/> of the conversation if a Dialogue was Triggered. </summary>
