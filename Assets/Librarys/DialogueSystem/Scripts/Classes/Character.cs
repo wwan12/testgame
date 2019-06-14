@@ -6,7 +6,7 @@ using DialogueManager.Models;
 /// <summary>
 /// 可以在Unity编辑器中创建可编写字符脚本的对象
 /// </summary>
-[CreateAssetMenu( fileName = "New Character", menuName = "对话角色" )]
+[CreateAssetMenu( fileName = "对话系统", menuName = "对话角色" )]
 public class Character : ScriptableObject
 {
     /// <summary> Name of the <see cref="Character"/> </summary>

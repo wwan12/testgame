@@ -21,7 +21,7 @@
         private List<LetterComponent> letters;
         private List<float> speeds;
         private List<ITextEffectBuilder> effects;
-        private int fontSize = 30;
+        private int fontSize = 16;
         private int boxSize = 380;
         private int currentX = 0;
         private int currentY = 0;
@@ -116,7 +116,7 @@
             }
 
             string[] words = onlyWords.Split( ' ' );
-            int letterSpacing = ( int )( this.fontSize * 0.5 );
+            int letterSpacing = ( int )( this.fontSize);
             int currentIndexEffects = 0;
             int currentIndexSpeeds = 0;
             foreach (string word in words)
@@ -144,7 +144,7 @@
                     myText.GetComponent<RectTransform>().localPosition = new Vector3( i * letterSpacing, 0, 0 );
                     myText.color = new Color( 0.0f, 0.0f, 0.0f, 0.0f );
                     RectTransform rt = letterObject.GetComponentInParent<RectTransform>();
-                    rt.sizeDelta = new Vector2( this.fontSize, this.fontSize );
+                    rt.sizeDelta = new Vector2( this.fontSize*2, this.fontSize*2 );
                     rt.pivot = new Vector2( 0, 1 );
 
                     LetterComponent letterComponent = letterObject.AddComponent<LetterComponent>();

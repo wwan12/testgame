@@ -26,7 +26,10 @@ public class Menu_mo_UI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // GetIMEI();
+        // GetIMEI();
+
+        PlayerPrefs.SetString("aa", "aa");
+        PlayerPrefs.Save();
     }
 
     // Update is called once per frame

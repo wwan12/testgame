@@ -9,7 +9,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Inspector custom editor of the Conversation Component
+    /// 会话组件的检查器自定义编辑器
     /// </summary>
     [CustomEditor( typeof( ConversationComponent ) )]
     public class ConversationEditor : Editor

@@ -1,4 +1,4 @@
-﻿namespace DialogueManager.GameComponents
+﻿namespace DialogueManager
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -17,8 +17,8 @@
 
         /// <summary> 对话管理器的控制器 </summary>
         private DialogueManagerController controller;
+        private  GameObject dialogueBox;
 
-       
 
         /// <summary>
         /// 在对象被实例化时被摘录
@@ -30,16 +30,17 @@
 
            
             Transform canvasObject = Model.Canvas ?? GameObject.Find("DialogueCanvas").GetComponent<Transform>();
-            GameObject dialogueBox = Instantiate( this.Model.CanvasObjectsPrefab );
-            dialogueBox.transform.position = new Vector3( -250, 0, 0 );
+            dialogueBox = Instantiate( this.Model.CanvasObjectsPrefab );
+            //dialogueBox.transform.position = new Vector3( -250, 0, 0 );
+            RectTransform boxRect = dialogueBox.GetComponent<RectTransform>();
             dialogueBox.name = "DialogueBox";
-            dialogueBox.transform.SetParent( canvasObject.transform );
-            dialogueBox.GetComponent<RectTransform>().localPosition = new Vector3( 0, -500, 0 );
+            boxRect.SetParent( canvasObject.transform,false);                    
+            boxRect.localPosition = new Vector3( 0, -500, 0 );
 
 
-            this.Model.DialogueStartPoint = GameObject.Find( "/DialogueCanvas/DialogueBox/DialogueStartPoint" ).GetComponent<Transform>();
-            this.Model.ImageText = GameObject.Find( "/DialogueCanvas/DialogueBox/CharacterImage" ).GetComponent<Image>();
-            this.Model.Animator = GameObject.Find( "/DialogueCanvas/DialogueBox" ).GetComponent<Animator>();
+            this.Model.DialogueStartPoint = GameObject.Find( "/"+canvasObject.name+"/DialogueBox/DialogueStartPoint" ).GetComponent<Transform>();
+            this.Model.ImageText = GameObject.Find("/" + canvasObject.name + "/DialogueBox/CharacterImage").GetComponent<Image>();
+            this.Model.Animator = GameObject.Find("/" + canvasObject.name + "/DialogueBox").GetComponent<Animator>();
             this.Model.Source = this.GetComponent<AudioSource>();
 
             this.controller = new DialogueManagerController( this.Model );
@@ -78,6 +79,10 @@
         /// </summary>
         private void StartDialogue()
         {
+            CanvasGroup group= dialogueBox.GetComponent<CanvasGroup>();
+            group.alpha = 1;
+            group.interactable = true;
+            group.blocksRaycasts = true;
             this.controller.StartDialogue();
             this.DisplayNextSentence();
         }
@@ -88,9 +93,15 @@
         private void DisplayNextSentence()
         {
             this.StopAllCoroutines();
-            if ( this.controller.DisplayNextSentence() )
+            if (this.controller.DisplayNextSentence())
             {
-                this.StartCoroutine( this.controller.TypeSentence() );
+                this.StartCoroutine(this.controller.TypeSentence());
+            }
+            else {
+                CanvasGroup group = dialogueBox.GetComponent<CanvasGroup>();
+                group.alpha = 0;
+                group.interactable = false;
+                group.blocksRaycasts = false;
             }
         }
     }

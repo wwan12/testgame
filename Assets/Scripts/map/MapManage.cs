@@ -86,9 +86,7 @@ public class MapManage : MonoBehaviour
         map = new MapTile[width, height];
       
         // player = GameObject.FindGameObjectWithTag("Player");
-#if  UNITY_EDITOR
-        CreateMap();
-#endif
+
 
         //  ChangeTile();
     }

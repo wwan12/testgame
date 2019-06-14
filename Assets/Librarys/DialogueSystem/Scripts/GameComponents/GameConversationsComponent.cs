@@ -1,4 +1,4 @@
-﻿namespace DialogueManager.GameComponents
+﻿namespace DialogueManager
 {
     using System;
     using System.Collections.Generic;

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 3d物体移动残影特效
+/// </summary>
 public class AfterimageMesh : MonoBehaviour
 {
     private SkinnedMeshRenderer[] skinMesh;

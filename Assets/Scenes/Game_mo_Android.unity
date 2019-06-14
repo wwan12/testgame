@@ -2726,6 +2726,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1846244709}
   - component: {fileID: 1846244708}
+  - component: {fileID: 1846244710}
   m_Layer: 0
   m_Name: '----Map----'
   m_TagString: Untagged
@@ -2781,6 +2782,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1846244710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846244707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7665803c971484b91497561e5d971c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productionTile: {fileID: 0}
+  terrainLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  uiRaycaster: {fileID: 0}
+  underConstructionGO: {fileID: 0}
 --- !u!1 &1911326347
 GameObject:
   m_ObjectHideFlags: 0
@@ -2790,7 +2809,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1911326348}
-  - component: {fileID: 1911326349}
   - component: {fileID: 1911326350}
   m_Layer: 0
   m_Name: '----UI----'
@@ -2813,18 +2831,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1911326349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1911326347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 611748d965c4ece4a995c7d3b3fb559c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1911326350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2837,6 +2843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95795337aabdf5c43ae56e66ed81779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Building: {fileID: 11400000, guid: 0e8ad7e07dc239b499ada28fc1ee6e1f, type: 2}
 --- !u!1 &1963019094
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,6 +2857,7 @@ GameObject:
   - component: {fileID: 1963019097}
   - component: {fileID: 1963019099}
   - component: {fileID: 1963019098}
+  - component: {fileID: 1963019100}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -2982,6 +2990,45 @@ CapsuleCollider2D:
   m_Offset: {x: -0.6, y: 0.4}
   m_Size: {x: 1.6, y: 4.8}
   m_Direction: 0
+--- !u!114 &1963019100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963019094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 886a3fe3bbb08b9459acef14402996f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Model:
+    Name: Aisde
+    ActiveStatus:
+      Name: startAisde
+      NextStatusIndex: 0
+      Dialogue:
+        Sentences:
+        - Character: {fileID: 11400000, guid: 86fc372f327e6a64691e5517552502a6, type: 2}
+          ExpressionIndex: 0
+          Paragraph: "I'm save \u6210\u529F"
+        - Character: {fileID: 11400000, guid: 86fc372f327e6a64691e5517552502a6, type: 2}
+          ExpressionIndex: 0
+          Paragraph: '[0.2] I''m feeling.[0.4]...[0.01]<angry> ANGRY</angry>!!'
+      NewConversations: []
+    ActiveStatusIndex: 0
+    Status:
+    - Name: startAisde
+      NextStatusIndex: 0
+      Dialogue:
+        Sentences:
+        - Character: {fileID: 11400000, guid: 86fc372f327e6a64691e5517552502a6, type: 2}
+          ExpressionIndex: 0
+          Paragraph: "I'm save \u6210\u529F"
+        - Character: {fileID: 11400000, guid: 86fc372f327e6a64691e5517552502a6, type: 2}
+          ExpressionIndex: 0
+          Paragraph: '[0.2] I''m feeling.[0.4]...[0.01]<angry> ANGRY</angry>!!'
+      NewConversations: []
 --- !u!1 &2002749633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3322,6 +3369,21 @@ PrefabInstance:
     - target: {fileID: 4619059805044586, guid: f179273886f664410813061b0d4ffe3b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114970755449612128, guid: f179273886f664410813061b0d4ffe3b,
+        type: 3}
+      propertyPath: Model.Canvas
+      value: 
+      objectReference: {fileID: 1789361056}
+    - target: {fileID: 114970755449612128, guid: f179273886f664410813061b0d4ffe3b,
+        type: 3}
+      propertyPath: Model.Font
+      value: 
+      objectReference: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 114970755449612128, guid: f179273886f664410813061b0d4ffe3b,
+        type: 3}
+      propertyPath: Model.Material
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f179273886f664410813061b0d4ffe3b, type: 3}
