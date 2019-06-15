@@ -8,6 +8,7 @@ public class PlacingHandler : MonoBehaviour {
 
     private GameObject placeable = null;
     private GameObject prefabToPlace = null;
+   // private ServerCommands commandManager = null;
     private Grid tileGrid = null;
 
     public void OnPlaceableButtonClicked(GameObject prefabOnButton)
@@ -27,11 +28,15 @@ public class PlacingHandler : MonoBehaviour {
         prefabToPlace = placeablePrefab;
     }
 
+    //public void SetCommandManager(ServerCommands manager)
+    //{
+    //    commandManager = manager;
+    //}
 
 	// Use this for initialization
 	void Start ()
     {
-        tileGrid = GameObject.Find("Grid").GetComponent<Grid>();
+        tileGrid = GameObject.FindGameObjectWithTag("Grid").GetComponent<Grid>();
 	}
 	
 	// Update is called once per frame
@@ -55,6 +60,7 @@ public class PlacingHandler : MonoBehaviour {
             mousePosition.z = 0;
             mousePosition = tileGrid.GetCellCenterWorld(tileGrid.WorldToCell(mousePosition));
 
+         //   commandManager.SpawnPlacebable(prefabToPlace, mousePosition);
             Destroy(placeable);
             placeable = null;
             prefabToPlace = null;

@@ -13,7 +13,7 @@ public class AutoGenerateControl : MonoBehaviour
     [Tooltip("现在生成的数量")]
     public int Count = 0;
     [Tooltip("生成最大数量")]
-    public int Max;
+    public int Max=1;
     [Tooltip("生成的时间间隔")]
     public float refreshTime = 0;
     [Tooltip("离多远开始生成")]

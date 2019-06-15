@@ -54,7 +54,10 @@ public class Game_mo_UI : MonoBehaviour
         }
         if (GUI.Button(new Rect(50, 450, 100, 40), "放置测试敌人"))
         {
-            
+            GameObject gameObject = new GameObject();
+            gameObject = GameObject.Instantiate(gameObject,GameObject.FindGameObjectWithTag("Player").transform.position+new Vector3(0,3,0),Quaternion.identity);
+            gameObject.AddComponent<AutoGenerateControl>().StartGenerate();
+         
         }
 #endif
     }
