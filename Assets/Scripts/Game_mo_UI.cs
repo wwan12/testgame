@@ -50,7 +50,9 @@ public class Game_mo_UI : MonoBehaviour
         }
         if (GUI.Button(new Rect(50, 400, 100, 40), "放置测试建筑"))
         {
-            GameObject.FindObjectOfType<SpawnBuildings>().SpawnBuilding(Building);
+            // GameObject.FindObjectOfType<SpawnBuildings>().SpawnBuilding(Building);
+            GameObject.FindObjectOfType<PlacingHandler>().tileGrid = GameObject.FindObjectOfType<Grid>();
+            GameObject.FindObjectOfType<PlacingHandler>().OnPlaceableButtonClicked(BuildingSO.prefab);
         }
         if (GUI.Button(new Rect(50, 450, 100, 40), "放置测试敌人"))
         {
