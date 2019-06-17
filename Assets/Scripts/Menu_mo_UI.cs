@@ -45,11 +45,11 @@ public class Menu_mo_UI : MonoBehaviour
         {
             if (saves[i] != null)
             {
-               images[i].sprite= Resources.Load<Sprite>("Save/"+saves[i].portraitName+".png");
+               images[i].sprite= Resources.Load<Sprite>("Save/"+saves[i].portraitName);
             }
             else
             {
-                images[i].sprite = Resources.Load<Sprite>("Save/Null.png");
+                images[i].sprite = Resources.Load<Sprite>("Save/Null");
             }          
         }
         AppManage.Instance.SetOpenUI(saveMenu);

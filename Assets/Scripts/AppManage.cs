@@ -88,7 +88,7 @@ public class AppManage
            "\nsupportsVibration：" + SystemInfo.supportsVibration + "\n内存大小：" + SystemInfo.systemMemorySize;
     }
     /// <summary>
-    /// 显示一个ui控件，若已显示则隐藏
+    /// 显示一个ui控件，若已显示则隐藏 todo转为消息系统处理
     /// </summary>
     /// <param name="ui"></param>
     /// <returns></returns>

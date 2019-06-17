@@ -5,14 +5,14 @@ using UnityEngine;
 public class PlaceControl : MonoBehaviour
 {
 
-    public float time;
-    private int progress=0;
+
     public bool isCheck = true;
+    private SpriteRenderer sprite;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -21,24 +21,7 @@ public class PlaceControl : MonoBehaviour
         
     }
 
-    private void OnMouseOver()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            Camera.main.ScreenToWorldPoint(gameObject.transform.position);
-           // gameObject.GetComponent<BuildOS>();
-            Destroy(gameObject);
-        }
-    }
-
-    IEnumerator RemoveProgress() {
-        while (progress<10)
-        {
-            yield return new WaitForSeconds(time / 10);
-            progress++;
-        }
-       
-    }
+   
 
     private void OnCollisionStay2D(Collision2D collision)
     {

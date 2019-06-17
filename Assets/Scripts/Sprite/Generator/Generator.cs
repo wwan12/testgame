@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete("动态生成的物体会自动挤开")]
 public class Generator : MonoBehaviour
 {
     private GameObject testCheck;
@@ -21,16 +23,14 @@ public class Generator : MonoBehaviour
     {
         
     }
-
+    
     public bool Generate(GameObject obj,Vector3 pos) {
         testCheck.transform.position = pos;
         if (check.isCheck)
         {
             GameObject.Instantiate(obj, pos, Quaternion.identity);
             return true;
-        }
-       
-       
+        }       
         return false;
     }
 

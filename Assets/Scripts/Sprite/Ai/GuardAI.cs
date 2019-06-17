@@ -5,7 +5,10 @@ using UnityEngine.AI;
 
 namespace AI
 {
-    public class EnemyAi : Ai
+    /// <summary>
+    /// 这是一个守卫型的AI
+    /// </summary>
+    public class GuardAI : MonoBehaviour
     {
         public float visualField = 10f;
 

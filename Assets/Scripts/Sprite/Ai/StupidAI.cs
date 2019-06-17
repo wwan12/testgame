@@ -6,10 +6,16 @@ using UnityEngine.AI;
 
 namespace AI
 {
-    public class EnemyController : MonoBehaviour
+    /// <summary>
+    /// 这是一个不会躲避障碍物的AI
+    /// </summary>
+    public class StupidAI : MonoBehaviour
     {
         GameObject[] playerTargets = null;
-        public float ENEMY_SPEED = 4.0f;
+        [HideInInspector]
+        public float ENEMY_SPEED = 1.0f;
+        [Tooltip("最小距离或攻击距离")]
+        public float minRange;
 
         void Start()
         {

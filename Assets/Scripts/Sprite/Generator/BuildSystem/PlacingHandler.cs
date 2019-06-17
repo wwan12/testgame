@@ -11,13 +11,19 @@ public class PlacingHandler : MonoBehaviour {
    // private ServerCommands commandManager = null;
     [Tooltip("建筑建造的坐标系")]
     public Grid tileGrid = null;
+    [Tooltip("todo 建造时显示")]
+    public GameObject building;
+    [Tooltip("建造进度条")]
+    public GameObject buildProgress;
+    [Tooltip("拆除进度条")]
+    public GameObject dismantleProgress;
     private PlaceControl place = null;
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="prefabOnButton"></param>
-    public void OnPlaceableButtonClicked(GameObject prefabOnButton)
+    public void OnPlaceable(BuildingSO prefabOnButton)
     {
 
         if (placeable == null)
@@ -27,14 +33,22 @@ public class PlacingHandler : MonoBehaviour {
         }
     }
 
-    public void SetPlaceable(GameObject placeablePrefab)
+    public void SetPlaceable(BuildingSO placeablePrefab)
     {
-        place = placeablePrefab.GetComponent<PlaceControl>();
+        //place = placeablePrefab.GetComponent<PlaceControl>();
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
-        placeable = Instantiate(placeablePrefab, mousePosition, Quaternion.identity);
+        placeable = Instantiate(placeablePrefab.buildingPrefab, mousePosition, Quaternion.identity);
         placeable.GetComponent<CircleCollider2D>().isTrigger = true;
-        place = placeable.GetComponent<PlaceControl>();
+        placeable.GetComponent<CircleCollider2D>().radius -= placeable.GetComponent<CircleCollider2D>().radius / 10;
+        place = placeable.AddComponent<PlaceControl>();
+        BuildControl build = placeable.AddComponent<BuildControl>();
+        build.durable = placeablePrefab.durable;
+        build.buildProgress = buildProgress;
+        build.dismantleProgress = dismantleProgress;
+        build.dTime = placeablePrefab.dTime;
+        build.buildTime = placeablePrefab.buildTime;
+        build.Build();
         // prefabToPlace = placeablePrefab;
     }
 
@@ -48,8 +62,9 @@ public class PlacingHandler : MonoBehaviour {
     {
         if (tileGrid==null)
         {
-            tileGrid =  GameObject.FindGameObjectWithTag("Grid").GetComponent<Grid>();
+            tileGrid =  GameObject.FindObjectOfType<Grid>();
         }
+        Messenger.AddListener<BuildingSO>(EventCode.BUILD_THIS,SetPlaceable);
        
     }
 
@@ -94,5 +109,6 @@ public class PlacingHandler : MonoBehaviour {
             prefabToPlace = null;
         }
     }
+
 
 }

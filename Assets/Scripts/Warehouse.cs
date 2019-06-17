@@ -13,7 +13,11 @@ public class Warehouse
     private GameObject[] enemys;
     private GameObject[] neutrals;
     private GameObject[] npcs;
+    /// <summary>
+    /// 可以放到背包里的物品
+    /// </summary>
     public  List<Item> itemTable;
+
     [Obsolete]
     public event EventHandler<ArticlesAttachment> DestroyCallBack;
 

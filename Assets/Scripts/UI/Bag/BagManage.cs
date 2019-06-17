@@ -12,6 +12,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
 	private Vector3 dragOffset;
     private GameObject extUI;
+   
 
    // public GameObject bagItem;
 
@@ -204,27 +205,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        autoSize = Screen.height / (1080 / autoSize);
-        autoTop = Screen.height / (1080 / autoTop);
-        autoLeft = Screen.width / (1920 / autoLeft);
-        left = Screen.width / (1920 / left);
-        top = Screen.height / (1080 / top);
-        if (isAuto)
-        {
-            NotExistItems();          
-        }
-        else
-        {
-            ExistItems();
-        }
-        bagItems = new int[allCapacity];
-        bagCapacity = allCapacity;
-        AddOtherUI("PlayerEquip");
-       // StartCoroutine(test());
-    }
+    
 
    
     /// <summary>
@@ -365,7 +346,31 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         return extUI;
     }
 
-   // Update is called once per frame
+
+    // Use this for initialization
+    void Start()
+    {
+        autoSize = Screen.height / (1080 / autoSize);
+        autoTop = Screen.height / (1080 / autoTop);
+        autoLeft = Screen.width / (1920 / autoLeft);
+        left = Screen.width / (1920 / left);
+        top = Screen.height / (1080 / top);
+        if (isAuto)
+        {
+            NotExistItems();
+        }
+        else
+        {
+            ExistItems();
+        }
+        bagItems = new int[allCapacity];
+        bagCapacity = allCapacity;
+        AddOtherUI("PlayerEquip");
+        Messenger.AddListener<ItemInfo>(EventCode.ADDITEM, BagAddItem);
+        // StartCoroutine(test());
+    }
+
+    // Update is called once per frame
     void Update()
     {
 

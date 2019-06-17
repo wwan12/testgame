@@ -21,7 +21,7 @@ public class DialoguePrefab : MonoBehaviour
         name = conversation.Model.Name;
         if (triggerType==TriggerType.aside)
         {
-            Messenger.AddListener(name, Play);
+            Messenger.AddListener(EventCode.START_DIALOGUE+name, Play);
         }
     }
 
