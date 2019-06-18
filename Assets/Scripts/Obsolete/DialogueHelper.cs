@@ -8,6 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 读取剧本，分发剧本，提供流程方法
 /// </summary>
+[Obsolete]
 public class DialogueHelper
 {
     [Tooltip("输出字的时间间隔")]

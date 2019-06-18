@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class ResourceManage : MonoBehaviour
 {
-
-    public ResourceType[] resourceTypes;
+    [Tooltip("载入的资源类型")]   
+    public ResourceType[] resourceTypes;//载入的资源类型
+    [Tooltip("要显示的canvas")]
+    public RectTransform canvas;
     private Dictionary<string,int> warehouse; 
     // Start is called before the first frame update
     void Start()
     {
         warehouse = new Dictionary<string, int>();
-        foreach (var type in resourceTypes)
-        {
-            warehouse.Add(type.resName,0);
-        }
+        //foreach (var type in resourceTypes)
+        //{
+        //    warehouse.Add(type.resName,0);
+        //}
+        //if (canvas==null)
+        //{
+        //    canvas = GameObject.FindObjectOfType<RectTransform>();
+        //}
         Messenger.AddListener<Dictionary<string, int>>(EventCode.ADD_RESOURCE, Add);
     }
 
@@ -38,6 +44,10 @@ public class ResourceManage : MonoBehaviour
             {
                 warehouse.Add(d.Key, d.Value);
             }
+        }
+        if (canvas!=null)
+        {
+            ChangeCanvasInfo();
         }
        
     }
@@ -65,11 +75,11 @@ public class ResourceManage : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// 忽略不存在的资源
+    /// 忽略不存在的资源,删除前应先检查是否有足够的资源并在主线程调用
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public bool Remove(Dictionary<string, int> data)
+    public void Remove(Dictionary<string, int> data)
     {
         foreach (var d in data)
         {
@@ -78,7 +88,14 @@ public class ResourceManage : MonoBehaviour
                 warehouse[d.Key] -= d.Value;
             }
         }
-        return true;
+  
+    }
+    /// <summary>
+    /// 查询现在资源数
+    /// </summary>
+    public void Query()
+    {
+
     }
 
     public ResourceType GetResourceInfo(string name)
@@ -93,8 +110,11 @@ public class ResourceManage : MonoBehaviour
         return null;
     }
 
-    public class ResourceInfo
+    void ChangeCanvasInfo()
     {
-
+        foreach (var item in warehouse)
+        {
+            
+        }
     }
 }

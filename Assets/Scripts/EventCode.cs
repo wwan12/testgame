@@ -17,7 +17,7 @@ public class EventCode
     /// </summary>
     public static readonly string BUILD_THIS = "BUILD_THIS";
     /// <summary>
-    /// 添加资源,负数为减少资源,传入参数为字典
+    /// 添加资源,负数为减少资源,传入参数为字典《string,int》
     /// </summary>
     public static readonly string ADD_RESOURCE = "ADD_RESOURCE";
 }

@@ -366,7 +366,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
         AddOtherUI("PlayerEquip");
-        Messenger.AddListener<ItemInfo>(EventCode.ADDITEM, BagAddItem);
+        Messenger.AddListener<ItemInfo>(EventCode.ADD_ITEM, BagAddItem);
         // StartCoroutine(test());
     }
 
