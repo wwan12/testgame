@@ -25,6 +25,7 @@ public class Game_mo_UI : MonoBehaviour
 
 #if UNITY_EDITOR
         GameObject.FindObjectOfType<MapManage>().CreateMap();
+        GameObject.FindObjectOfType<MapManage>().ChangeTile();
         gameObject.AddComponent<FPSOnGUIText>();
        
 #endif
@@ -55,8 +56,8 @@ public class Game_mo_UI : MonoBehaviour
         if (GUI.Button(new Rect(50, 400, 100, 40), "放置测试建筑"))
         {
             // GameObject.FindObjectOfType<SpawnBuildings>().SpawnBuilding(Building);
-            GameObject.FindObjectOfType<PlacingHandler>().tileGrid = GameObject.FindObjectOfType<Grid>();
-            GameObject.FindObjectOfType<PlacingHandler>().OnPlaceable(testBuild);
+            GameObject.FindObjectOfType<PlacingManage>().tileGrid = GameObject.FindObjectOfType<Grid>();
+            GameObject.FindObjectOfType<PlacingManage>().OnPlaceable(testBuild);
         }
         if (GUI.Button(new Rect(50, 450, 100, 40), "放置测试敌人"))
         {

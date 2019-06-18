@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 放置控制
 /// </summary>
-public class PlacingHandler : MonoBehaviour {
+public class PlacingManage : MonoBehaviour {
 
     private GameObject placeable = null;
     private GameObject prefabToPlace = null;

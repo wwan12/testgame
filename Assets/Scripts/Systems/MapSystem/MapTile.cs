@@ -4,11 +4,30 @@ using UnityEngine;
 
 public class MapTile 
 {
+    /// <summary>
+    /// 墙？
+    /// </summary>
     public bool isWall;
+    /// <summary>
+    /// 地块显示序号
+    /// </summary>
     public int Index;
+    /// <summary>
+    /// 资源？
+    /// </summary>
     public bool isHasRes;
+    /// <summary>
+    /// 资源序号
+    /// </summary>
     public int resIndex;
+    /// <summary>
+    /// 资源量
+    /// </summary>
     public int resAllowance;
+    /// <summary>
+    /// 资源名称
+    /// </summary>
+    public string resName;
     public int posX;
     public int posY;
     public int posZ;

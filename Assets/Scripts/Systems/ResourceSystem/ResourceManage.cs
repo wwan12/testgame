@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 资源管理
+/// </summary>
 public class ResourceManage : MonoBehaviour
 {
     [Tooltip("载入的资源类型")]   
@@ -93,9 +95,14 @@ public class ResourceManage : MonoBehaviour
     /// <summary>
     /// 查询现在资源数
     /// </summary>
-    public void Query()
+    public Dictionary<string, int> Query()
     {
+        return warehouse;
+    }
 
+    public ResourceType[] GetAllResourceInfo()
+    {
+        return resourceTypes;
     }
 
     public ResourceType GetResourceInfo(string name)

@@ -9,5 +9,5 @@ public class ResourceType : ScriptableObject
     public Sprite resSprite;
     public string count;
     public float weight;
-    
+    public Color mapColor;
 }

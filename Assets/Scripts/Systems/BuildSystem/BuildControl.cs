@@ -49,7 +49,7 @@ public class BuildControl : MonoBehaviour
     /// <summary>
     /// 当呗左键点中
     /// </summary>
-    public void Open() {
+    public virtual void Open() {
 
     }
 

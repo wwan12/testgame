@@ -18,4 +18,12 @@ public class BuildingSO : ScriptableObject
     [Tooltip("耐久")]
     public float durable=10f;
     //public Icon icon;
+
+    public enum BuildType
+    {
+        collect,
+        storage,
+
+
+    }
 }
