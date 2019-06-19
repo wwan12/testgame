@@ -5,21 +5,7 @@ using UnityEngine.Audio;
 
 public class AudioManage : MonoBehaviour
     {
-        public static AudioManage Instance
-        {
-            get
-            {
-                if (s_Instance != null)
-                    return s_Instance;
-
-                s_Instance = FindObjectOfType<AudioManage>();
-
-                return s_Instance;
-            }
-        }
-
-        protected static AudioManage s_Instance;
-
+        
         [Header("音频设置")]
         public AudioClip musicAudioClip;
         public AudioMixerGroup musicOutput;
@@ -44,28 +30,9 @@ public class AudioManage : MonoBehaviour
         protected Stack<AudioClip> m_MusicStack = new Stack<AudioClip>();
 
         void Awake()
-        {
-            // If there's already a player...
-            if (Instance != null && Instance != this)
-            {
-                //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
-                if (Instance.musicAudioClip == musicAudioClip)
-                {
-                    m_TransferMusicTime = true;
-                }
-
-                //...if it use the same ambient clip, we set the audio source to be at the same position, so ambient don't restart
-                if (Instance.ambientAudioClip == ambientAudioClip)
-                {
-                    m_TransferAmbientTime = true;
-                }
-
-                // ... destroy the pre-existing player.
-                m_OldInstanceToDestroy = Instance;
-            }
-
-            s_Instance = this;
-
+        {            
+       // m_TransferAmbientTime = true;
+       // m_TransferMusicTime = true;
             DontDestroyOnLoad(gameObject);
 
             m_MusicAudioSource = gameObject.AddComponent<AudioSource>();
@@ -103,7 +70,9 @@ public class AudioManage : MonoBehaviour
                 m_OldInstanceToDestroy.Stop();
                 Destroy(m_OldInstanceToDestroy.gameObject);
             }
+        Messenger.AddListener<string>(EventCode.PLAY_AUDIO, Push);
         }
+
 
         private void Update()
         {
@@ -127,6 +96,10 @@ public class AudioManage : MonoBehaviour
                 }
             }
         }
+    public void Push(string name) {
+        AudioClip clip = Resources.Load<AudioClip>("Sounds/"+name);
+        PushClip(clip);
+    }
     /// <summary>
     /// 添加一个新音频
     /// </summary>

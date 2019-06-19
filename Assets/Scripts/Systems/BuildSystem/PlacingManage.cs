@@ -42,13 +42,16 @@ public class PlacingManage : MonoBehaviour {
         placeable.GetComponent<CircleCollider2D>().isTrigger = true;
         placeable.GetComponent<CircleCollider2D>().radius -= placeable.GetComponent<CircleCollider2D>().radius / 10;
         place = placeable.AddComponent<PlaceControl>();
-        BuildControl build = placeable.AddComponent<BuildControl>();
+        BuildControl build = placeable.GetComponent<BuildControl>();
+        build.name = placeablePrefab.objectName;
         build.durable = placeablePrefab.durable;
         build.buildProgress = buildProgress;
         build.dismantleProgress = dismantleProgress;
         build.dTime = placeablePrefab.dTime;
         build.buildTime = placeablePrefab.buildTime;
-        build.Build();
+        build.type = placeablePrefab.type;
+        build.cost = placeablePrefab.cost;
+
         // prefabToPlace = placeablePrefab;
     }
 
@@ -87,18 +90,15 @@ public class PlacingManage : MonoBehaviour {
         {
             if (place.isCheck)
             {
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePosition.z = 0;
-                mousePosition = tileGrid.GetCellCenterWorld(tileGrid.WorldToCell(mousePosition));
+                //扣除资源
+                Messenger.AddListener<bool>(EventCode.CHECK_RESOURCE + name + GetInstanceID(), StartBuild);
+                Messenger.Broadcast<Dictionary<string, int>, string>(EventCode.REDUCE_RESOURCE, placeable.GetComponent<BuildControl>().cost, EventCode.CHECK_RESOURCE + name + GetInstanceID());
 
+                //Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                //mousePosition.z = 0;
+                //mousePosition = tileGrid.GetCellCenterWorld(tileGrid.WorldToCell(mousePosition));
                 //  commandManager.SpawnPlacebable(prefabToPlace, mousePosition);
-                placeable.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                placeable.GetComponent<CircleCollider2D>().isTrigger = false;
-                placeable.GetComponent<SpriteRenderer>().color = Color.white;
-                Destroy(placeable.GetComponent<PlaceControl>());
-                placeable = null;
-                // prefabToPlace = null;
-                place = null;
+               
             }
 
         }
@@ -110,5 +110,25 @@ public class PlacingManage : MonoBehaviour {
         }
     }
 
+    void StartBuild(bool r)
+    {
+        if (r)
+        {
+            placeable.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            placeable.GetComponent<CircleCollider2D>().isTrigger = false;
+            placeable.GetComponent<SpriteRenderer>().color = Color.white;
+            placeable.GetComponent<BuildControl>().Build();
 
+            Destroy(placeable.GetComponent<PlaceControl>());
+            placeable = null;
+            // prefabToPlace = null;
+            place = null;
+        }
+        else
+        {
+            Messenger.Broadcast<string>(EventCode.PLAY_AUDIO, "SystemError");
+            
+        }
+
+    }
 }

@@ -16,8 +16,22 @@ public class EventCode
     /// 建造这个建筑
     /// </summary>
     public static readonly string BUILD_THIS = "BUILD_THIS";
+   
     /// <summary>
-    /// 添加资源,负数为减少资源,传入参数为字典《string,int》
+    /// 添加资源,传入参数为字典《string,int》
     /// </summary>
     public static readonly string ADD_RESOURCE = "ADD_RESOURCE";
+    /// <summary>
+    /// 减少资源,传入参数为字典《string,int》
+    /// </summary>
+    public static readonly string REDUCE_RESOURCE = "REDUCE_RESOURCE";
+    /// <summary>
+    /// 用于注册资源是否扣除成功的回调（ _后面接 name+GetInstanceID,返回为bool）
+    /// 只区分发送对象
+    /// </summary>
+    public static readonly string CHECK_RESOURCE = "CHECK_RESOURCE_";
+    /// <summary>
+    /// 播放音频，参数音频名称（不需要路径）
+    /// </summary>
+    public static readonly string PLAY_AUDIO = "PLAY_AUDIO";
 }

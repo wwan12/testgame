@@ -8,7 +8,7 @@
     [CustomEditor( typeof( DialogueManagerComponent ) )]
     public class DialogueManagerEditor : Editor
     {
-        DialogueManagerComponent m_Target;
+       // DialogueManagerComponent m_Target;
         private SerializedProperty gameConversationsProperty;
         private SerializedProperty canvasObjectsProperty;
         private SerializedProperty waitTimeProperty;

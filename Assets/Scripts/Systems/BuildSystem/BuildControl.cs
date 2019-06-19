@@ -8,19 +8,30 @@ using UnityEngine.UI;
 /// </summary>
 public class BuildControl : MonoBehaviour
 {
-    public string objectName = "Building Name";
     public float durable;
     public float dTime;
     public float buildTime;
     public GameObject buildProgress;
     public GameObject dismantleProgress;
+    public BuildingSO.BuildType type;
+    /// <summary>
+    /// 建筑价格
+    /// </summary>
+    public Dictionary<string, int> cost;
     private int progress = 0;
     private bool ready;
-
+    /// <summary>
+    /// 如果是收集建筑，可以收集的资源类型
+    /// </summary>
+    public ResourceType.AttributionType colType;
+    /// <summary>
+    /// 如果是收集建筑，可以收集的资源数
+    /// </summary>
+    public int colNum;
 
     void Start()
     {
-        name = objectName;
+        
     }
 
     // Update is called once per frame
@@ -69,7 +80,15 @@ public class BuildControl : MonoBehaviour
     }
 
     public void Build() {
-        if (buildTime!=0)
+
+        if (type==BuildingSO.BuildType.collect)
+        {
+            float x = transform.localScale.x * GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+            float y = transform.localScale.y * GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+            colNum= GameObject.FindObjectOfType<MapManage>().QueryResource(gameObject.transform.position,colType,(int)x+1,(int)y+1);
+           // Messenger.AddListener<Vector3, ResourceType.AttributionType, Vector2Int, int>(EventCode);
+        }
+        if (buildTime != 0)
         {
             StartCoroutine(BuildProgress());
         }
@@ -77,9 +96,8 @@ public class BuildControl : MonoBehaviour
         {
             ready = true;
         }
-       
     }
-
+   
 
     IEnumerator BuildProgress()
     {

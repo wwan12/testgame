@@ -9,18 +9,28 @@ public class BuildingSO : ScriptableObject
     public string objectName = "Building Name";
     [Tooltip("建筑预制体")]
     public GameObject buildingPrefab;
+    public Sprite lowSource;
     [Tooltip("建造时间")]
     public float buildTime;
     [Tooltip("拆除时间")]
     public float dTime=1f;
     [Tooltip("费用")]
-    public float cost;
+    public Dictionary<string,int> cost;
     [Tooltip("耐久")]
     public float durable=10f;
     //public Icon icon;
+    [Tooltip("特殊类型")]
+    public BuildType type;
+    [Tooltip("采集的资源")]
+    public ResourceType res;
+    [Tooltip("每个循环采集数量")]
+    public int collectNum;
+    [Tooltip("采集间隔")]
+    public float collectInterval;
 
     public enum BuildType
     {
+        none,
         collect,
         storage,
 

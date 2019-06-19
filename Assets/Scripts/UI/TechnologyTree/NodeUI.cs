@@ -148,8 +148,8 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     void SendErrorSound()
     {
-        AudioClip clip = Resources.Load<AudioClip>("Sounds/NodeError");
-        AudioManage.Instance.PushClip(clip);
+        Messenger.Broadcast<string>(EventCode.PLAY_AUDIO, "NodeError");
+        
     }
 
 
@@ -195,8 +195,7 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             yield return new WaitForSeconds(completeTime / 100f);
             musk.fillAmount = i / 100f;
         }
-        AudioClip clip = Resources.Load<AudioClip>("Sounds/NodeComplete");
-        AudioManage.Instance.PushClip(clip);
+        Messenger.Broadcast(EventCode.PLAY_AUDIO, "NodeComplete");
         passEvent.Invoke();
     }
 

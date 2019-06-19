@@ -195,8 +195,14 @@ static internal class Messenger {
         OnListenerAdding(eventType, handler);
         eventTable[eventType] = (Callback<T, U, V>)eventTable[eventType] + handler;
     }
+    //四个参数
+    static public void AddListener<T, U, V,E>(string eventType, Callback<T, U, V,E> handler)
+    {
+        OnListenerAdding(eventType, handler);
+        eventTable[eventType] = (Callback<T, U, V,E>)eventTable[eventType] + handler;
+    }
     #endregion
- 
+
     #region RemoveListener
     //No parameters
     static public void RemoveListener(string eventType, Callback handler) {
@@ -311,6 +317,29 @@ static internal class Messenger {
             if (callback != null) {
                 callback(arg1, arg2, arg3);
             } else {
+                throw CreateBroadcastSignatureException(eventType);
+            }
+        }
+    }
+    //Three parameters
+    static public void Broadcast<T, U, V,E>(string eventType, T arg1, U arg2, V arg3,E arg4)
+    {
+#if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
+        Debug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
+#endif
+        OnBroadcasting(eventType);
+
+        Delegate d;
+        if (eventTable.TryGetValue(eventType, out d))
+        {
+            Callback<T, U, V,E> callback = d as Callback<T, U, V,E>;
+
+            if (callback != null)
+            {
+                callback(arg1, arg2, arg3,arg4);
+            }
+            else
+            {
                 throw CreateBroadcastSignatureException(eventType);
             }
         }

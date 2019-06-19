@@ -24,6 +24,7 @@ public class ResourceManage : MonoBehaviour
         //    canvas = GameObject.FindObjectOfType<RectTransform>();
         //}
         Messenger.AddListener<Dictionary<string, int>>(EventCode.ADD_RESOURCE, Add);
+        Messenger.AddListener<Dictionary<string, int>,string>(EventCode.REDUCE_RESOURCE, Remove);
     }
 
     // Update is called once per frame
@@ -81,8 +82,13 @@ public class ResourceManage : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public void Remove(Dictionary<string, int> data)
+    public void Remove(Dictionary<string, int> data,string nameAndId)
     {
+        if (!Check(data))
+        {
+            Messenger.Broadcast<bool>(EventCode.CHECK_RESOURCE + nameAndId, false);
+            return;
+        }
         foreach (var d in data)
         {
             if (warehouse.ContainsKey(d.Key))
@@ -90,8 +96,30 @@ public class ResourceManage : MonoBehaviour
                 warehouse[d.Key] -= d.Value;
             }
         }
-  
+        Messenger.Broadcast<bool>(EventCode.CHECK_RESOURCE + nameAndId, true);
     }
+
+    /// <summary>
+    /// 扣除资源
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public bool Remove(Dictionary<string, int> data)
+    {
+        if (!Check(data))
+        {
+            return false;
+        }
+        foreach (var d in data)
+        {
+            if (warehouse.ContainsKey(d.Key))
+            {
+                warehouse[d.Key] -= d.Value;
+            }
+        }
+        return true;
+    }
+
     /// <summary>
     /// 查询现在资源数
     /// </summary>

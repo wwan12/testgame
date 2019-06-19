@@ -20,8 +20,8 @@ public class MapManage : MonoBehaviour
 
     [Tooltip(" 地板Tile")]
     public Tile[] baseTile;
-    [Tooltip("资源tile")]
-    public Color[] resourcesTiles;//使用纯色块表现资源
+   // [Tooltip("资源tile")]
+    private Color[] resourcesTiles;//使用纯色块表现资源
     [Tooltip("墙tile")]
     public Tile wallTile;
     [Tooltip("视野边际的碰撞体")]
@@ -86,11 +86,7 @@ public class MapManage : MonoBehaviour
     void Start()
     {
         map = new MapTile[width, height];
-
-        // player = GameObject.FindGameObjectWithTag("Player");
-
-
-        //  
+        HideResourse();
     }
 
     // Update is called once per frame
@@ -107,6 +103,7 @@ public class MapManage : MonoBehaviour
         {
             SmoothMap(map);
         }
+        FillResMap();
         DrawMap();
     }
     /// <summary>
@@ -119,34 +116,39 @@ public class MapManage : MonoBehaviour
 
         pseudoRandom = new System.Random(seed);
         pseudoRandomRes = new System.Random(seed + 99);
+        ResourceType[] rest= GameObject.FindObjectOfType<ResourceManage>().resourceTypes;
 
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                map[i, j] = new MapTile(i, j);
+               
+                MapTile tile = new MapTile(i, j);
                 if (isSurround && (i == 0 || i == width - 1 || j == 0 || j == height - 1))
                 {
                     //边缘是墙
-                    map[i, j].isWall = true;
+                    tile.isWall = true;
                 }
                 else {
 
                     if (width / 2 - 2 < i && i < width / 2 + 2 && height / 2 - 2 < j && j < height / 2 + 2)//中间空出3*3的格子
                     {
-                        map[i, j].isWall = false;
+                        tile.isWall = false;
                     }
                     else
                     {
-                        map[i, j].Index= UnityEngine.Random.Range(0, baseTile.Length-1);
-                        map[i, j].isWall = (pseudoRandom.Next(0, 100) < probability);  //1是墙，0是空地
-                        map[i, j].isHasRes = (pseudoRandomRes.Next(0, 100) < resourceDensity);
-                        if (map[i, j].isHasRes)
+                        tile.Index= UnityEngine.Random.Range(0, baseTile.Length-1);
+                        tile.isWall = (pseudoRandom.Next(0, 100) < probability);  //1是墙，0是空地
+                        tile.isHasRes = (pseudoRandomRes.Next(0, 100) < resourceDensity);          
+                        if (tile.isHasRes)
                         {
-                            map[i, j].resAllowance = (int)Rand(resourceAbundance, resourceAbundance / 4);//第一次生成
+                            tile.resIndex = UnityEngine.Random.Range(0, rest.Length);
+                            tile.resName = rest[tile.resIndex].resName;
+                            tile.resAllowance = (int)Rand(resourceAbundance, resourceAbundance / 4);//第一次生成
                         }                     
                     }
                 }
+                map[i, j] = tile;
             }
         }
     }
@@ -275,43 +277,44 @@ public class MapManage : MonoBehaviour
     /// <param name="extra"></param>
     IEnumerator ExpandMap(int extra)
     {
-        oldWidth = width;
-        oldHeight = height;
         width += 2 * extra;
         height += 2 * extra;
         MapTile[,] expand = new MapTile[width, height];
+        ResourceType[] rest= GameObject.FindObjectOfType<ResourceManage>().resourceTypes;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-
+                MapTile tile=null;
                 // expand[i, j] = new int[saveMapLength];
                 if (extra < i && i < width - extra && extra < j && j < height - extra)//已加载的地图数据不变
                 {
-                    expand[i, j] = null;
+                   // expand[i, j] = null;
                 }
                 else
                 {
-                    expand[i, j] = new MapTile(i, j)
+                     tile = new MapTile(i, j)
+                     {
+                         Index = UnityEngine.Random.Range(0, baseTile.Length - 1),
+                         isWall = (pseudoRandom.Next(0, 100) < probability),  //1是墙，0是空地
+                         isHasRes = (pseudoRandomRes.Next(0, 100) < resourceDensity),
+                     };
+                    if (tile.isHasRes)
                     {
-                        Index = UnityEngine.Random.Range(0, baseTile.Length - 1),
-                        isWall = (pseudoRandom.Next(0, 100) < probability),  //1是墙，0是空地
-                        isHasRes = (pseudoRandomRes.Next(0, 100) < resourceDensity)
-                    };
-                    if (expand[i, j].isHasRes)
-                    {
-                        expand[i, j].resAllowance = (int)Rand(resourceAbundance, resourceAbundance / 4);//第一次生成
+                        tile.resIndex = UnityEngine.Random.Range(0, rest.Length);
+                        tile.resName = rest[tile.resIndex].resName;
+                        tile.resAllowance = (int)Rand(resourceAbundance, resourceAbundance / 4);//第一次生成
                     }
                   
                 }
-
+                expand[i, j] = tile;
             }
         }
         yield return new WaitForEndOfFrame();
         for (int i = 0; i < 2; i++)
         {
             SmoothMap(expand);
-            // SmoothMap(expand);
+            SmoothResMap(expand);
         }
         for (int i = 0; i < width - 2 * extra; i++)
         {
@@ -335,17 +338,94 @@ public class MapManage : MonoBehaviour
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <returns>等于0就是没资源</returns>
-    public int QueryResource(Vector3Int vector, int width, int height) {
+    public int QueryResource(Vector3 vector,string resName, int width, int height) {
+        Vector3Int vector3Int= resMap.WorldToCell(vector);
         int num = 0;
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                num += map[vector.x + i, vector.y + j].resAllowance;
+                if (resName.Equals(map[vector3Int.x + i, vector3Int.y + j].resName))
+                {
+                    num += map[vector3Int.x + i, vector3Int.y + j].resAllowance;
+                }             
             }
         }
         return num;
     }
+
+    /// <summary>
+    /// 按类型查询框选地块资源量
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="type"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <returns></returns>
+    public int QueryResource(Vector3 vector, ResourceType.AttributionType type, int width, int height)
+    {
+        Vector3Int vector3Int = resMap.WorldToCell(vector);
+        int num = 0;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                MapTile tile = map[vector3Int.x + i, vector3Int.y + j];
+                if (tile.isHasRes)
+                {
+                    ResourceType resource= GameObject.FindObjectOfType<ResourceManage>().GetResourceInfo(tile.resName);
+                    if (resource.type==type)
+                    {
+                        num += tile.resAllowance;
+                    }
+                }
+              
+            }
+        }
+        return num;
+    }
+    /// <summary>
+    /// 减少地块上的资源
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="type"></param>
+    /// <param name="vector2"></param>
+    /// <param name="mine">采集量</param>
+    /// <returns>0为采集完毕</returns>
+    public int ReduceResource(Vector3 vector, ResourceType.AttributionType type, Vector2Int vector2,int mine) {
+        Vector3Int vector3Int = resMap.WorldToCell(vector);
+        for (int i = 0; i < vector2.x; i++)
+        {
+            for (int j = 0; j < vector2.y; j++)
+            {
+                MapTile tile = map[vector3Int.x + i, vector3Int.y + j];
+                if (tile.isHasRes)
+                {
+                    ResourceType resource = GameObject.FindObjectOfType<ResourceManage>().GetResourceInfo(tile.resName);
+                    if (resource.type == type)
+                    {
+                        
+                        if (tile.resAllowance<mine)
+                        {
+                            int Remnant= tile.resAllowance;
+                            tile.resAllowance = 0;
+                            tile.isHasRes = false;
+                            tile.resName = null;
+                            return Remnant;
+                        }
+                        else
+                        {
+                            tile.resAllowance -= mine;
+                            return mine;
+                        }
+                    }
+                }
+
+            }
+        }
+        return 0;
+    }
+
     /// <summary>
     /// 显示资源地图
     /// </summary>
@@ -361,7 +441,7 @@ public class MapManage : MonoBehaviour
         resMap.gameObject.GetComponent<Renderer>().enabled = false;
     }
     /// <summary>
-    /// 填充资源地图（去噪，todo填色）
+    /// 填充资源地图（去噪，填色）
     /// </summary>
     public void FillResMap()
     {
@@ -369,6 +449,7 @@ public class MapManage : MonoBehaviour
         resourcesTiles = new Color[c.Length];
         for (int i = 0; i < c.Length; i++)
         {
+           
             resourcesTiles[i]=c[i].mapColor;
         }
         SmoothResMap(map);
@@ -411,6 +492,10 @@ public class MapManage : MonoBehaviour
             {
                 if (i >= 0 && i < width && j >= 0 && j < height)
                 {
+                    if (data[i, j].resName==null)
+                    {
+                        continue;
+                    }
                     if (cache.ContainsKey(data[i, j].resName) )
                     {
                         cache[data[i,j].resName]+=1;
