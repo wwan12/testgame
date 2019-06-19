@@ -49,11 +49,12 @@ public class BuildOSEditor : Editor
             costLength = EditorGUILayout.IntField("需资源种类数量", costLength);
             if (costLength>0)
             {
-                cost = new ResourcePrefab[costLength];
+                cache(costLength);
                 for (int i = 0; i < costLength; i++)
                 {
-                    cost[i].type = EditorGUILayout.ObjectField("资源种类", null, typeof(ResourceType), true) as ResourceType;
-                    cost[i].num = EditorGUILayout.IntField("资源数量", 0);
+
+                    cost[i].type = EditorGUILayout.ObjectField("资源种类", cost[i].type, typeof(ResourceType), true) as ResourceType;
+                    cost[i].num = EditorGUILayout.IntField("资源数量", cost[i].num);
                 }
                 m_Target.cost = new Dictionary<string, int>();
                 foreach (var c in cost)
@@ -62,10 +63,22 @@ public class BuildOSEditor : Editor
                 }
               
             }
+           // showPosition = !showPosition;
         }
-        EditorGUILayout.EndFoldoutHeaderGroup();
+      //  EditorGUILayout.EndFoldoutHeaderGroup();
        
     }
 
+    void cache(int Length) {
+        if (cost == null)
+        {
+            cost = new ResourcePrefab[Length];
+        }
+        else {
+            ResourcePrefab[] c = new ResourcePrefab[Length];
+            cost.CopyTo(c,cost.Length);
+            cost = c;
+        }
+    }
    
 }
