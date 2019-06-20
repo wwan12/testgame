@@ -28,6 +28,16 @@ public class BuildingSO : ScriptableObject
     [Tooltip("采集间隔")]
     public float collectInterval;
 
+    [System.Serializable]
+    public struct ResourcePrefab
+    {
+        public ResourceType type;
+        public int num;
+    }
+    public ResourcePrefab[] costc;
+    public int costLength = 0;
+
+    public bool showPosition;
     public enum BuildType
     {
         none,

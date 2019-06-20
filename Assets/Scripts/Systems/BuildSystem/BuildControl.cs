@@ -86,6 +86,7 @@ public class BuildControl : MonoBehaviour
             float x = transform.localScale.x * GetComponent<SpriteRenderer>().sprite.bounds.size.x;
             float y = transform.localScale.y * GetComponent<SpriteRenderer>().sprite.bounds.size.y;
             colNum= GameObject.FindObjectOfType<MapManage>().QueryResource(gameObject.transform.position,colType,(int)x+1,(int)y+1);
+            GetComponent<ResourceComponent>().Add(colType,colNum);
            // Messenger.AddListener<Vector3, ResourceType.AttributionType, Vector2Int, int>(EventCode);
         }
         if (buildTime != 0)

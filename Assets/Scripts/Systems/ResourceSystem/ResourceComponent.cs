@@ -109,15 +109,48 @@ public class ResourceComponent : MonoBehaviour
         {
             if (d_Resources.ContainsKey(d.Key))
             {
-                d_Resources[d.Key] += d.Value;
+               // d_Resources[d.Key] += d.Value;
                 n_Resources[d.Key] += d.Value;
             }
             else
             {
-                d_Resources.Add(d.Key, d.Value);
+               // d_Resources.Add(d.Key, d.Value);
                 n_Resources.Add(d.Key, d.Value);
             }
         }
+
+    }
+
+    /// <summary>
+    /// 添加某项资源
+    /// </summary>
+    /// <param name="data"></param>
+    public void Add(ResourceType.AttributionType type,int num)
+    {
+        string resName = "";
+        switch (type)
+        {
+            case ResourceType.AttributionType.mineral:
+                resName = "矿物";
+                break;
+            case ResourceType.AttributionType.organicCompound:
+                resName = "有机物";
+                break;
+            default:
+                return;
+        }
+
+        if (d_Resources.ContainsKey(resName))
+            {
+                // d_Resources[d.Key] += d.Value;
+                n_Resources[resName] += num;
+            }
+            else
+            {
+                // d_Resources.Add(d.Key, d.Value);
+                n_Resources.Add(resName, num);
+            }
+        
 
     }
 

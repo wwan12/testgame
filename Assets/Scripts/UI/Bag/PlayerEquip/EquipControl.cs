@@ -14,12 +14,15 @@ public class EquipControl : MonoBehaviour
     private LatticeController lattice;
     private RectTransform canvas;
 
-    // Start is called before the first frame update
+    // todo 不依赖外部启动
     void Start()
     {
         lattice = gameObject.AddComponent<LatticeController>();
         lattice.tagOfSupport = canInput;
-        lattice.itemInfoPanel = GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().itemInfoPanel;
+        if (GameObject.FindObjectOfType<BagManage>()!=null)
+        {
+            lattice.itemInfoPanel = GameObject.FindObjectOfType<BagManage>().itemInfoPanel;
+        }       
         canvas = gameObject.GetComponent<Image>().canvas.gameObject.GetComponent<RectTransform>();
         lattice.canvas = canvas;
         lattice.UseThisItemCallBack += UseEquip;

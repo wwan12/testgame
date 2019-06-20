@@ -34,4 +34,9 @@ public class EventCode
     /// 播放音频，参数音频名称（不需要路径）
     /// </summary>
     public static readonly string PLAY_AUDIO = "PLAY_AUDIO";
+
+    /// <summary>
+    /// 减少地图地块资源，回调为成功减少值
+    /// </summary>
+    public static readonly string MAP_REDUCE_RESOURSE = "MAP_REDUCE_RESOURSE";
 }

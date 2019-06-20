@@ -7,16 +7,6 @@ using UnityEngine;
 public class BuildOSEditor : Editor
 {
     private BuildingSO m_Target;
-    [System.Serializable]
-    private struct ResourcePrefab
-    {
-        public ResourceType type;
-        public int num;
-    }
-
-    private ResourcePrefab[] cost;
-    private int costLength=0;
-    private bool showPosition;
 
     //重写OnInspectorGUI方法，当激活此面板区域时调用
     public override void OnInspectorGUI()
@@ -42,24 +32,44 @@ public class BuildOSEditor : Editor
             m_Target.collectNum = EditorGUILayout.IntField("每个循环采集数量", m_Target.collectNum);
             m_Target.collectInterval = EditorGUILayout.FloatField("采集间隔", m_Target.collectInterval);           
         }
-       
-        showPosition = EditorGUILayout.BeginFoldoutHeaderGroup(showPosition, "建造费用");
-        if (showPosition)
+
+        m_Target.showPosition = EditorGUILayout.BeginFoldoutHeaderGroup(m_Target.showPosition, "建造费用");
+        if (m_Target.showPosition)
         {
-            costLength = EditorGUILayout.IntField("需资源种类数量", costLength);
-            if (costLength>0)
+            m_Target.costLength = EditorGUILayout.IntField("需资源种类数量", m_Target.costLength);
+            if (m_Target.costLength >0)
             {
-                cache(costLength);
-                for (int i = 0; i < costLength; i++)
+                if (m_Target.costc==null)
+                {
+                    m_Target.costc = new BuildingSO.ResourcePrefab[m_Target.costLength];
+                }
+                else
+                {
+                    BuildingSO.ResourcePrefab[] c= new BuildingSO.ResourcePrefab[m_Target.costLength];
+                    m_Target.costc.CopyTo(c,0);
+                    m_Target.costc = c;
+                }
+                
+                for (int i = 0; i < m_Target.costLength; i++)
                 {
 
-                    cost[i].type = EditorGUILayout.ObjectField("资源种类", cost[i].type, typeof(ResourceType), true) as ResourceType;
-                    cost[i].num = EditorGUILayout.IntField("资源数量", cost[i].num);
+                    m_Target.costc[i].type = EditorGUILayout.ObjectField("资源种类", m_Target.costc[i].type, typeof(ResourceType), true) as ResourceType;
+                    m_Target.costc[i].num = EditorGUILayout.IntField("资源数量", m_Target.costc[i].num);
                 }
-                m_Target.cost = new Dictionary<string, int>();
-                foreach (var c in cost)
+                if (m_Target.cost == null)
                 {
-                    m_Target.cost.Add(c.type.resName,c.num);
+                    m_Target.cost = new Dictionary<string, int>();
+                }
+                else
+                {
+                    m_Target.cost.Clear();                    
+                }                
+                foreach (var c in m_Target.costc)
+                {
+                    if (c.type!=null)
+                    {
+                        m_Target.cost.Add(c.type.resName, c.num);
+                    }                  
                 }
               
             }
@@ -67,18 +77,6 @@ public class BuildOSEditor : Editor
         }
       //  EditorGUILayout.EndFoldoutHeaderGroup();
        
-    }
-
-    void cache(int Length) {
-        if (cost == null)
-        {
-            cost = new ResourcePrefab[Length];
-        }
-        else {
-            ResourcePrefab[] c = new ResourcePrefab[Length];
-            cost.CopyTo(c,cost.Length);
-            cost = c;
-        }
     }
    
 }

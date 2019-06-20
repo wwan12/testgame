@@ -337,7 +337,7 @@ public class MapManage : MonoBehaviour
     /// <param name="vector"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    /// <returns>等于0就是没资源</returns>
+    /// <returns>等于0就是资源被采完</returns>
     public int QueryResource(Vector3 vector,string resName, int width, int height) {
         Vector3Int vector3Int= resMap.WorldToCell(vector);
         int num = 0;
