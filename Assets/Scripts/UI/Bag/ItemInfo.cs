@@ -1,4 +1,4 @@
-using System;
+using BattleSystem;
 using UnityEngine;
 
 public enum ItemType
@@ -16,8 +16,6 @@ public enum ItemType
 
 public class ItemInfo
 {
-  
-
     public string id;
     public string name="";
     public ItemType type;
@@ -28,4 +26,5 @@ public class ItemInfo
     public bool isUse=true;
     public Sprite sprite;
     public int maxNum;
+    public Equip equipInfo; 
 }

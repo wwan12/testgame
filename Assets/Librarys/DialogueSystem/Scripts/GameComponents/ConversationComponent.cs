@@ -10,7 +10,6 @@
     /// <summary>
     ///会话组件   必须为每个单独的NPC或有会话的情况添加会话组件 
     /// </summary>
-    [CreateAssetMenu(fileName = "对话系统", menuName = "对话系统/对话触发器")]
     public class ConversationComponent : MonoBehaviour
     {
         /// <summary> Model of the Conversation </summary>

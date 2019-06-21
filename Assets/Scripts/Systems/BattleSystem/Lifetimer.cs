@@ -7,6 +7,13 @@ using UnityEngine;
 /// </summary>
 public class Lifetimer : MonoBehaviour
 {
+    /// <summary>
+    /// 添加一个定时销毁器
+    /// </summary>
+    /// <param name="onThis"></param>
+    /// <param name="timeInSeconds"></param>
+    /// <param name="callDespawn"></param>
+    /// <returns></returns>
     public static Lifetimer AddTimer(GameObject onThis, float timeInSeconds, bool callDespawn)
     {
         Lifetimer omg = onThis.AddComponent<Lifetimer>();

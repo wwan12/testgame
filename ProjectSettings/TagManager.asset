@@ -8,6 +8,7 @@ TagManager:
   - UIController
   - Ignore
   - MainCanvas
+  - Build
   layers:
   - Default
   - TransparentFX
