@@ -32,9 +32,9 @@ public class MapManage : MonoBehaviour
     /// </summary>
     public MapTile[,] map { get; private set; }
     //int[,][] resourcesMap;//资源地图,[x纵列坐标,y横列坐标](0无资源，1有资源)，(资源类型序号),(资源余量)(结束符|)
-    readonly int saveMapLength = 5;//存档长度
+    private readonly int saveMapLength = 5;//存档长度
     //readonly int saveResLength = 3;//存档长度
-    readonly char mapEnd = '|';
+    private readonly char mapEnd = '|';
     //readonly char middleEnd = '>';
     [Header("生成参数设置")]
     [Tooltip("障碍物密度")]
@@ -86,6 +86,7 @@ public class MapManage : MonoBehaviour
     void Start()
     {
         map = new MapTile[width, height];
+        Messenger.AddReturnListener<Vector3, ResourceType.AttributionType, Vector2Int, int, int>(EventCode.MAP_REDUCE_RESOURSE,ReduceResource);
         HideResourse();
     }
 
