@@ -49,6 +49,6 @@ public class FPSOnGUIText : MonoBehaviour
             fontStyle = FontStyle.BoldAndItalic,
         };
         //自定义宽度 ，高度大小 颜色，style
-        GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height - 100, 200, 200), "<color=#00ff00><size=30>" + "FPS:" + fps.ToString("f0") + "</size></color>", style);
+        GUI.Label(new Rect(50, 100, 200, 200), "<color=#ffffff><size=30>" + "FPS:" + fps.ToString("f0") + "</size></color>", style);
     }
 }

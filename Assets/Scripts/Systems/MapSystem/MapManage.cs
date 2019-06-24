@@ -21,7 +21,7 @@ public class MapManage : MonoBehaviour
     [Tooltip(" 地板Tile")]
     public Tile[] baseTile;
    // [Tooltip("资源tile")]
-    private Color[] resourcesTiles;//使用纯色块表现资源
+    private Tile[] resourcesTiles;//使用纯色块表现资源
     [Tooltip("墙tile")]
     public Tile wallTile;
     [Tooltip("视野边际的碰撞体")]
@@ -167,7 +167,7 @@ public class MapManage : MonoBehaviour
                         runMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), baseTile[map[i, j].Index]);
                         if (map[i, j].isHasRes)
                         {
-                            resMap.SetColor(new Vector3Int(j - width / 2, i - height / 2, 0), resourcesTiles[map[i, j].resIndex]);
+                            resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), resourcesTiles[map[i, j].resIndex]);
                         }
                         miniMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), miniRunTile);
                     }
@@ -220,7 +220,7 @@ public class MapManage : MonoBehaviour
                         runMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), baseTile[map[i, j].Index]);
                         if (map[i, j].isHasRes)
                         {
-                            resMap.SetColor(new Vector3Int(j - width / 2, i - height / 2, 0), resourcesTiles[map[i, j].resIndex]);
+                            resMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), resourcesTiles[map[i, j].resIndex]);
                         }
                         miniMap.SetTile(new Vector3Int(j - width / 2, i - height / 2, 0), miniRunTile);
                     }
@@ -447,11 +447,11 @@ public class MapManage : MonoBehaviour
     public void FillResMap()
     {
         ResourceType[] c = GameObject.FindObjectOfType<ResourceManage>().resourceTypes;
-        resourcesTiles = new Color[c.Length];
+        resourcesTiles = new Tile[c.Length];
         for (int i = 0; i < c.Length; i++)
         {
            
-            resourcesTiles[i]=c[i].mapColor;
+            resourcesTiles[i]= new Tile {sprite= c[i].mapColor };
         }
         SmoothResMap(map);
     }

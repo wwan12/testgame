@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/新资源类型")]
 public class ResourceType : ScriptableObject
@@ -12,7 +13,7 @@ public class ResourceType : ScriptableObject
     //public string count;
     public float weight;
     [Tooltip("在资源地图上的颜色")]
-    public Color mapColor;
+    public Sprite mapColor;
     [Tooltip("归属类型")]
     public AttributionType type;
     public enum AttributionType

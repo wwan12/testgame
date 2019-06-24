@@ -1,9 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿/// <summary>
+/// 事件代码
+/// </summary>
 public class EventCode
 {
+    /// <summary>
+    /// 开始事件，需要初始化的组件订阅
+    /// </summary>
+    public static readonly string START_GAME = "START_GAME";
+    /// <summary>
+    /// 继续事件，当这个事件发出后，存档对象就已经准备完毕了
+    /// </summary>
+    public static readonly string CONTINUE_GAME = "CONTINUE_GAME";
     /// <summary>
     /// 往背包中添加一个物体
     /// </summary>

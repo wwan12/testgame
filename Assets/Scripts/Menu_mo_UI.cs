@@ -40,6 +40,7 @@ public class Menu_mo_UI : MonoBehaviour
        
     }
 
+
     public void InitLoadMenu() {
         saves= AppManage.Instance.LoadAllGame().singleSaves;
         Image[] images= saveMenu.GetComponentsInChildren<Image>();
@@ -86,7 +87,7 @@ public class Menu_mo_UI : MonoBehaviour
         //StartCoroutine(LoadingScene());
     }
 
-    public void About() {
+    public void ShowSetMenu() {
 
     }
 
