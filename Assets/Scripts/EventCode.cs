@@ -46,4 +46,16 @@ public class EventCode
     /// 减少地图地块资源，回调为成功减少值
     /// </summary>
     public static readonly string MAP_REDUCE_RESOURSE = "MAP_REDUCE_RESOURSE";
+
+
+
+    /// <summary>
+    /// 添加一个电力节点
+    /// </summary>
+    public static readonly string ADD_POWER_NODE = "ADD_POWER_NODE";
+
+    /// <summary>
+    /// 移除一个电力节点
+    /// </summary>
+    public static readonly string REMOVE_POWER_NODE = "ADD_POWER_NODE";
 }

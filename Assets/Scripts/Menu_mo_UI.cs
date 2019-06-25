@@ -74,6 +74,7 @@ public class Menu_mo_UI : MonoBehaviour
 
     public void RoleSelect(int i) {
         AppManage.Instance.saveData.roleId = i;
+        AppManage.Instance.isNew = true;
         ToGameScene();
     }
 

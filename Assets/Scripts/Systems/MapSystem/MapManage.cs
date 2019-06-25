@@ -244,8 +244,11 @@ public class MapManage : MonoBehaviour
     /// 创建新地图
     /// </summary>
     public void CreateMap() {
-        ChangeBoundary();
-        GenerateMap();
+        if (map[0,0]==null)
+        {
+            ChangeBoundary();
+            GenerateMap();
+        }
     }
     /// <summary>
     /// 创建新地图

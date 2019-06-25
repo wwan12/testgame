@@ -42,7 +42,7 @@ public class AppManage
     /// 上层显示的ui可以快速关闭
     /// </summary>
     public GameObject openUI;
-
+    public bool isNew;
 
 
     /// <summary>
@@ -197,9 +197,10 @@ public class AppManage
     /// </summary>
     public void StartNewGame(MonoBehaviour mono) {
         StartCallBack(this, saveData);
-        Messenger.Broadcast<SingleSave>(EventCode.START_GAME,saveData);
-        saveData.mapData = GameObject.Find("----Map----").GetComponent<MapManage>().SaveMap();//获取地图数据
-        saveData.bagData = GameObject.Find("Bag").GetComponent<BagManage>().SaveBagData();//获取背包数据
+       // Messenger.Broadcast<SingleSave>(EventCode.START_GAME,saveData);
+        GameObject.FindObjectOfType<MapManage>().CreateMap();
+        saveData.mapData = GameObject.FindObjectOfType<MapManage>().SaveMap();//获取地图数据
+        saveData.bagData = GameObject.FindObjectOfType<BagManage>().SaveBagData();//获取背包数据
         saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
         saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
@@ -210,8 +211,8 @@ public class AppManage
     /// 继续游戏
     /// </summary>
     public void ContinueGame(MonoBehaviour mono) {
-        GameObject.Find("----Map----").GetComponent<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
-        GameObject.Find("Bag").GetComponent<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
+        GameObject.FindObjectOfType<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
+        GameObject.FindObjectOfType<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
         GameObject.FindGameObjectWithTag("Player").transform.position=new Vector3(saveData.playerLocation[0],saveData.playerLocation[1],saveData.playerLocation[2]);//恢复人物位置
         mono.StartCoroutine(AutoSave());//启动自动存档      
     }
@@ -353,5 +354,13 @@ public class AppManage
             yield return new WaitForEndOfFrame(); //等待一帧
         }
         asyncOperation.allowSceneActivation = true;  //如果加载完成，可以进入场景
+        if (isNew)
+        {
+            StartNewGame(GameObject.FindObjectOfType<Game_mo_UI>());
+        }
+        else
+        {
+            ContinueGame(GameObject.FindObjectOfType<Game_mo_UI>());
+        }
     }
 }

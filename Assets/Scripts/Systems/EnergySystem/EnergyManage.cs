@@ -17,13 +17,33 @@ public class EnergyManage : MonoBehaviour
     void Start()
     {
         energyGrids = new Dictionary<string, EnergyGrid>();
-        energyGrids.Add("主电网", new EnergyGrid());
+       
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void Register(string gridName,SupplyModel model)
+    {
+        Input(gridName,model.outputPower);
+    }
+    /// <summary>
+    /// 获取一个新的名字
+    /// </summary>
+    /// <returns></returns>
+    public string GetGridName()
+    {
+        if (energyGrids.Count==0)
+        {
+            return "主电网";
+        }
+        else
+        {
+            return "子电网"+energyGrids.Count;
+        }
     }
 
     public string[] GetGridNames()
@@ -84,7 +104,30 @@ public class EnergyManage : MonoBehaviour
         {
             energyGrids[name].consumeEnergy -= power / 1000;
         }
+
         powerChange?.Invoke(this, name);
+    }
+
+    public int PercentagePower(string gridName,int redit)
+    {
+        if (energyGrids.ContainsKey(name))
+        {
+            float te = energyGrids[name].totalEnergy;
+            float ce = energyGrids[name].consumeEnergy;
+            int outPwoer = 0;
+            if (te >= ce + redit)
+            {
+                outPwoer = redit;
+            }
+            else if (te > ce)
+            {
+                outPwoer = (int)((te - ce) * 1000);
+            }
+           // ce += power / 1000;
+           // powerChange?.Invoke(this, name);
+            return outPwoer;
+        }
+        return 0;
     }
 
     public EnergyGrid GetEnergyGrids(string name)
@@ -97,5 +140,6 @@ public class EnergyManage : MonoBehaviour
         public string name;
         public float totalEnergy;
         public float consumeEnergy;
+        public float efficiency;
     }
 }
