@@ -202,6 +202,14 @@ static internal class Messenger {
         eventTable[eventType] = (Callback<T, U, V,E>)eventTable[eventType] + handler;
     }
 
+    //Single parameter
+    static public void AddReturnListener<T,R>(string eventType, CallbackReturn<T,R> handler)
+    {
+        OnListenerAdding(eventType, handler);
+        eventTable[eventType] = (CallbackReturn<T,R>)eventTable[eventType] + handler;
+    }
+
+
     //四个参数+返回值
     static public void AddReturnListener<T, U, V, E,R>(string eventType, CallbackReturn<T, U, V, E,R> handler)
     {
@@ -301,11 +309,13 @@ static internal class Messenger {
  
         Delegate d;
         if (eventTable.TryGetValue(eventType, out d)) {
-            Callback<T, U> callback = d as Callback<T, U>;
- 
-            if (callback != null) {
+
+            if (d is Callback<T, U> callback)
+            {
                 callback(arg1, arg2);
-            } else {
+            }
+            else
+            {
                 throw CreateBroadcastSignatureException(eventType);
             }
         }
@@ -352,6 +362,33 @@ static internal class Messenger {
             }
         }
     }
+
+    //Three parameters
+    static public R BroadcastReturn<T, R>(string eventType, T arg1)
+    {
+#if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
+        Debug.Log("MESSENGER\t" + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\t\t\tInvoking \t\"" + eventType + "\"");
+#endif
+        OnBroadcasting(eventType);
+
+        Delegate d;
+        if (eventTable.TryGetValue(eventType, out d))
+        {
+            R r;
+            if (d is CallbackReturn<T, R> callback)
+            {
+                r = callback(arg1);
+                return r;
+            }
+            else
+            {
+                throw CreateBroadcastSignatureException(eventType);
+            }
+        }
+        return default;
+    }
+
+ 
 
     //Three parameters
     static public R BroadcastReturn<T, U, V, E,R>(string eventType, T arg1, U arg2, V arg3, E arg4)

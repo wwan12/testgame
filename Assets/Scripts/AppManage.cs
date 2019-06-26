@@ -13,8 +13,6 @@ public class AppManage
     public const string IOSOS = "UNITY_IOS";
     public const string WINDOWSOS = "UNITY_WINDOWS";
     private const string SAVEFILENAME ="/byBin.dat";
-    //不同平台下StreamingAssets的路径是不同的，这里需要注意一下。
-    public string PathURL;
     public event EventHandler StartCallBack;
     public event EventHandler ExitCallBack;
     public event EventHandler SaveSuccessCallBack;
@@ -43,6 +41,10 @@ public class AppManage
     /// </summary>
     public GameObject openUI;
     public bool isNew;
+    /// <summary>
+    /// 是否已经开始
+    /// </summary>
+    public bool isInGame;
 
 
     /// <summary>
@@ -52,17 +54,16 @@ public class AppManage
     {
 #if UNITY_IOS
        RunOS = IOSOS;
-         PathURL= Application.dataPath + "/Raw/";
+        
 #endif
 
 #if UNITY_ANDROID
      RunOS = ANDROIDOS;
-         PathURL="jar:file://" + Application.dataPath + "!/assets/"; 
+     
 #endif
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
-        RunOS = WINDOWSOS;
-        PathURL = "file://" + Application.dataPath + "/StreamingAssets/";
+        RunOS = WINDOWSOS;      
 
 #endif
         GetDeviceInfo();
@@ -85,12 +86,19 @@ public class AppManage
             "\nsupportsShadows：" + SystemInfo.supportsShadows + "\nsupportsSparseTextures：" + SystemInfo.supportsSparseTextures +         
            "\nsupportsVibration：" + SystemInfo.supportsVibration + "\n内存大小：" + SystemInfo.systemMemorySize;
     }
+
+    public void SetOpenUI(string path)
+    {
+        GameObject ui= Resources.Load<GameObject>(path);
+        CanvasGroup group = ui.GetComponent<CanvasGroup>() ?? openUI.AddComponent<CanvasGroup>();
+    }
+
     /// <summary>
     /// 显示一个ui控件，若已显示则隐藏 todo转为消息系统处理
     /// </summary>
     /// <param name="ui"></param>
     /// <returns></returns>
-    public GameObject SetOpenUI(GameObject ui) { 
+    public void SetOpenUI(GameObject ui) { 
          CanvasGroup group;
         if (openUI!=null&&openUI.GetInstanceID()!=ui.GetInstanceID())
         {
@@ -103,8 +111,18 @@ public class AppManage
         group=openUI.GetComponent<CanvasGroup>()??openUI.AddComponent<CanvasGroup>();
         group.alpha = group.alpha == 1 ? 0 : 1;
         group.interactable = group.interactable ? false : true;
-        group.blocksRaycasts = group.blocksRaycasts ? false : true;
-        return openUI;
+        group.blocksRaycasts = group.blocksRaycasts ? false : true;      
+    }
+
+    private GameObject[] openUICaches;
+
+    private void OpenUIGC( ) {
+        if (openUICaches == null)
+        {
+            openUICaches = new GameObject[20];
+        }
+
+
     }
 
     /// <summary>
@@ -196,24 +214,28 @@ public class AppManage
     /// 传递开始新游戏事件
     /// </summary>
     public void StartNewGame(MonoBehaviour mono) {
-        StartCallBack(this, saveData);
-       // Messenger.Broadcast<SingleSave>(EventCode.START_GAME,saveData);
-        GameObject.FindObjectOfType<MapManage>().CreateMap();
+        //StartCallBack(this, saveData);
+        GameObject.FindObjectOfType<MapManage>().CreateMap();    
         saveData.mapData = GameObject.FindObjectOfType<MapManage>().SaveMap();//获取地图数据
         saveData.bagData = GameObject.FindObjectOfType<BagManage>().SaveBagData();//获取背包数据
         saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
         saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
         SaveByBin();
-        mono.StartCoroutine(AutoSave());//启动自动存档      
+        Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
+        isInGame = true;
+        mono.StartCoroutine(AutoSave());//启动自动存档  
+        
     }
     /// <summary>
     /// 继续游戏
     /// </summary>
-    public void ContinueGame(MonoBehaviour mono) {
+    public void ContinueGame(MonoBehaviour mono) {        
         GameObject.FindObjectOfType<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
         GameObject.FindObjectOfType<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
         GameObject.FindGameObjectWithTag("Player").transform.position=new Vector3(saveData.playerLocation[0],saveData.playerLocation[1],saveData.playerLocation[2]);//恢复人物位置
+        Messenger.Broadcast<SingleSave>(EventCode.APP_CONTINUE_GAME, saveData);
+        isInGame = true;
         mono.StartCoroutine(AutoSave());//启动自动存档      
     }
     /// <summary>
@@ -313,7 +335,7 @@ public class AppManage
     AsyncOperation asyncOperation;
 
     private IEnumerator AutoSave() {
-        while (saveData!=null) {
+        while (isInGame) {
             yield return new WaitForSeconds(60 * 2);
             SaveByBin();
         }

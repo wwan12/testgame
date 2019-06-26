@@ -148,7 +148,7 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     void SendErrorSound()
     {
-        Messenger.Broadcast<string>(EventCode.PLAY_AUDIO, "NodeError");
+        Messenger.Broadcast<string>(EventCode.AUDIO_EFFECT_PLAY, "NodeError");
         
     }
 
@@ -195,7 +195,7 @@ public class NodeUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             yield return new WaitForSeconds(completeTime / 100f);
             musk.fillAmount = i / 100f;
         }
-        Messenger.Broadcast(EventCode.PLAY_AUDIO, "NodeComplete");
+        Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY, "NodeComplete");
         passEvent.Invoke();
     }
 

@@ -67,7 +67,7 @@ public class PlacingManage : MonoBehaviour {
         {
             tileGrid =  GameObject.FindObjectOfType<Grid>();
         }
-        Messenger.AddListener<BuildingSO>(EventCode.BUILD_THIS,SetPlaceable);
+        Messenger.AddListener<BuildingSO>(EventCode.BUILD_THIS, OnPlaceable);
        
     }
 
@@ -91,14 +91,15 @@ public class PlacingManage : MonoBehaviour {
             if (place.isCheck)
             {
                 //扣除资源
-                Messenger.AddListener<bool>(EventCode.CHECK_RESOURCE + name + GetInstanceID(), StartBuild);
-                Messenger.Broadcast<Dictionary<string, int>, string>(EventCode.REDUCE_RESOURCE, placeable.GetComponent<BuildControl>().cost, EventCode.CHECK_RESOURCE + name + GetInstanceID());
+                bool r = Messenger.BroadcastReturn<Dictionary<string, int>, bool>(EventCode.RESOURCE_CHECK, placeable.GetComponent<BuildControl>().cost);
+                StartBuild(r);
+
 
                 //Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 //mousePosition.z = 0;
                 //mousePosition = tileGrid.GetCellCenterWorld(tileGrid.WorldToCell(mousePosition));
                 //  commandManager.SpawnPlacebable(prefabToPlace, mousePosition);
-               
+
             }
 
         }
@@ -126,7 +127,7 @@ public class PlacingManage : MonoBehaviour {
         }
         else
         {
-            Messenger.Broadcast<string>(EventCode.PLAY_AUDIO, "SystemError");
+            Messenger.Broadcast<string>(EventCode.AUDIO_EFFECT_PLAY, "SystemError");
             
         }
 

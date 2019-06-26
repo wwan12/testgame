@@ -73,7 +73,7 @@ public class ResourceComponent : MonoBehaviour
                 g_Resources.Add(res.Key, get);
             }
         }
-        Messenger.Broadcast<Dictionary<string, int>>(EventCode.ADD_RESOURCE, g_Resources);
+        Messenger.Broadcast<Dictionary<string, int>>(EventCode.RESOURCE_ADD, g_Resources);
     }
     /// <summary>
     /// 按固定数获取资源
@@ -96,7 +96,7 @@ public class ResourceComponent : MonoBehaviour
                 g_Resources.Add(res.Key, num);
             }         
         }
-        Messenger.Broadcast<Dictionary<string, int>>(EventCode.ADD_RESOURCE, g_Resources);
+        Messenger.Broadcast<Dictionary<string, int>>(EventCode.RESOURCE_ADD, g_Resources);
     }
 
     /// <summary>

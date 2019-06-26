@@ -21,7 +21,8 @@ public class DialoguePrefab : MonoBehaviour
         name = conversation.Model.Name;
         if (triggerType==TriggerType.aside)
         {
-            Messenger.AddListener(EventCode.START_DIALOGUE+name, Play);
+            Messenger.AddListener(EventCode.DIALOGUE_START_ASIDE, Play);
+
         }
     }
 
@@ -40,6 +41,7 @@ public class DialoguePrefab : MonoBehaviour
     /// <param name="i"></param>
     public void Play() {
         conversation.Trigger();
+       
     }
 
     private void OnMouseOver()

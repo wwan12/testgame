@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -644,9 +644,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 576220044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac74be0f6b7b50c4e8627f5ff6e721a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9151ced616c13f1488e63d17e64fbb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAutoPlay: 0
+  isBack: 0
+  isLoop: 0
+  easetype: 0
+  animationTime: 0.25
+  animationNowTime: 0
+  vector_To: {x: 0, y: 0, z: 0}
 --- !u!114 &576220049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1106,9 +1113,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 784336138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac74be0f6b7b50c4e8627f5ff6e721a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9151ced616c13f1488e63d17e64fbb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAutoPlay: 0
+  isBack: 0
+  isLoop: 0
+  easetype: 0
+  animationTime: 0.25
+  animationNowTime: 0
+  vector_To: {x: 0, y: 0, z: 0}
 --- !u!114 &784336143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2139,9 +2153,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1459367086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac74be0f6b7b50c4e8627f5ff6e721a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9151ced616c13f1488e63d17e64fbb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAutoPlay: 0
+  isBack: 0
+  isLoop: 0
+  easetype: 0
+  animationTime: 0.25
+  animationNowTime: 0
+  vector_To: {x: 0, y: 0, z: 0}
 --- !u!114 &1459367091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2540,9 +2561,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1580555734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac74be0f6b7b50c4e8627f5ff6e721a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9151ced616c13f1488e63d17e64fbb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAutoPlay: 0
+  isBack: 0
+  isLoop: 0
+  easetype: 0
+  animationTime: 0.25
+  animationNowTime: 0
+  vector_To: {x: 0, y: 0, z: 0}
 --- !u!114 &1580555739
 MonoBehaviour:
   m_ObjectHideFlags: 0

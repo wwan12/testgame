@@ -23,7 +23,7 @@ public class QueueAiControl : MonoBehaviour
     {
         foreach (BaseCharacter character in this.characters)
         {
-            if (player.IsSeeIt())
+            if (true)
             {
                 character.UpdateDraw();
             }

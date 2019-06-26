@@ -23,8 +23,9 @@ public class ResourceManage : MonoBehaviour
         //{
         //    canvas = GameObject.FindObjectOfType<RectTransform>();
         //}
-        Messenger.AddListener<Dictionary<string, int>>(EventCode.ADD_RESOURCE, Add);
-        Messenger.AddListener<Dictionary<string, int>,string>(EventCode.REDUCE_RESOURCE, Remove);
+        Messenger.AddListener<Dictionary<string, int>>(EventCode.RESOURCE_ADD, Add);
+        Messenger.AddReturnListener<Dictionary<string, int>,bool>(EventCode.RESOURCE_CHECK, Check);
+        Messenger.AddListener<Dictionary<string, int>,string>(EventCode.RESOURCE_REDUCE, Remove);
     }
 
     // Update is called once per frame
@@ -86,7 +87,7 @@ public class ResourceManage : MonoBehaviour
     {
         if (!Check(data))
         {
-            Messenger.Broadcast<bool>(EventCode.CHECK_RESOURCE + nameAndId, false);
+            Messenger.Broadcast<bool>(EventCode.RESOURCE_CHECK + nameAndId, false);
             return;
         }
         foreach (var d in data)
@@ -96,7 +97,7 @@ public class ResourceManage : MonoBehaviour
                 warehouse[d.Key] -= d.Value;
             }
         }
-        Messenger.Broadcast<bool>(EventCode.CHECK_RESOURCE + nameAndId, true);
+        Messenger.Broadcast<bool>(EventCode.RESOURCE_CHECK + nameAndId, true);
     }
 
     /// <summary>

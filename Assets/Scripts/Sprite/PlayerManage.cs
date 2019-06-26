@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerManage : MonoBehaviour
 {
     private Rigidbody2D m_Rigidbody2D;
-    private List<string> eventLog;
+    private List<Buff> eventBuff;
     [Tooltip("角色信息栏")]
     public GameObject playerStateLabel;
     [Tooltip("多用途菜单栏（文件夹样式）")]
@@ -17,12 +18,17 @@ public class PlayerManage : MonoBehaviour
     public GameObject available;
     [HideInInspector]
     public PlayerRole role;
-    public float weight=55f;
+    public float weight = 55f;
     public float Hp;
     public float power;
     public float collectSpeed;
     public float moveSpeed = 0.1f;
     public float v;
+    public float satiety;
+    public float benchmarkSatiety;
+    public float hpEfflux;
+    public float powerEfflux;
+    public float satietyEfflux;
     private GameObject miniMapCamera;
     public enum PlayerRole
     {
@@ -32,19 +38,30 @@ public class PlayerManage : MonoBehaviour
         INVESTIGATOR,       //侦察,点亮48*48区块
     }
     public State state;
+    public delegate void StateAction(State state);
     // Start is called before the first frame update
     void Start()
     {
         m_Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-        eventLog = new List<string>();
+        eventBuff = new List<Buff>();
         state = new State() {
             hp = Hp,
             power = power,
             collectSpeed = collectSpeed,
             moveSpeed = moveSpeed,
             weight = weight,
+            satiety= satiety,
+            benchmarkSatiety= benchmarkSatiety,
+            hpEfflux=hpEfflux,
+            powerEfflux=powerEfflux,
+            satietyEfflux=satietyEfflux,
         };
         miniMapCamera = GameObject.Find("MapCamera");
+        Messenger.AddListener(EventCode.APP_START_GAME, PlayerStart);
+    }
+
+    private void PlayerStart() {
+        StartCoroutine(TimeGoneUpdataState());
     }
 
     // Update is called once per frame
@@ -53,7 +70,7 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_EDITOR||UNITY_STANDALONE_WIN
         MoveOnWindows();
         Operate();
-      
+
 #endif
 
 #if UNITY_ANDROID
@@ -63,9 +80,10 @@ public class PlayerManage : MonoBehaviour
 #if UNITY_IOS
       Debug.Log("Iphone");
 #endif
+        MonitorState();
     }
 
-     void LateUpdate()
+    void LateUpdate()
     {
         miniMapCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -10);
     }
@@ -75,12 +93,12 @@ public class PlayerManage : MonoBehaviour
     /// </summary>
     private void MoveOnWindows()
     {
-        float H = Input.GetAxis("Horizontal")/10;
-        float V = Input.GetAxis("Vertical")/10;
+        float H = Input.GetAxis("Horizontal") / 10;
+        float V = Input.GetAxis("Vertical") / 10;
         Vector2 now = new Vector2(transform.position.x, transform.position.y);
-        Vector2 playerMove =now + new Vector2(H * moveSpeed , V * moveSpeed );
-       // m_Rigidbody2D.AddForce(playerMove);
-        v = Vector2.Distance(new Vector2(H*moveSpeed,0),new Vector2(0,v*moveSpeed));
+        Vector2 playerMove = now + new Vector2(H * moveSpeed, V * moveSpeed);
+        // m_Rigidbody2D.AddForce(playerMove);
+        v = Vector2.Distance(new Vector2(H * moveSpeed, 0), new Vector2(0, V * moveSpeed));
         m_Rigidbody2D.MovePosition(Vector2.Lerp(playerMove, now, 1.5f * Time.deltaTime));
         //Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
         //Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
@@ -91,7 +109,7 @@ public class PlayerManage : MonoBehaviour
     private void Operate() {
         if (Input.GetKeyDown(KeyCode.E))//物品栏
         {
-            AppManage.Instance.SetOpenUI(GameObject.FindGameObjectWithTag("Bag"));    
+            AppManage.Instance.SetOpenUI(GameObject.FindGameObjectWithTag("Bag"));
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -102,12 +120,21 @@ public class PlayerManage : MonoBehaviour
             else
             {
                 CanvasGroup group = AppManage.Instance.openUI.GetComponent<CanvasGroup>();
-                group.alpha = 0;
-                group.interactable = false;
-                group.blocksRaycasts = false;
-                AppManage.Instance.openUI = null;
+                if (group.alpha!=0)
+                {
+                    group.alpha = 0;
+                    group.interactable = false;
+                    group.blocksRaycasts = false;
+                }
+                else
+                {
+                    AppManage.Instance.SetOpenUI(GameObject.Find("EscMenu"));
+                }
+               
+               // AppManage.Instance.openUI = null;
             }
         }
+     
         if (Input.GetKeyDown(KeyCode.Q))
         {
 
@@ -118,57 +145,91 @@ public class PlayerManage : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/TechnologyTree"));
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Build"));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Relation"));
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("TechnologyTree"));
+            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Map"));
         }
 
     }
 
-    public bool IsSeeIt()
+    private void MonitorState(){
+        
+        if (state.hp <= 0)
+        {
+            //todo gameover
+        }
+    }
+
+    IEnumerator TimeGoneUpdataState()
     {
-        return true;
+        while (AppManage.Instance.isInGame)
+        {
+            yield return new WaitForSeconds(1f);
+            if (state.satiety < state.benchmarkSatiety)
+            {
+                state.hp -= state.hpEfflux;
+            }
+            state.power -= state.powerEfflux;
+            state.satiety -= state.satietyEfflux;
+            Messenger.Broadcast<State>(EventCode.PLAYER_STATE_CHANGE, state);
+        }
+     
+    }
+
+
+    private void UpdataState(Buff buff) {
+       
     }
     /// <summary>
     /// 接受外界赋予的状态
     /// </summary>
-    public void Suffer(string log) {
-        if (eventLog.Count>10)
-        {
-            eventLog.RemoveAt(0);
-        }    
-        eventLog.Add(log);
-        if (state.hp<=0)
-        {
-            //todo gameover
-        }
-        
-    }
-    /// <summary>
-    /// 延时状态
-    /// </summary>
     /// <param name="func"></param>
     /// <param name="log"></param>
     /// <param name="delay"></param>
-    public void Suffer(System.Action func, string log, float delay)
+    public void Suffer(Buff buff)
     {
-        Suffer(log);
-        StartCoroutine(DelayFunc(func,delay));
+        //   Suffer(buff.log);
+        eventBuff.Add(buff);
+        if (buff.isPermanent)
+        {
+            buff.change.Invoke(state);
+        }
+        else
+        {
+            StartCoroutine(DelayFunc(buff));
+        }
+      
     }
 
-    IEnumerator DelayFunc(System.Action func,float delay) {
-        yield return new WaitForSeconds(delay);
-        func.Invoke();
+    IEnumerator DelayFunc(Buff buff) {
+        if (buff.delay==0)
+        {
+            yield return new WaitForSeconds(buff.totalTime);
+            buff.change.Invoke(state);
+        }
+        else
+        {
+            float totalDelay = 0;
+            buff.change.Invoke(state);
+            while (totalDelay >= buff.totalTime)
+            {
+                yield return new WaitForSeconds(buff.delay);
+                buff.change.Invoke(state);
+            }
+        }
+        buff.recovery.Invoke(state);
+        eventBuff.Remove(buff);
+        
     }
 
 
@@ -233,15 +294,39 @@ public class PlayerManage : MonoBehaviour
 
     public class State
     {
-       public string other;
+        public string other;
         public float hp;
         public float power;
-        public float collectSpeed;
+        public float collectSpeed;//采集速度
         public float moveSpeed;
-        public float increaseOrDecrease;
-    public float weight;
+      //  public float increaseOrDecrease;
+        public float weight;//重量
+        /// <summary>
+        /// 饱腹度
+        /// </summary>
+        public float satiety;
+        /// <summary>
+        /// 基准饱腹度
+        /// </summary>
+        public float benchmarkSatiety;//
+        /// <summary>
+        /// hp自然流逝率
+        /// </summary>
+        public float hpEfflux;
+        public float powerEfflux;
+        public float satietyEfflux;
+    }
 
-}
+    public class Buff
+    {
+        public bool isPermanent;
+        public string log;
+        public float delay;
+        public StateAction change;
+        public StateAction recovery;
+        public float totalTime;
+        
+    }
 
     public enum PlayerAnimState
     {
@@ -250,21 +335,14 @@ public class PlayerManage : MonoBehaviour
         /// </summary>
         idle,
         /// <summary>
-        /// 玩耍状态
+        /// 状态
         /// </summary>
         run,
         /// <summary>
-        /// 张嘴状态
+        /// 状态
         /// </summary>
-        use,
-        /// <summary>
-        /// 吞食状态
-        /// </summary>
-        eat,
-        /// <summary>
-        /// 失败状态
-        /// </summary>
-        fail,
+        walk,
+     
     }
 
 
@@ -278,9 +356,8 @@ public class PlayerManage : MonoBehaviour
     public Animator playerAnimator;
 
     /// <summary>
-    /// 改变玩家状态方法
+    /// 改变状态方法
     /// </summary>
-    /// <param name="state">玩家状态</param>
     public void ChangeState(PlayerAnimState state)
     {
         switch (state)
@@ -294,19 +371,9 @@ public class PlayerManage : MonoBehaviour
                 playerAnimator.SetBool("IsOpen", false);
                 playerAnimator.SetBool("IsPlay", false);
                 break;
-            case PlayerAnimState.use:
+            case PlayerAnimState.walk:
                 playerAnimator.SetBool("IsOpen", true);
                 playerAnimator.SetBool("IsIdle", false);
-                break;
-            case PlayerAnimState.eat:
-                playerAnimator.SetBool("IsEat", true);
-                playerAnimator.SetBool("IsOpen", false);
-                break;
-            case PlayerAnimState.fail:
-                playerAnimator.SetBool("IsUnhappy", true);
-                playerAnimator.SetBool("IsOpen", false);
-                break;
-            default:
                 break;
         }
     }
