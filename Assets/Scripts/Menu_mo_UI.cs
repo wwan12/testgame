@@ -37,7 +37,18 @@ public class Menu_mo_UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+
+            CanvasGroup group = AppManage.Instance.openUI.GetComponent<CanvasGroup>();
+            if (group.alpha != 0)
+            {
+                group.alpha = 0;
+                group.interactable = false;
+                group.blocksRaycasts = false;
+            }
+
+        }
     }
 
 
@@ -89,8 +100,11 @@ public class Menu_mo_UI : MonoBehaviour
     }
 
     public void ShowSetMenu() {
-
+        GameObject set = GameObject.Find("SetMenu");
+        AppManage.Instance.SetOpenUI(set);
     }
+
+   
 
     public void LoadProgress(object obj,int progress) {
          if (loadingSlider.value != 1.0f) {

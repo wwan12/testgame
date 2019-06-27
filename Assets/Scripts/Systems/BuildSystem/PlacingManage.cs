@@ -90,7 +90,7 @@ public class PlacingManage : MonoBehaviour {
         {
             if (place.isCheck)
             {
-                //扣除资源
+                //检测是否有资源
                 bool r = Messenger.BroadcastReturn<Dictionary<string, int>, bool>(EventCode.RESOURCE_CHECK, placeable.GetComponent<BuildControl>().cost);
                 StartBuild(r);
 
@@ -115,6 +115,8 @@ public class PlacingManage : MonoBehaviour {
     {
         if (r)
         {
+            Messenger.Broadcast<Dictionary<string, int>>(EventCode.RESOURCE_REDUCE, placeable.GetComponent<BuildControl>().cost);
+
             placeable.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             placeable.GetComponent<CircleCollider2D>().isTrigger = false;
             placeable.GetComponent<SpriteRenderer>().color = Color.white;

@@ -26,7 +26,8 @@ public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.GetComponent<Text>().text = building.objectName;
+        gameObject.GetComponentInChildren<Text>().text = building.objectName;
+        gameObject.GetComponentInChildren<Image>().sprite = building.lowSource;
     }
 
     // Update is called once per frame

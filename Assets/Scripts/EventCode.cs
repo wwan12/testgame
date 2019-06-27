@@ -35,9 +35,8 @@ public class EventCode
     public static readonly string RESOURCE_REDUCE = "RESOURCE_REDUCE";
     /// <summary>
     /// 用于注册资源是否扣除成功的回调有返回值
-    /// 只区分发送对象
     /// </summary>
-    public static readonly string RESOURCE_CHECK = "RESOURCE_CHECK_";
+    public static readonly string RESOURCE_CHECK = "RESOURCE_CHECK";
     /// <summary>
     /// 播放效果音频，参数音频名称（不需要路径）
     /// </summary>

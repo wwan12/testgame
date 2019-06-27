@@ -10,6 +10,9 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     EasyAnimation_Move move;
 
+    public Canvas canvas;
+    [HideInInspector]
+    public GameObject cacheGameObject;
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -30,7 +33,14 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void Open()
     {
-        AppManage.Instance.SetOpenUI(GameObject.Find(gameObject.name + "Menu"));
+        if (cacheGameObject==null)
+        {
+            cacheGameObject = Resources.Load<GameObject>(gameObject.name + "Menu");
+            cacheGameObject = GameObject.Instantiate<GameObject>(cacheGameObject);
+            cacheGameObject.transform.SetParent(canvas.transform, false);
+        }
+     
+        AppManage.Instance.SetOpenUI(cacheGameObject);
     }
 
     // Start is called before the first frame update

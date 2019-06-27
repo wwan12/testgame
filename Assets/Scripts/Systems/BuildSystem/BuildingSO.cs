@@ -28,6 +28,7 @@ public class BuildingSO : ScriptableObject
     [Tooltip("采集间隔")]
     public float collectInterval;
 
+
     [System.Serializable]
     public struct ResourcePrefab
     {

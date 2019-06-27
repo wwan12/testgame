@@ -87,17 +87,22 @@ public class ResourceManage : MonoBehaviour
     {
         if (!Check(data))
         {
-            Messenger.Broadcast<bool>(EventCode.RESOURCE_CHECK + nameAndId, false);
             return;
         }
         foreach (var d in data)
         {
             if (warehouse.ContainsKey(d.Key))
             {
-                warehouse[d.Key] -= d.Value;
+                if (d.Value > warehouse[d.Key])
+                {
+                    warehouse[d.Key] = 0;
+                }
+                else
+                {
+                    warehouse[d.Key] -= d.Value;
+                }              
             }
         }
-        Messenger.Broadcast<bool>(EventCode.RESOURCE_CHECK + nameAndId, true);
     }
 
     /// <summary>
