@@ -25,10 +25,10 @@ public class PlacingManage : MonoBehaviour {
     /// <param name="prefabOnButton"></param>
     public void OnPlaceable(BuildingSO prefabOnButton)
     {
-
+       
         if (placeable == null)
         {
-
+            AppManage.Instance.CloseOpenUI();
             SetPlaceable(prefabOnButton);
         }
     }

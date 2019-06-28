@@ -35,7 +35,7 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (cacheGameObject==null)
         {
-            cacheGameObject = Resources.Load<GameObject>(gameObject.name + "Menu");
+            cacheGameObject = Resources.Load<GameObject>("prefabs/UI/"+gameObject.name + "Menu");
             cacheGameObject = GameObject.Instantiate<GameObject>(cacheGameObject);
             cacheGameObject.transform.SetParent(canvas.transform, false);
         }

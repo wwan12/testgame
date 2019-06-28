@@ -73,10 +73,7 @@ public class MapManage : MonoBehaviour
     //private bool isExhausted;
     private System.Random pseudoRandom;
     private System.Random pseudoRandomRes;
-    private int oldWidth;
-    private int oldHeight;
-    [HideInInspector]
-    public List<BaseCharacter> characters;
+
     //private bool hasPlayer;
     //private GameObject player;
     //Interest point

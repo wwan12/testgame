@@ -27,7 +27,8 @@ public class BuildingSO : ScriptableObject
     public int collectNum;
     [Tooltip("采集间隔")]
     public float collectInterval;
-
+    [Tooltip("该节点的层级")]
+    public int hierarchy;
 
     [System.Serializable]
     public struct ResourcePrefab

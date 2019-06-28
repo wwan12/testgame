@@ -113,6 +113,17 @@ public class AppManage
         group.interactable = group.interactable ? false : true;
         group.blocksRaycasts = group.blocksRaycasts ? false : true;      
     }
+    public void CloseOpenUI()
+    {
+        CanvasGroup group;
+        if (openUI != null)
+        {
+            group = openUI.GetComponent<CanvasGroup>();
+            group.alpha = 0;
+            group.interactable = false;
+            group.blocksRaycasts = false;
+        }
+    }
 
     private GameObject[] openUICaches;
 
