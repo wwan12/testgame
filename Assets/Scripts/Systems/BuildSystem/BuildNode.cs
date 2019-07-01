@@ -10,11 +10,19 @@ public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
     public int hierarchy;
     [Tooltip("该节点对应的建筑")]
     public BuildingSO building;
-    [Tooltip("是否允许建造")]
-    public bool isBuild;
+    /// <summary>
+    /// 是否允许建造
+    /// </summary>
+    public bool isBuild { get; private set; }
 
     public BuildNode(BuildingSO building) {
         this.building = building;
+    }
+
+    public void SetAvailable() {
+        isBuild = true;
+        gameObject.GetComponentInChildren<Text>().color = Color.white;
+        gameObject.GetComponentInChildren<Image>().color = Color.white;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -36,6 +44,13 @@ public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
     void Start()
     {
         hierarchy = building.hierarchy;
+        isBuild = building.isBuild;
+        if (!isBuild)
+        {
+            gameObject.GetComponentInChildren<Text>().color = Color.gray;
+            gameObject.GetComponentInChildren<Image>().color = Color.grey;
+        }
+        building.objectName = building.name;
         gameObject.GetComponentInChildren<Text>().text = building.objectName;
         gameObject.GetComponentInChildren<Image>().sprite = building.lowSource;
     }

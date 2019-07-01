@@ -13,10 +13,10 @@ public class AppManage
     public const string IOSOS = "UNITY_IOS";
     public const string WINDOWSOS = "UNITY_WINDOWS";
     private const string SAVEFILENAME ="/byBin.dat";
-    public event EventHandler StartCallBack;
-    public event EventHandler ExitCallBack;
-    public event EventHandler SaveSuccessCallBack;
-    public event EventHandler<SingleSave> LoadSuccessCallBack;
+  //  public event EventHandler StartCallBack;
+  //  public event EventHandler ExitCallBack;
+  //  public event EventHandler SaveSuccessCallBack;
+ //   public event EventHandler<SingleSave> LoadSuccessCallBack;
     public event EventHandler ToSaveCallBack;
     public event EventHandler<int> LoadSceneCallBack;
     private Save allSave;
@@ -167,6 +167,17 @@ public class AppManage
         }));
 
     }
+
+    private void CollectSaveData()
+    {
+        saveData.mapData = GameObject.FindObjectOfType<MapManage>().SaveMap();//获取地图数据
+        saveData.bagData = GameObject.FindObjectOfType<BagManage>().SaveBagData();//获取背包数据
+        saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
+        saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
+        saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
+        saveData.buildNodes = GameObject.FindObjectOfType<BuildMenu>()?.SaveNodes();
+    }
+
     /// <summary>
         /// 二进制方法：存档
         /// </summary>
@@ -185,6 +196,7 @@ public class AppManage
         //创建一个二进制格式化程序
         BinaryFormatter bf = new BinaryFormatter();
         //创建一个文件流
+        //File.op;
         FileStream fileStream = System.IO.File.Create(Application.dataPath + SAVEFILENAME);
         //用二进制格式化程序的序列化方法来序列化Save对象,参数：创建的文件流和需要序列化的对象
         bf.Serialize(fileStream, save);
@@ -193,7 +205,7 @@ public class AppManage
         //如果文件存在，则显示保存成功
         if (System.IO.File.Exists(Application.dataPath + SAVEFILENAME))
         {
-            SaveSuccessCallBack(this, EventArgs.Empty);
+           // SaveSuccessCallBack(this, EventArgs.Empty);
         }
     }
 
@@ -226,12 +238,9 @@ public class AppManage
     /// </summary>
     public void StartNewGame(MonoBehaviour mono) {
         //StartCallBack(this, saveData);
-        GameObject.FindObjectOfType<MapManage>().CreateMap();    
-        saveData.mapData = GameObject.FindObjectOfType<MapManage>().SaveMap();//获取地图数据
-        saveData.bagData = GameObject.FindObjectOfType<BagManage>().SaveBagData();//获取背包数据
-        saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
-        saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
-        saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
+        // GameObject.FindObjectOfType<MapManage>().CreateMap();
+        saveData.buildLocation = new Dictionary<string, string>();
+        CollectSaveData();
         SaveByBin();
         Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
         isInGame = true;
@@ -242,22 +251,27 @@ public class AppManage
     /// 继续游戏
     /// </summary>
     public void ContinueGame(MonoBehaviour mono) {        
-        GameObject.FindObjectOfType<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
-        GameObject.FindObjectOfType<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
-        GameObject.FindGameObjectWithTag("Player").transform.position=new Vector3(saveData.playerLocation[0],saveData.playerLocation[1],saveData.playerLocation[2]);//恢复人物位置
-        Messenger.Broadcast<SingleSave>(EventCode.APP_CONTINUE_GAME, saveData);
+       // GameObject.FindObjectOfType<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
+       // GameObject.FindObjectOfType<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
+        //GameObject.FindObjectOfType<>
+       
+        Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
+        //  Messenger.Broadcast<SingleSave>(EventCode.APP_CONTINUE_GAME, saveData);
         isInGame = true;
         mono.StartCoroutine(AutoSave());//启动自动存档      
     }
+
+
+
     /// <summary>
     /// 传递退出游戏事件
     /// </summary>
     public void ExitGame()
     {
-        ExitCallBack(this, saveData);
-        SaveByBin();
+        isInGame = false;
+        SaveGame();
         saveData = null;
-
+      //  Messenger.
     }
     /// <summary>
     /// 读取存档游戏事件
@@ -280,11 +294,8 @@ public class AppManage
     {
         saveData = allSave==null? LoadByBin().singleSaves[saveIndex]:allSave.singleSaves[saveIndex];
        
-        Debug.Log(saveData.roleId.ToString());
-        if (LoadSuccessCallBack!=null)
-        {
-            LoadSuccessCallBack(this, saveData);
-        }     
+      //  Debug.Log(saveData.roleId.ToString());
+        
         return saveData;
     }
 
@@ -305,7 +316,10 @@ public class AppManage
     /// <param name="save"></param>
     public void SaveGame()
     {
+        Messenger.Broadcast(EventCode.APP_SAVE_GAME);
+        CollectSaveData();
         SaveByBin();
+        Messenger.Broadcast(EventCode.APP_SAVEOVER_GAME);
         
     }
     /// <summary>
@@ -340,15 +354,17 @@ public class AppManage
         public float[] playerLocation = new float[3];
         public string mapData = "";
         public string bagData = "";
-        public string buildLocation = "";
+        //public string buildLocation = "";
         public string otherData = "";
+        public Dictionary<int, Dictionary<string, bool>> buildNodes;
+        public Dictionary<string,string> buildLocation;
     }
     AsyncOperation asyncOperation;
 
     private IEnumerator AutoSave() {
         while (isInGame) {
             yield return new WaitForSeconds(60 * 2);
-            SaveByBin();
+            SaveGame();
         }
        
     }
@@ -387,6 +403,7 @@ public class AppManage
             yield return new WaitForEndOfFrame(); //等待一帧
         }
         asyncOperation.allowSceneActivation = true;  //如果加载完成，可以进入场景
+        //yield return new WaitForEndOfFrame(); 
         if (isNew)
         {
             StartNewGame(GameObject.FindObjectOfType<Game_mo_UI>());
@@ -395,5 +412,6 @@ public class AppManage
         {
             ContinueGame(GameObject.FindObjectOfType<Game_mo_UI>());
         }
+        Messenger.OnListenerRemoved(EventCode.APP_START_GAME);
     }
 }

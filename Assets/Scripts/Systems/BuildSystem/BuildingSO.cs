@@ -29,7 +29,8 @@ public class BuildingSO : ScriptableObject
     public float collectInterval;
     [Tooltip("该节点的层级")]
     public int hierarchy;
-
+    [Tooltip("初始是否允许建造")]
+    public bool isBuild;
     [System.Serializable]
     public struct ResourcePrefab
     {

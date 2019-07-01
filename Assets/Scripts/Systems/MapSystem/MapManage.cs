@@ -84,6 +84,7 @@ public class MapManage : MonoBehaviour
     {
         map = new MapTile[width, height];
         Messenger.AddReturnListener<Vector3, ResourceType.AttributionType, Vector2Int, int, int>(EventCode.MAP_REDUCE_RESOURSE,ReduceResource);
+        Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, StartInit);
         HideResourse();
     }
 
@@ -92,6 +93,17 @@ public class MapManage : MonoBehaviour
     {
 
 
+    }
+
+    void StartInit(AppManage.SingleSave save) {
+        if (save.mapData.Equals(""))
+        {
+            CreateMap();
+        }
+        else
+        {
+            ReadMap(save.mapData);
+        }      
     }
 
     void GenerateMap()
@@ -545,6 +557,10 @@ public class MapManage : MonoBehaviour
     /// 储存地图
     /// </summary>
     public string SaveMap() {
+        if (map==null)
+        {
+            return "";
+        }
         StringBuilder saveMapData = new StringBuilder();
         for (int i = 0; i < width; i++)
         {

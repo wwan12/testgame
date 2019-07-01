@@ -8,7 +8,7 @@ public class BuildMenu : MonoBehaviour
     [Tooltip("分成几栏")]
     public int hierarchy;
     [Tooltip("是否从磁盘读取")]
-    public bool isOSRead;
+    public bool isOSRead=true;
 
     private readonly string OS_PATH = "Assets/BuildAssets"; 
     [Tooltip("建筑UI节点s")]
@@ -29,9 +29,9 @@ public class BuildMenu : MonoBehaviour
             for (int i = 0; i < allBuildOS.Length; i++)
             {
                 GameObject build= Resources.Load<GameObject>("prefabs/UI/BuildNode");
-              //  GameObject build = new GameObject("Node"+i);
-                build = GameObject.Instantiate<GameObject>(build);
-                build.GetComponent<BuildNode>().building=allBuildOS[i];
+                //  GameObject build = new GameObject("Node"+i);
+                build.GetComponent<BuildNode>().building = allBuildOS[i];
+                build = GameObject.Instantiate<GameObject>(build);              
                // node.building = allBuildOS[i];
                 allBuild[i] = build;
             }
@@ -74,7 +74,10 @@ public class BuildMenu : MonoBehaviour
             }          
             allBuild[i].transform.SetParent(h.transform);
         }
-
+        if (AppManage.Instance.isInGame)
+        {
+            ReadNodes(AppManage.Instance.saveData.buildNodes);
+        }
     }
 
     // Update is called once per frame
@@ -82,4 +85,79 @@ public class BuildMenu : MonoBehaviour
     {
         
     }
+
+    private void AddNode(int i,GameObject h)
+    {
+
+    }
+
+    public void SetAvailable(string buildName )
+    {
+        foreach (var build in allBuild)
+        {
+            BuildNode node= build.GetComponent<BuildNode>();
+            if (node.building.objectName.Equals(buildName))
+            {
+                node.SetAvailable();
+            }
+            
+        }
+    }
+
+
+    /// <summary>
+    /// 储存节点允许状态
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<int, Dictionary<string, bool>> SaveNodes()
+    {
+        Dictionary<int, Dictionary<string, bool>> nodes = new Dictionary<int, Dictionary<string, bool>>();
+        for (int i = 0; i < hierarchys.Length; i++)
+        {
+            Dictionary<string, bool> pairs = new Dictionary<string, bool>();
+            foreach (var node in hierarchys[i].GetComponentsInChildren<Transform>())
+            {
+                BuildNode buildNode= node.gameObject.GetComponent<BuildNode>();
+                pairs.Add(buildNode.building.objectName, buildNode.isBuild);
+                
+            }
+            nodes.Add(i,pairs);
+        }
+        return nodes;
+
+    }
+    /// <summary>
+    /// 恢复节点允许状态
+    /// </summary>
+    /// <param name="pairs"></param>
+    public void ReadNodes(Dictionary<int, Dictionary<string, bool>> pairs)
+    {
+        if (pairs==null)
+        {
+            return;
+        }
+        foreach (var pair in pairs)
+        {
+            foreach (var p in pair.Value)
+            {
+                foreach (var build in allBuild)
+                {
+                    BuildNode buildNode= build.GetComponent<BuildNode>();
+                    if (buildNode.building.objectName.Equals(p.Key))
+                    {
+                        if (p.Value)
+                        {
+                            buildNode.SetAvailable();
+                        }
+                      
+                    }
+                    
+                }
+            }
+        }
+
+    }
+
+
+  
 }

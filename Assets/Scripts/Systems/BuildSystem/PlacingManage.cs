@@ -20,7 +20,7 @@ public class PlacingManage : MonoBehaviour {
     private PlaceControl place = null;
 
     /// <summary>
-    /// 
+    /// 准备建造
     /// </summary>
     /// <param name="prefabOnButton"></param>
     public void OnPlaceable(BuildingSO prefabOnButton)
@@ -29,20 +29,29 @@ public class PlacingManage : MonoBehaviour {
         if (placeable == null)
         {
             AppManage.Instance.CloseOpenUI();
-            SetPlaceable(prefabOnButton);
+           
+            SetPlaceable( prefabOnButton);
         }
     }
 
-    public void SetPlaceable(BuildingSO placeablePrefab)
+
+    /// <summary>
+    /// 在鼠标位置初始化未建造的建筑
+    /// </summary>
+    /// <param name="placeablePrefab"></param>
+    public void SetPlaceable( BuildingSO placeablePrefab)
     {
-        //place = placeablePrefab.GetComponent<PlaceControl>();
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
+        //place = placeablePrefab.GetComponent<PlaceControl>();       
         placeable = Instantiate(placeablePrefab.buildingPrefab, mousePosition, Quaternion.identity);
-        placeable.GetComponent<CircleCollider2D>().isTrigger = true;
-        placeable.GetComponent<CircleCollider2D>().radius -= placeable.GetComponent<CircleCollider2D>().radius / 10;
+        BoxCollider2D boxCollider2D = placeable.GetComponent<BoxCollider2D>();
+        boxCollider2D.isTrigger = true;
+        boxCollider2D.size = new Vector2(boxCollider2D.size.x-boxCollider2D.size.x/20,boxCollider2D.size.y- boxCollider2D.size.y/20);
+        
         place = placeable.AddComponent<PlaceControl>();
         BuildControl build = placeable.GetComponent<BuildControl>();
+        placeable.name = placeablePrefab.objectName;
         build.name = placeablePrefab.objectName;
         build.durable = placeablePrefab.durable;
         build.buildProgress = buildProgress;
@@ -53,6 +62,51 @@ public class PlacingManage : MonoBehaviour {
         build.cost = placeablePrefab.cost;
 
         // prefabToPlace = placeablePrefab;
+    }
+
+
+    /// <summary>
+    /// 在地图上设置建造完的建筑
+    /// </summary>
+    /// <param name="placeablePrefab"></param>
+    public void SetPlaceable(Vector3 initPosition, BuildingSO placeablePrefab)
+    {
+        //place = placeablePrefab.GetComponent<PlaceControl>();       
+        GameObject place = Instantiate(placeablePrefab.buildingPrefab, initPosition, Quaternion.identity);
+        BoxCollider2D boxCollider2D = placeable.GetComponent<BoxCollider2D>();
+      //  boxCollider2D.isTrigger = true;
+        boxCollider2D.size = new Vector2(boxCollider2D.size.x - boxCollider2D.size.x / 20, boxCollider2D.size.y - boxCollider2D.size.y / 20);
+        BuildControl build = placeable.GetComponent<BuildControl>();
+        placeable.name = placeablePrefab.objectName;
+        build.name = placeablePrefab.objectName;
+        build.durable = placeablePrefab.durable;
+        build.buildProgress = buildProgress;
+        build.dismantleProgress = dismantleProgress;
+        build.dTime = placeablePrefab.dTime;
+        build.buildTime = 0;
+        build.type = placeablePrefab.type;
+        build.cost = null;
+        build.Build();
+        // prefabToPlace = placeablePrefab;
+    }
+    /// <summary>
+    /// 恢复已建造的建筑
+    /// </summary>
+    /// <param name="saveBuilds"></param>
+    public void RecoveryBuilds(Dictionary<string, string> saveBuilds)
+    {
+        foreach (var b in saveBuilds)
+        {
+            string[] position = b.Key.Split('|');
+            Vector3 vector = new Vector3(float.Parse(position[0]), float.Parse(position[1]), 0);
+            SetPlaceable(vector, Resources.Load<BuildingSO>("Assets/BuildAssets/" + b.Value));
+
+        }
+    }
+
+    void StartInit(AppManage.SingleSave save)
+    {
+        RecoveryBuilds(save.buildLocation);
     }
 
     //  public void SetCommandManager(ServerCommands manager)
@@ -68,7 +122,7 @@ public class PlacingManage : MonoBehaviour {
             tileGrid =  GameObject.FindObjectOfType<Grid>();
         }
         Messenger.AddListener<BuildingSO>(EventCode.BUILD_THIS, OnPlaceable);
-       
+        Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, StartInit);
     }
 
     // Update is called once per frame
@@ -115,8 +169,6 @@ public class PlacingManage : MonoBehaviour {
     {
         if (r)
         {
-            Messenger.Broadcast<Dictionary<string, int>>(EventCode.RESOURCE_REDUCE, placeable.GetComponent<BuildControl>().cost);
-
             placeable.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             placeable.GetComponent<CircleCollider2D>().isTrigger = false;
             placeable.GetComponent<SpriteRenderer>().color = Color.white;

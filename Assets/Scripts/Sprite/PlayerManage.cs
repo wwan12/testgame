@@ -57,10 +57,11 @@ public class PlayerManage : MonoBehaviour
             satietyEfflux=satietyEfflux,
         };
         miniMapCamera = GameObject.Find("MapCamera");
-        Messenger.AddListener(EventCode.APP_START_GAME, PlayerStart);
+        Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, PlayerStart);
     }
 
-    private void PlayerStart() {
+    private void PlayerStart(AppManage.SingleSave save) {
+        gameObject.transform.position = new Vector3(save.playerLocation[0], save.playerLocation[1], save.playerLocation[2]);//恢复人物位置
         StartCoroutine(TimeGoneUpdataState());
     }
 

@@ -11,7 +11,18 @@ public class EventCode
     /// <summary>
     /// 继续事件，当这个事件发出后，存档对象就已经准备完毕了
     /// </summary>
+    [Obsolete]
     public static readonly string APP_CONTINUE_GAME = "APP_CONTINUE_GAME";
+    /// <summary>
+    /// 存档事件，当这个事件发出后,存档开始
+    /// </summary>
+    public static readonly string APP_SAVE_GAME = "APP_SAVE_GAME";
+    /// <summary>
+    /// 存档完成事件，当这个事件发出后，存档结束
+    /// </summary>
+    public static readonly string APP_SAVEOVER_GAME = "APP_SAVEOVER_GAME";
+
+
     /// <summary>
     /// 往背包中添加一个物体
     /// </summary>
@@ -24,7 +35,11 @@ public class EventCode
     /// 建造这个建筑
     /// </summary>
     public static readonly string BUILD_THIS = "BUILD_THIS";
-   
+    /// <summary>
+    /// 研究完成
+    /// </summary>
+    public static readonly string TEC_COMPLETE = "TEC_COMPLETE";
+
     /// <summary>
     /// 添加资源,传入参数为字典《string,int》
     /// </summary>

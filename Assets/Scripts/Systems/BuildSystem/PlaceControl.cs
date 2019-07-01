@@ -27,25 +27,25 @@ public class PlaceControl : MonoBehaviour
     {
         isCheck = false;
         sprite.color = Color.red;
-        Debug.Log("stayc:" + isCheck);
+       // Debug.Log("stayc:" + isCheck);
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         isCheck = true;
         sprite.color = Color.green;
-        Debug.Log("exitc:" + isCheck);
+       // Debug.Log("exitc:" + isCheck);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         isCheck = false;
         sprite.color = Color.red;
-        Debug.Log("stayt:" + isCheck);
+       // Debug.Log("stayt:" + isCheck);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         isCheck = true;
         sprite.color = Color.green;
-        Debug.Log("Exitt:" + isCheck);
+       // Debug.Log("Exitt:" + isCheck);
     }
 }

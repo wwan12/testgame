@@ -367,6 +367,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         bagCapacity = allCapacity;
         AddOtherUI("PlayerEquip");
         Messenger.AddListener<ItemInfo>(EventCode.BAG_ADD_ITEM, BagAddItem);
+        Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, StartInit);
         // StartCoroutine(test());
     }
 
@@ -374,5 +375,9 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     void Update()
     {
 
+    }
+
+    void StartInit(AppManage.SingleSave save) {
+        ReadBagData(save.bagData);
     }
 }

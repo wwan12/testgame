@@ -43,25 +43,38 @@ public class BuildControl : MonoBehaviour
     {
         if (ready&&Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Open();
+            Show();
         }
         if (ready&&Input.GetKeyDown(KeyCode.Mouse1))
         {
-            if (dTime!=0)
-            {
-                StartCoroutine(RemoveProgress());
-            }
-            else
-            {
-                Destroy(gameObject);
-            }                       
+            Open();                         
         }
     }
     /// <summary>
     /// 当呗左键点中
     /// </summary>
-    public virtual void Open() {
+    public virtual void Show() {
 
+    }
+
+    /// <summary>
+    /// 当呗右键点中
+    /// </summary>
+    public virtual void Open()
+    {
+
+    }
+
+    public void RemoveBuild()
+    {
+        if (dTime != 0)
+        {
+            StartCoroutine(RemoveProgress());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     IEnumerator RemoveProgress()
@@ -81,6 +94,8 @@ public class BuildControl : MonoBehaviour
 
     public void Build() {
 
+        Messenger.Broadcast<Dictionary<string, int>>(EventCode.RESOURCE_REDUCE, cost);
+
         if (type==BuildingSO.BuildType.collect)
         {
             float x = transform.localScale.x * GetComponent<SpriteRenderer>().sprite.bounds.size.x;
@@ -96,6 +111,7 @@ public class BuildControl : MonoBehaviour
         else
         {
             ready = true;
+            BuildComplete();
         }
     }
    
@@ -118,5 +134,18 @@ public class BuildControl : MonoBehaviour
         progress = 0;
         ready = true;
         Destroy(bp);
+        BuildComplete();
+    }
+
+    void BuildComplete()
+    {
+        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
+        AppManage.Instance.saveData.buildLocation.Add(position,gameObject.name);
+    }
+
+    void RemoveComplete()
+    {
+        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
+        AppManage.Instance.saveData.buildLocation.Remove(position);
     }
 }

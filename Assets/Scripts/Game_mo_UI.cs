@@ -15,26 +15,58 @@ public class Game_mo_UI : MonoBehaviour
     public AutoGenerateControl testAutoGen;
 #endif
 
+    public Texture saveImage;
+    private bool isSave;
+    private int saveTime;
     // Start is called before the first frame update
     void Start()
     {
-
+        //物品过多可能有开销问题
         //Physics.gravity = new Vector3(0, -1.0F, 0);
         ExternalRead read = new ExternalRead();
         read.ReadItems(this);
-
+        
+        Messenger.AddListener(EventCode.APP_SAVE_GAME,SaveShow);
+        Messenger.AddListener(EventCode.APP_SAVEOVER_GAME, SaveOver);
 #if UNITY_EDITOR
+        isSave = true;
         GameObject.FindObjectOfType<MapManage>().CreateMap();
-        GameObject.FindObjectOfType<MapManage>().ChangeTile();
+       // GameObject.FindObjectOfType<MapManage>().ChangeTile();
         gameObject.AddComponent<FPSOnGUIText>();
        
 #endif
     }
 
+    void SaveShow()
+    {
+        isSave = true;
+    }
+
+    void SaveOver()
+    {
+        isSave = false;
+    }
 
 
     private void OnGUI()
     {
+        if (isSave)
+        {
+            if (saveTime<12)
+            {
+                GUIStyle style = new GUIStyle
+                {
+                    border = new RectOffset(10, 10, 10, 10),
+                };
+                GUI.Box(new Rect(50, Screen.height - 200, 100, 100), saveImage, style);
+                saveTime++;
+            }
+            else
+            {
+                saveTime = 0;
+            }                    
+        }
+
 #if UNITY_EDITOR
         GUI.Box(new Rect(30, 200, 200, 500), "Menu");
         if (GUI.Button(new Rect(50, 250, 100, 40), "添加物品")) {
