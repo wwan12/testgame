@@ -52,13 +52,13 @@ public class Game_mo_UI : MonoBehaviour
     {
         if (isSave)
         {
-            if (saveTime<12)
+            if (saveTime<24)
             {
                 GUIStyle style = new GUIStyle
                 {
                     border = new RectOffset(10, 10, 10, 10),
                 };
-                GUI.Box(new Rect(50, Screen.height - 200, 100, 100), saveImage, style);
+                GUI.Box(new Rect(50, Screen.height - 100, 100, 100), saveImage, style);
                 saveTime++;
             }
             else

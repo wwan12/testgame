@@ -164,7 +164,7 @@ public class TechnologyMenu : MonoBehaviour
     /// 恢复节点允许状态 todo 恢复节点完成状态
     /// </summary>
     /// <param name="pairs"></param>
-    public void ReadNodes(Dictionary<int, Dictionary<string, bool>> pairs)
+    public void ReadNodes(Dictionary<string, Dictionary<string, bool>> pairs)
     {
         if (pairs == null)
         {

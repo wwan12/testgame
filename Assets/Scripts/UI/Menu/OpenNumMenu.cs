@@ -37,6 +37,10 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             cacheGameObject = Resources.Load<GameObject>("prefabs/UI/"+gameObject.name + "Menu");
             cacheGameObject = GameObject.Instantiate<GameObject>(cacheGameObject);
+            CanvasGroup group = cacheGameObject.AddComponent<CanvasGroup>();
+            group.alpha = 0;
+            group.interactable = false;
+            group.blocksRaycasts = false;
             cacheGameObject.transform.SetParent(canvas.transform, false);
         }
      
