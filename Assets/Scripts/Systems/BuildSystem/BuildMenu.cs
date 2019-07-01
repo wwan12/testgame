@@ -10,8 +10,8 @@ public class BuildMenu : MonoBehaviour
     [Tooltip("是否从磁盘读取")]
     public bool isOSRead;
 
-    private readonly string OS_PATH = "prefabs/BuildNodes"; 
-    [Tooltip("建筑节点s")]
+    private readonly string OS_PATH = "Assets/BuildAssets"; 
+    [Tooltip("建筑UI节点s")]
     public GameObject[] allBuild;
     [Tooltip("上下间隔")]
     public int interval=20;

@@ -10,6 +10,8 @@ public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
     public int hierarchy;
     [Tooltip("该节点对应的建筑")]
     public BuildingSO building;
+    [Tooltip("是否允许建造")]
+    public bool isBuild;
 
     public BuildNode(BuildingSO building) {
         this.building = building;
