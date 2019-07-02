@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 连接节点
+/// </summary>
 public class TransferModel : MonoBehaviour
 {
     /// <summary>
@@ -25,7 +28,7 @@ public class TransferModel : MonoBehaviour
     {
         energys = new List<TransferModel>();
 
-        rangeDis = Resources.Load<GameObject>("prefabs/UI/RangeDisplay").GetComponent<SpriteRenderer>();
+        rangeDis = Resources.Load<GameObject>("prefabs/Sprite/RangeDisplay").GetComponent<SpriteRenderer>();
         rangeDis.size = new Vector2(connectionScope, connectionScope);
         rangeDis.transform.position = gameObject.transform.position;
         rangeDis = GameObject.Instantiate(rangeDis);

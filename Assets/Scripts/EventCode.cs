@@ -1,6 +1,6 @@
 ﻿using System;
 /// <summary>
-/// 事件代码
+/// 事件代码表
 /// </summary>
 public class EventCode
 {

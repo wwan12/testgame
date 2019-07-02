@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 提供给其他特殊建筑继承
+/// 提供给其他具体实现建筑继承
 /// </summary>
 public class BuildControl : MonoBehaviour
 {

@@ -181,7 +181,7 @@ public class PlacingManage : MonoBehaviour {
         }
         else
         {
-            Messenger.Broadcast<string>(EventCode.AUDIO_EFFECT_PLAY, "SystemError");
+            Messenger.Broadcast<string>(EventCode.AUDIO_EFFECT_PLAY, AudioCode.SYSTEM_ERROR);
             
         }
 

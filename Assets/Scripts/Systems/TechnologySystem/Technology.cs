@@ -11,8 +11,12 @@ public class Technology : ScriptableObject
     public int hierarchy;
     [Tooltip("初始是否科研及")]
     public bool isResearch;
+    [Tooltip("初始是否拥有")]
+    public bool isComplete;
     [Tooltip("预览图")]
     public Sprite lowSource;
     [Tooltip("研究时间")]
     public float researhTime;
+    [Tooltip("进度监听，效果执行")]
+    public TechnologyControl technologyControl;
 }

@@ -67,10 +67,11 @@
                 this.Model.Finished = true;
                 this.DisplayNextSentence();
             }
-            if (Model.IsAuto && this.Model.Finished)
+            if (Model.IsAuto && this.Model.DoubleTap == false)
             {
+                this.Model.Finished = true;
                 this.DisplayNextSentence();
-                this.Model.Finished = false;
+              
             }
         }
 

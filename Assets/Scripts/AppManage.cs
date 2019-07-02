@@ -176,6 +176,7 @@ public class AppManage
         saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
         saveData.buildNodes = GameObject.FindObjectOfType<BuildMenu>()?.SaveNodes();
+        saveData.tecStates = GameObject.FindObjectOfType<TechnologyMenu>()?.SaveNodes();
     }
 
     /// <summary>
@@ -358,6 +359,7 @@ public class AppManage
         public string otherData = "";
         public Dictionary<int, Dictionary<string, bool>> buildNodes;
         public Dictionary<string,string> buildLocation;
+        public List<TechnologyMenu.TecState> tecStates;
     }
     AsyncOperation asyncOperation;
 

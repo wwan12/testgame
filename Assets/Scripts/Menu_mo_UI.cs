@@ -30,8 +30,8 @@ public class Menu_mo_UI : MonoBehaviour
     {
         // GetIMEI();
 
-        PlayerPrefs.SetString("aa", "aa");
-        PlayerPrefs.Save();
+      //  PlayerPrefs.SetString("aa", "aa");
+      //  PlayerPrefs.Save();
     }
 
     // Update is called once per frame
@@ -93,7 +93,7 @@ public class Menu_mo_UI : MonoBehaviour
         loaddlg.SetActive(true);
         loadingSlider = loaddlg.transform.Find("Loading/Slider").GetComponent<Slider>();
         loadingText = loaddlg.transform.Find("Loading/Slider/Text").GetComponent<Text>();
-        asyncOperation = SceneManager.LoadSceneAsync("Game_mo_Android");
+        asyncOperation = SceneManager.LoadSceneAsync("Game_mo");
         AppManage.Instance.LoadSceneCallBack += LoadProgress;
         AppManage.Instance.StartLoadScene(this, asyncOperation);
         //StartCoroutine(LoadingScene());

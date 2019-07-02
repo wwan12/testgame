@@ -46,7 +46,7 @@ public class TechnologyNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHa
             }
             else
             {
-                //todo 播放声音
+                Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY,AudioCode.SYSTEM_ERROR);
             }
         }
 

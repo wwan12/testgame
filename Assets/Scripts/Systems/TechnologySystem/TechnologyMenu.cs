@@ -81,7 +81,7 @@ public class TechnologyMenu : MonoBehaviour
         }
         if (AppManage.Instance.isInGame)
         {
-          //todo
+            ReadNodes(AppManage.Instance.saveData.tecStates);
         }
     }
 
@@ -90,7 +90,10 @@ public class TechnologyMenu : MonoBehaviour
     {
 
     }
-
+    /// <summary>
+    /// 设置可用
+    /// </summary>
+    /// <param name="TechnologyName"></param>
     public void SetAvailable(string TechnologyName)
     {
         foreach (var Technology in allTechnology)
@@ -103,10 +106,28 @@ public class TechnologyMenu : MonoBehaviour
 
         }
     }
+    /// <summary>
+    /// 检测是否研究
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public bool CheckComplete(string name)
+    {
+        foreach (var tec in allTechnology)
+        {
+            if (tec.name.Equals(name))
+            {
+               return tec.GetComponent<TechnologyNode>().isComplete;
+            }
+            
+        }
+        return false;
+    }
 
     public void StartTec(TechnologyNode tec)
     {
         isTec = true;
+        tec.tec.technologyControl.OnStart();
         StartCoroutine(TecProgress(tec));
     }
 
@@ -129,6 +150,8 @@ public class TechnologyMenu : MonoBehaviour
             if (researchProgress >= 100)
             {
                 //todo 研究完成
+                tec.tec.technologyControl.OnComplete(this);
+                Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY,AudioCode.SYSTEM_COMPLETE);
                 tec.isComplete = true;
                 researchProgress = 0;
                 isTec = false;
@@ -140,31 +163,33 @@ public class TechnologyMenu : MonoBehaviour
 
 
     /// <summary>
-    /// 储存节点允许状态 todo 储存节点完成状态
+    /// 储存节点允许状态 
     /// </summary>
     /// <returns></returns>
-    public Dictionary<int, Dictionary<string, bool>> SaveNodes()
+    public List<TecState> SaveNodes()
     {
-        Dictionary<int, Dictionary<string, bool>> nodes = new Dictionary<int, Dictionary<string, bool>>();
+        List<TecState> nodes = new List<TecState>();
         for (int i = 0; i < hierarchys.Length; i++)
         {
-            Dictionary<string, bool> pairs = new Dictionary<string, bool>();
+            TecState tec = new TecState();
             foreach (var node in hierarchys[i].GetComponentsInChildren<Transform>())
             {
                 TechnologyNode TechnologyNode = node.gameObject.GetComponent<TechnologyNode>();
-                pairs.Add(TechnologyNode.name, TechnologyNode.isResearch);
-
+                tec.name = TechnologyNode.name;
+                tec.isResearch = TechnologyNode.isResearch;
+                tec.isComplete = TechnologyNode.isComplete;
+                tec.hierarchy = i;
             }
-            nodes.Add(i, pairs);
+            nodes.Add(tec);
         }
         return nodes;
 
     }
     /// <summary>
-    /// 恢复节点允许状态 todo 恢复节点完成状态
+    /// 恢复节点允许状态 
     /// </summary>
     /// <param name="pairs"></param>
-    public void ReadNodes(Dictionary<string, Dictionary<string, bool>> pairs)
+    public void ReadNodes(List<TecState> pairs)
     {
         if (pairs == null)
         {
@@ -172,23 +197,34 @@ public class TechnologyMenu : MonoBehaviour
         }
         foreach (var pair in pairs)
         {
-            foreach (var p in pair.Value)
-            {
-                foreach (var Technology in allTechnology)
-                {
-                    TechnologyNode TechnologyNode = Technology.GetComponent<TechnologyNode>();
-                    if (TechnologyNode.name.Equals(p.Key))
-                    {
-                        if (p.Value)
-                        {
-                            TechnologyNode.SetAvailable();
-                        }                       
-                    }
 
+            foreach (var Technology in allTechnology)
+            {
+                TechnologyNode TechnologyNode = Technology.GetComponent<TechnologyNode>();
+                if (TechnologyNode.name.Equals(pair.name))
+                {
+                    if (pair.isResearch)
+                    {
+                        TechnologyNode.SetAvailable();
+                    }
+                    if (pair.isComplete)
+                    {
+                        TechnologyNode.SetComplete();
+                    }
                 }
+
             }
+
         }
 
+    }
+    [System.Serializable]
+    public class TecState
+    {
+        public int hierarchy;
+        public string name;
+        public bool isResearch;
+        public bool isComplete;
     }
 
 }
