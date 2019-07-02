@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EscMenu : MonoBehaviour
 {
+    private GameObject set;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +20,13 @@ public class EscMenu : MonoBehaviour
 
     public void OpenSetMenu(Canvas canvas)
     {
-        GameObject set = Resources.Load<GameObject>("prefabs/UI/SetMenu");
-        set = GameObject.Instantiate<GameObject>(set);
-        set.transform.SetParent(canvas.gameObject.transform,false);
+        if (set==null)
+        {
+            set = Resources.Load<GameObject>("prefabs/UI/SetMenu");
+            set = GameObject.Instantiate<GameObject>(set);
+            set.transform.SetParent(canvas.gameObject.transform, false);
+        }
+        AppManage.Instance.SetOpenUI(set);
     }
 
     public void BackMainMenu()
@@ -33,6 +38,10 @@ public class EscMenu : MonoBehaviour
     public void OpenGuide()
     {
 
+    }
+
+    public void Continue() {
+        Destroy(gameObject);
     }
 
 }
