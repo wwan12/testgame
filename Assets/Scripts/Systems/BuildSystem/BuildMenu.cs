@@ -85,10 +85,20 @@ public class BuildMenu : MonoBehaviour
     {
         
     }
-
-    private void AddNode(int i,GameObject h)
+    /// <summary>
+    /// 全局激活建筑
+    /// </summary>
+    public static void AvailableNode(BuildingSO build)
     {
-
+        if (GameObject.FindObjectOfType<BuildMenu>()==null)
+        {
+            AppManage.Instance.saveData.buildNodes[build.hierarchy][build.objectName] = true;
+        }
+        else
+        {
+            GameObject.FindObjectOfType<BuildMenu>().SetAvailable(build.objectName);
+        }
+        
     }
 
     public void SetAvailable(string buildName )

@@ -7,16 +7,11 @@ public class TechnologyMenu : MonoBehaviour
 {
     [Tooltip("分成几栏")]
     public int hierarchy;
-    [Tooltip("是否从磁盘读取")]
-    public bool isOSRead = true;
-
-    private readonly string OS_PATH = "Assets/TechnologyAssets";
-    [Tooltip("UI节点s")]
-    public GameObject[] allTechnology;
     [Tooltip("上下间隔")]
     public int interval = 20;
 
     private GameObject[] hierarchys;
+    private GameObject[] allTechnology;
     private int researchProgress;
     /// <summary>
     /// 效率
@@ -26,22 +21,18 @@ public class TechnologyMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (isOSRead)
+        for (int i = 0; i < GameObject.FindObjectOfType<TechnologyManager>().allTechnology.Length; i++)
         {
-            Technology[] allTechnologyOS = Resources.LoadAll<Technology>(OS_PATH);
-            allTechnology = new GameObject[allTechnologyOS.Length];
-            for (int i = 0; i < allTechnologyOS.Length; i++)
-            {
-                GameObject Technology = Resources.Load<GameObject>("prefabs/UI/TechnologyNode");
-                //  GameObject Technology = new GameObject("Node"+i);
-                Technology.GetComponent<TechnologyNode>().tec = allTechnologyOS[i];
-                Technology.GetComponent<TechnologyNode>().menu = this;
-                Technology = GameObject.Instantiate<GameObject>(Technology);
-                // node.Technologying = allTechnologyOS[i];
-                allTechnology[i] = Technology;
-            }
-
+            GameObject Technology = Resources.Load<GameObject>("prefabs/UI/TechnologyNode");
+            //  GameObject Technology = new GameObject("Node"+i);          
+            Technology.GetComponent<TechnologyNode>().tec = GameObject.FindObjectOfType<TechnologyManager>().allTechnology[i];
+            // Technology.GetComponent<TechnologyNode>().menu = this;
+             Technology = GameObject.Instantiate<GameObject>(Technology);
+            // node.Technologying = allTechnologyOS[i];
+            allTechnology[i] = Technology;
         }
+      
+        
         float lx = 180;
         float ly = -gameObject.GetComponent<RectTransform>().rect.y * 2;
         if (allTechnology.Length > 0)
@@ -73,15 +64,12 @@ public class TechnologyMenu : MonoBehaviour
             vertical.padding = new RectOffset(20, 0, (int)ly - top - 20 - il, 20);
             vertical.childControlWidth = false;
             vertical.childControlHeight = false;
-            if (!isOSRead)
-            {
-                allTechnology[i] = GameObject.Instantiate<GameObject>(allTechnology[i]);
-            }
+           // allTechnology[i] = GameObject.Instantiate<GameObject>(allTechnology[i]);            
             allTechnology[i].transform.SetParent(h.transform);
         }
         if (AppManage.Instance.isInGame)
         {
-            ReadNodes(AppManage.Instance.saveData.tecStates);
+            ReadNodes(FindObjectOfType<TechnologyManager>().allTechnology);
         }
     }
 
@@ -106,22 +94,18 @@ public class TechnologyMenu : MonoBehaviour
 
         }
     }
-    /// <summary>
-    /// 检测是否研究
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    public bool CheckComplete(string name)
+ 
+
+    public void StartTec(string tecName)
     {
         foreach (var tec in allTechnology)
         {
-            if (tec.name.Equals(name))
+            if (tec.name.Equals(tecName))
             {
-               return tec.GetComponent<TechnologyNode>().isComplete;
+                StartTec(tec.GetComponent<TechnologyNode>());
             }
-            
         }
-        return false;
+      
     }
 
     public void StartTec(TechnologyNode tec)
@@ -147,12 +131,14 @@ public class TechnologyMenu : MonoBehaviour
             yield return new WaitForSeconds(tec.tec.researhTime / 100);
             researchProgress++;
             progress.fillAmount = researchProgress/100;
+            tec.tec.progress = researchProgress;
             if (researchProgress >= 100)
             {
                 //todo 研究完成
                 tec.tec.technologyControl.OnComplete(this);
                 Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY,AudioCode.SYSTEM_COMPLETE);
-                tec.isComplete = true;
+                tec.tec.isComplete = true;
+                tec.tec.progress = 0;
                 researchProgress = 0;
                 isTec = false;
                 break;
@@ -161,35 +147,11 @@ public class TechnologyMenu : MonoBehaviour
        
     }
 
-
-    /// <summary>
-    /// 储存节点允许状态 
-    /// </summary>
-    /// <returns></returns>
-    public List<TecState> SaveNodes()
-    {
-        List<TecState> nodes = new List<TecState>();
-        for (int i = 0; i < hierarchys.Length; i++)
-        {
-            TecState tec = new TecState();
-            foreach (var node in hierarchys[i].GetComponentsInChildren<Transform>())
-            {
-                TechnologyNode TechnologyNode = node.gameObject.GetComponent<TechnologyNode>();
-                tec.name = TechnologyNode.name;
-                tec.isResearch = TechnologyNode.isResearch;
-                tec.isComplete = TechnologyNode.isComplete;
-                tec.hierarchy = i;
-            }
-            nodes.Add(tec);
-        }
-        return nodes;
-
-    }
     /// <summary>
     /// 恢复节点允许状态 
     /// </summary>
     /// <param name="pairs"></param>
-    public void ReadNodes(List<TecState> pairs)
+    public void ReadNodes(Technology[] pairs)
     {
         if (pairs == null)
         {
@@ -211,20 +173,16 @@ public class TechnologyMenu : MonoBehaviour
                     {
                         TechnologyNode.SetComplete();
                     }
+                    if (pair.progress != 0)
+                    {
+                        StartTec(pair.name);
+                    }
                 }
 
             }
 
         }
 
-    }
-    [System.Serializable]
-    public class TecState
-    {
-        public int hierarchy;
-        public string name;
-        public bool isResearch;
-        public bool isComplete;
     }
 
 }

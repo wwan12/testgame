@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3869,6 +3869,8 @@ GameObject:
   - component: {fileID: 2133753284}
   - component: {fileID: 2133753286}
   - component: {fileID: 2133753285}
+  - component: {fileID: 2133753287}
+  - component: {fileID: 2133753288}
   m_Layer: 0
   m_Name: NoEntityManager
   m_TagString: Untagged
@@ -4043,3 +4045,34 @@ MonoBehaviour:
     NextKey: z
     Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     Material: {fileID: 0}
+--- !u!114 &2133753287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133753281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0074445bc5fc14548af11c56419b85fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOSRead: 1
+  allTechnology: []
+  menu: {fileID: 0}
+--- !u!114 &2133753288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133753281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ccaad1e0117aeb4688ca2a86bcd272d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initTasks: []
+  freeTasks: []
+  refreshTime: 1
+  activatedTask: {fileID: 0}

@@ -2,33 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class TaskControl
+public abstract class TaskControl
 {
+    /// <summary>
+    /// 需要根据进度改变的堆
+    /// </summary>
+    public List<int> intHeap;
+    /// <summary>
+    /// 不需要改变的堆，已完成的堆
+    /// </summary>
+    public List<int> CompHeap;
 
-    public List<float> floatHeap;
+   
+    /// <summary>
+    /// 注册后每个周期调用 触发条件
+    /// </summary>
+    public abstract bool OnAwake();
 
     /// <summary>
-    /// 触发条件
+    /// 被激活时调用
     /// </summary>
-    public virtual bool OnAwake()
-    {
-        return false;
-    }
+    public abstract void OnInProgress();
 
     /// <summary>
-    /// 进行中
+    /// 完成后实现类调用
     /// </summary>
-    public virtual void OnInProgress()
-    {
-
-    }
-
-    /// <summary>
-    /// 完成后调用
-    /// </summary>
-    public virtual void OnComplete(MonoBehaviour mono)
-    {
-
+    public void OnComplete(Task task) {
+        GameObject.FindObjectOfType<TaskManager>().LogOff(task);
     }
 }

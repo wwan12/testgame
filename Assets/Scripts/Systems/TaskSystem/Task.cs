@@ -13,7 +13,21 @@ public class Task : ScriptableObject
     public int TaskIndex;
     [Tooltip("任务控制器")]
     public TaskControl taskControl;
- 
+    [Tooltip("类型")]
+    public TaskType type;
+    [Tooltip("进度")]
+    public int chainProgress;
+    [Tooltip("是否被激活")]
+    public bool isAvailable;
+
+
+    
+}
+
+public enum TaskType
+{
+    none,
+    chain,
 }
 
 

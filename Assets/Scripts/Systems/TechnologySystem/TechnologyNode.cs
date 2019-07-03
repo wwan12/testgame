@@ -10,27 +10,21 @@ public class TechnologyNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHa
     public int hierarchy;
     [Tooltip("该节点对应的科技")]
     public Technology tec;
-    /// <summary>
-    /// 是否允许研究
-    /// </summary>
-    public bool isResearch { get; private set; }
+   
+   
+ 
 
-    /// <summary>
-    /// 是否已研究
-    /// </summary>
-    public bool isComplete;
-    public TechnologyMenu menu;
 
     public void SetAvailable()
     {
-        isResearch = true;
+        tec.isResearch = true;
         gameObject.GetComponentInChildren<Text>().color = Color.white;
         gameObject.GetComponentInChildren<Image>().color = Color.white;
     }
 
     public void SetComplete()
     {
-        isComplete = true;
+        tec.isComplete = true;
         gameObject.GetComponentInChildren<Text>().color = Color.blue;
         gameObject.GetComponentInChildren<Image>().color = Color.blue;
     }
@@ -40,7 +34,8 @@ public class TechnologyNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (isResearch&&!menu.isTec&&!isComplete)
+            TechnologyMenu menu = GameObject.FindObjectOfType<TechnologyMenu>();
+            if (tec.isResearch&&!menu.isTec&&!tec.isComplete)
             {
                 menu.StartTec(this);
             }
@@ -61,8 +56,8 @@ public class TechnologyNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHa
     void Start()
     {
         hierarchy = tec.hierarchy;
-        isResearch = tec.isResearch;
-        if (!isResearch)
+        //isResearch = tec.isResearch;
+        if (!tec.isResearch)
         {
             gameObject.GetComponentInChildren<Text>().color = Color.gray;
             gameObject.GetComponentInChildren<Image>().color = Color.grey;
