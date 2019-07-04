@@ -18,6 +18,28 @@ public class BuildMenu : MonoBehaviour
 
     private GameObject[] hierarchys;
 
+    /// <summary>
+    /// 缓存的展示板
+    /// </summary>
+    [HideInInspector]
+    public static GameObject CacheBoard;
+    /// <summary>
+    /// 全局激活建筑
+    /// </summary>
+    public static void AvailableNode(BuildingSO build)
+    {
+        if (GameObject.FindObjectOfType<BuildMenu>() == null)
+        {
+            AppManage.Instance.saveData.buildNodes[build.hierarchy][build.objectName] = true;
+        }
+        else
+        {
+            GameObject.FindObjectOfType<BuildMenu>().SetAvailable(build.objectName);
+        }
+
+    }
+    
+
 
     // Start is called before the first frame update
     void Start()
@@ -85,21 +107,7 @@ public class BuildMenu : MonoBehaviour
     {
         
     }
-    /// <summary>
-    /// 全局激活建筑
-    /// </summary>
-    public static void AvailableNode(BuildingSO build)
-    {
-        if (GameObject.FindObjectOfType<BuildMenu>()==null)
-        {
-            AppManage.Instance.saveData.buildNodes[build.hierarchy][build.objectName] = true;
-        }
-        else
-        {
-            GameObject.FindObjectOfType<BuildMenu>().SetAvailable(build.objectName);
-        }
-        
-    }
+  
 
     public void SetAvailable(string buildName )
     {

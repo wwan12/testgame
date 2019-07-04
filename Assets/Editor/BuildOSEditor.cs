@@ -16,7 +16,8 @@ public class BuildOSEditor : Editor
 
         //获取指定脚本对象
         m_Target = target as BuildingSO;
-
+        m_Target.hierarchy = EditorGUILayout.IntField("菜单中层级", m_Target.hierarchy);
+        
         m_Target.objectName = EditorGUILayout.DelayedTextField("建筑名称", m_Target.objectName);
         m_Target.buildingPrefab = EditorGUILayout.ObjectField("建筑预制", m_Target.buildingPrefab, typeof(GameObject), true) as GameObject;
         m_Target.lowSource = EditorGUILayout.ObjectField("预览图", m_Target.lowSource, typeof(Sprite), true) as Sprite;
@@ -24,11 +25,12 @@ public class BuildOSEditor : Editor
         //EditorGUILayout.PropertyField(cost,true);
         m_Target.dTime = EditorGUILayout.FloatField("拆除时间", m_Target.dTime);
         m_Target.durable = EditorGUILayout.FloatField("耐久", m_Target.durable);
+       
         m_Target.type = (BuildingSO.BuildType)EditorGUILayout.EnumFlagsField("特殊类型", m_Target.type);
         if (m_Target.type== BuildingSO.BuildType.collect)
         {
-
-            m_Target.res = EditorGUILayout.ObjectField("采集的资源", m_Target.res, typeof(ResourceType), true) as ResourceType;
+            m_Target.res = (ResourceType.AttributionType)EditorGUILayout.EnumFlagsField("采集的资源", m_Target.res);
+          //  m_Target.res = EditorGUILayout.ObjectField("采集的资源", m_Target.res, typeof(ResourceType), true) as ResourceType;
             m_Target.collectNum = EditorGUILayout.IntField("每个循环采集数量", m_Target.collectNum);
             m_Target.collectInterval = EditorGUILayout.FloatField("采集间隔", m_Target.collectInterval);           
         }

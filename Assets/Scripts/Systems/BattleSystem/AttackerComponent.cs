@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace BattleSystem
@@ -9,6 +9,7 @@ namespace BattleSystem
         public Equip equip;
         public AttackModel attackModel;
         public Vector3 equipAttackPosition;
+        public event EventHandler<Hit> AttackCallBack;
 
         private const string rangName = "rang";
         private const string minRangName = "minRang";
@@ -20,6 +21,7 @@ namespace BattleSystem
         private bool perFrameDetection;
         private bool ready;
         private IEnumerator attackLoop;
+
 
         // Start is called before the first frame update
         void Start()
@@ -38,13 +40,13 @@ namespace BattleSystem
         public void Awaken(Equip equip_alpha)
         {
             equip = equip_alpha;
-            if (equip.range!=0f)
+            if (equip.range != 0f)
             {
                 CircleCollider2D rangeCollider2D = gameObject.AddComponent<CircleCollider2D>();
                 rangeCollider2D.name = rangName;
                 rangeCollider2D.isTrigger = true;
                 rangeCollider2D.radius = equip.range;
-            }         
+            }
             if (equip.minRange != 0f)
             {
                 CircleCollider2D minRangeCollider2D = gameObject.AddComponent<CircleCollider2D>();
@@ -67,10 +69,10 @@ namespace BattleSystem
                 }
             }//添加距离监听
             perFrameDetection = true;//第一次启动在下一帧刷新下模式
-           
-                attackLoop = AttackLoop();
-                StartCoroutine(attackLoop);
-                  
+
+            attackLoop = AttackLoop();
+            StartCoroutine(attackLoop);
+
         }
         /// <summary>
         /// 休眠，移除所有范围检测
@@ -115,17 +117,19 @@ namespace BattleSystem
                     switch (equip.shootType)
                     {
                         case ShootType.gun:
-                            if (equip.muzzleFlame!=null)
+                            if (equip.muzzleFlame != null)
                             {
                                 GameObject b = Instantiate<GameObject>(equip.muzzleFlame, equipAttackPosition, Quaternion.identity);
-                                Lifetimer.AddTimer(b,1.5f,true);
+                                Lifetimer.AddTimer(b, 1.5f, true);
                             }
+                            AttackCallBack(this, hit);
                             target.Recipient(hit);//即时的hit
                             break;
                         case ShootType.ballistic:
                             //todo 弹道发射hit
                             break;
                         case ShootType.closeCombat:
+                            AttackCallBack(this, hit);
                             target.Recipient(hit);//即时的hit
                             break;                       
                     }

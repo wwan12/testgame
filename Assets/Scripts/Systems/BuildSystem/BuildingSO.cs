@@ -22,7 +22,7 @@ public class BuildingSO : ScriptableObject
     [Tooltip("特殊类型")]
     public BuildType type;
     [Tooltip("采集的资源")]
-    public ResourceType res;
+    public ResourceType.AttributionType res;
     [Tooltip("每个循环采集数量")]
     public int collectNum;
     [Tooltip("采集间隔")]
@@ -31,6 +31,7 @@ public class BuildingSO : ScriptableObject
     public int hierarchy;
     [Tooltip("初始是否允许建造")]
     public bool isBuild;
+
     [System.Serializable]
     public struct ResourcePrefab
     {

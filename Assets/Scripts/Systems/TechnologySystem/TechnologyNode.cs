@@ -34,10 +34,10 @@ public class TechnologyNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHa
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            TechnologyMenu menu = GameObject.FindObjectOfType<TechnologyMenu>();
-            if (tec.isResearch&&!menu.isTec&&!tec.isComplete)
+            TechnologyManager mana = GameObject.FindObjectOfType<TechnologyManager>();
+            if (tec.isResearch&&!tec.isComplete)
             {
-                menu.StartTec(this);
+                mana.StartTec(tec);
             }
             else
             {

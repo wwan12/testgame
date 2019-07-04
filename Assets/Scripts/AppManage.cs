@@ -45,7 +45,7 @@ public class AppManage
     /// 是否已经开始
     /// </summary>
     public bool isInGame;
-
+    public GameObject HUD;
 
     /// <summary>
     /// 初始化获取系统信息等
@@ -177,6 +177,7 @@ public class AppManage
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
         saveData.buildNodes = GameObject.FindObjectOfType<BuildMenu>()?.SaveNodes();
         saveData.tecStates = GameObject.FindObjectOfType<TechnologyManager>()?.SaveNodes();
+        saveData.ongoingTasks = GameObject.FindObjectOfType<TaskManager>().SaveTask();
     }
 
     /// <summary>
@@ -355,11 +356,14 @@ public class AppManage
         public float[] playerLocation = new float[3];
         public string mapData = "";
         public string bagData = "";
-        //public string buildLocation = "";
         public string otherData = "";
         public Dictionary<int, Dictionary<string, bool>> buildNodes;
+        /// <summary>
+        /// 格式是 x|y,name
+        /// </summary>
         public Dictionary<string,string> buildLocation;
         public TechnologyManager.TecState[] tecStates;
+        public TaskManager.TaskState[] ongoingTasks;
     }
     AsyncOperation asyncOperation;
 
@@ -406,13 +410,15 @@ public class AppManage
         }
         asyncOperation.allowSceneActivation = true;  //如果加载完成，可以进入场景
         //yield return new WaitForEndOfFrame(); 
+        Game_mo_UI ui= GameObject.FindObjectOfType<Game_mo_UI>();
+        HUD = ui.gameObject;
         if (isNew)
         {
-            StartNewGame(GameObject.FindObjectOfType<Game_mo_UI>());
+            StartNewGame(ui);
         }
         else
         {
-            ContinueGame(GameObject.FindObjectOfType<Game_mo_UI>());
+            ContinueGame(ui);
         }
         Messenger.OnListenerRemoved(EventCode.APP_START_GAME);
     }

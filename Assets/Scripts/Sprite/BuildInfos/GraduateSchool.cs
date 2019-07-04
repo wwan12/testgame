@@ -3,96 +3,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraduateSchool : MonoBehaviour
+public class GraduateSchool : BuildControl
 {
-    /// <summary>
-    /// 研究进度回调
-    /// </summary>
-    public event EventHandler<int> progressCallBcak;
-    /// <summary>
-    /// 研究完成
-    /// </summary>
-    public event EventHandler<string> completeCallBcak;
-    private float time;
-    private byte progress=0;
-    private bool isRun;
-    [HideInInspector]
-    public List<string> researched = new List<string>();
-    [HideInInspector]
-    public List<string> notResearch = new List<string>();
-    private GameObject[] allTec;
-    // Start is called before the first frame update
-    void Start()
+
+    public string explain;
+    public override void OnAvailable()
     {
-        ReadTecTree();
+        AddTecSpeed();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnBuild()
     {
-        
-    }
-    /// <summary>
-    /// 读取科技树
-    /// </summary>
-    void ReadTecTree()
-    {
-        allTec= Resources.LoadAll<GameObject>("prefabs/Technology");
+        AddTecSpeed();
+       
     }
 
-    void AddUI()
+    public override void OnDismantle()
     {
-       GameObject ui= GameObject.Find("TechnologyMenu");
-        foreach (var tec in allTec)
+        ReduceTecSpeed();
+    }
+
+    public override void OnNotAvailable()
+    {
+        ReduceTecSpeed();
+    }
+
+    public override void Left()
+    {
+       
+    }
+
+    public override void Right()
+    {
+        DisplayBoard.Show(this,gameObject.transform.position, explain);
+    }
+
+    private void AddTecSpeed()
+    {
+        GraduateSchool[] grs = GameObject.FindObjectsOfType<GraduateSchool>();
+        if (grs.Length == 1)
         {
-            RectTransform rect = tec.GetComponent<RectTransform>();
-            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right,0 , rect.sizeDelta.x);
-            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, rect.sizeDelta.y);
-            tec.transform.SetParent(ui.transform);
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(1f);
         }
-    }
-    /// <summary>
-    /// 直接获取一个科技
-    /// </summary>
-    /// <param name="tecName"></param>
-    public void GetTec(string tecName)
-    {
-        researched.Add(tecName);
-    }
-
-     bool IsResearch()
-    {
-        return false;
-    }
-    /// <summary>
-    /// 开始研究
-    /// </summary>
-    /// <param name="tecName"></param>
-    public void StartResearch(string tecName)
-    {
-        if (!isRun)
+        if (grs.Length > 1 && grs.Length < 5)
         {
-         StartCoroutine(Progress(tecName));        
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(0.25f);
+        }
+        if (grs.Length >= 5)
+        {
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(0.1f);
         }
     }
 
-    IEnumerator Progress(string tecName) {
-        isRun = true;
-        while (progress < 100)
-        {
-        yield return new WaitForSeconds(time/100);
-        progress++;
-        progressCallBcak(this, progress);
-        }
-        progress = 0;
-        researched.Add(tecName);
-        TecTakeEffect(tecName);
-        completeCallBcak(this, tecName);
-        isRun = false;
-    }
-
-    void TecTakeEffect(string tecName)
+    private void ReduceTecSpeed()
     {
-
+        GraduateSchool[] grs = GameObject.FindObjectsOfType<GraduateSchool>();
+        if (grs.Length == 1)
+        {
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(-1f);
+        }
+        if (grs.Length > 1 && grs.Length < 5)
+        {
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(-0.25f);
+        }
+        if (grs.Length >= 5)
+        {
+            GameObject.FindObjectOfType<TechnologyManager>().ChangeEfficiency(-0.1f);
+        }
     }
 }

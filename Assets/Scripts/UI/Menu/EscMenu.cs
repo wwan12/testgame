@@ -41,6 +41,7 @@ public class EscMenu : MonoBehaviour
     }
 
     public void Continue() {
+        Destroy(set);
         Destroy(gameObject);
     }
 

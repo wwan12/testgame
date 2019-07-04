@@ -17,8 +17,7 @@ public class Task : ScriptableObject
     public TaskType type;
     [Tooltip("进度")]
     public int chainProgress;
-    [Tooltip("是否被激活")]
-    public bool isAvailable;
+   
 
 
     

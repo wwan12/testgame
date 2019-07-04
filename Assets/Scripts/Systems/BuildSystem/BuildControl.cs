@@ -6,28 +6,38 @@ using UnityEngine.UI;
 /// <summary>
 /// 提供给其他具体实现建筑继承
 /// </summary>
-public class BuildControl : MonoBehaviour
+public abstract class BuildControl : MonoBehaviour
 {
+    [HideInInspector]
     public float durable;
+    [HideInInspector]
     public float dTime;
+    [HideInInspector]
     public float buildTime;
+    [HideInInspector]
     public GameObject buildProgress;
+    [HideInInspector]
     public GameObject dismantleProgress;
+    [HideInInspector]
     public BuildingSO.BuildType type;
     /// <summary>
     /// 建筑价格
     /// </summary>
+    [HideInInspector]
     public Dictionary<string, int> cost;
-    private int progress = 0;
-    private bool ready;
     /// <summary>
     /// 如果是收集建筑，可以收集的资源类型
     /// </summary>
+    [HideInInspector]
     public ResourceType.AttributionType colType;
     /// <summary>
     /// 如果是收集建筑，可以收集的资源数
     /// </summary>
+    [HideInInspector]
     public int colNum;
+    private int progress = 0;
+    private bool ready;
+ 
 
     void Start()
     {
@@ -43,26 +53,50 @@ public class BuildControl : MonoBehaviour
     {
         if (ready&&Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Show();
+            Left();
         }
         if (ready&&Input.GetKeyDown(KeyCode.Mouse1))
         {
-            Open();                         
+            Right();                         
         }
     }
     /// <summary>
     /// 当呗左键点中
     /// </summary>
-    public virtual void Show() {
-
-    }
+    public abstract void Left();
+    
 
     /// <summary>
     /// 当呗右键点中
     /// </summary>
-    public virtual void Open()
-    {
+    public abstract void Right();
 
+    /// <summary>
+    /// 建造完成
+    /// </summary>
+    public abstract void OnBuild();
+    /// <summary>
+    /// 拆除
+    /// </summary>
+    public abstract void OnDismantle();
+
+    /// <summary>
+    ///  不可用回调
+    /// </summary>
+    public abstract void OnNotAvailable();
+
+    /// <summary>
+    /// 可用回调
+    /// </summary>
+    public abstract void OnAvailable();
+
+    /// <summary>
+    /// todo 连接电力
+    /// </summary>
+    /// <returns></returns>
+    public bool TryConnect()
+    {
+        return true;
     }
 
     public void RemoveBuild()
@@ -73,6 +107,7 @@ public class BuildControl : MonoBehaviour
         }
         else
         {
+            RemoveComplete();
             Destroy(gameObject);
         }
     }
@@ -80,7 +115,7 @@ public class BuildControl : MonoBehaviour
     IEnumerator RemoveProgress()
     {
         GameObject dp= GameObject.Instantiate(dismantleProgress);
-        dp.transform.SetParent(GameObject.Find("GameUI").transform);
+        dp.transform.SetParent(AppManage.Instance.HUD.transform);
         dp.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);
         while (progress < 100)
         {
@@ -89,6 +124,7 @@ public class BuildControl : MonoBehaviour
             dp.GetComponentInChildren<Image>().fillAmount = progress / 100;
         }
         progress = 0;
+        RemoveComplete();
         Destroy(gameObject);
     }
 
@@ -119,7 +155,7 @@ public class BuildControl : MonoBehaviour
     IEnumerator BuildProgress()
     {
         GameObject bp= GameObject.Instantiate(buildProgress);
-        bp.transform.SetParent(GameObject.Find("GameUI").transform);
+        bp.transform.SetParent(AppManage.Instance.HUD.transform);
         bp.transform.position= Camera.main.WorldToScreenPoint(gameObject.transform.position);
         Color alpha= gameObject.GetComponent<SpriteRenderer>().color;
         while (progress < 100)
@@ -141,11 +177,13 @@ public class BuildControl : MonoBehaviour
     {
         string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
         AppManage.Instance.saveData.buildLocation.Add(position,gameObject.name);
+        OnBuild();
     }
 
     void RemoveComplete()
     {
         string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
         AppManage.Instance.saveData.buildLocation.Remove(position);
+        OnDismantle();
     }
 }

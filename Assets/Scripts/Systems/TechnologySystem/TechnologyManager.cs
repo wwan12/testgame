@@ -12,18 +12,18 @@ public class TechnologyManager : MonoBehaviour
     public Technology[] allTechnology;
     [HideInInspector]
     public TechnologyMenu menu;
+    /// <summary>
+    /// 效率
+    /// </summary>
+    private float researchEfficiency=0f;
     // Start is called before the first frame update
     void Start()
     {
         if (isOSRead)
         {
-            allTechnology = Resources.LoadAll<Technology>(OS_PATH);
-            if (AppManage.Instance.isInGame)
-            {
-                ReadNodes(AppManage.Instance.saveData.tecStates);
-            }
-
+            allTechnology = Resources.LoadAll<Technology>(OS_PATH);          
         }
+        Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, TecStart);
     }
 
     // Update is called once per frame
@@ -31,6 +31,74 @@ public class TechnologyManager : MonoBehaviour
     {
         
     }
+    private void TecStart(AppManage.SingleSave save)
+    {
+        ReadNodes(save.tecStates);
+    }
+
+    /// <summary>
+    /// 改变研究速度
+    /// </summary>
+    /// <param name="factor"></param>
+    public void ChangeEfficiency(float factor)
+    {
+        researchEfficiency += factor;
+    }
+    /// <summary>
+    /// 开始一个研究
+    /// </summary>
+    /// <param name="tecName"></param>
+    public void StartTec(string tecName)
+    {
+        foreach (var tec in allTechnology)
+        {
+            if (tec.name.Equals(tecName))
+            {
+                StartTec(tec);
+            }
+        }
+
+    }
+
+    public void StartTec(Technology tec)
+    {
+       
+        tec.technologyControl.OnStart();
+        StartCoroutine(TecProgress(tec));
+    }
+
+    IEnumerator TecProgress(Technology tec)
+    {
+        if (menu != null)
+        {
+            menu.SetProgress(tec.name, tec.progress);
+        }
+        while (true)
+        {
+            if (researchEfficiency == 0)
+            {
+                yield return new WaitForSeconds(1f);
+                continue;
+            }
+            yield return new WaitForSeconds(tec.researhTime / 100/researchEfficiency);
+            tec.progress++;
+            if (tec.progress >= 100)
+            {
+                //todo 研究完成             
+                tec.technologyControl.OnComplete(this);
+                Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY, AudioCode.SYSTEM_COMPLETE);
+                tec.isComplete = true;
+                tec.progress = 0;
+                break;
+            }
+            if (menu != null)
+            {
+                menu.SetProgress(tec.name, tec.progress);
+            }
+        }
+
+    }
+
 
     /// <summary>
     /// 设置可用
@@ -112,7 +180,10 @@ public class TechnologyManager : MonoBehaviour
                     tec.isComplete = pair.isComplete;
                     tec.isResearch = pair.isResearch;
                     tec.progress = pair.progress;
-
+                    if (tec.progress != 0)
+                    {
+                        StartTec(tec);
+                    }
                 }
             }
            

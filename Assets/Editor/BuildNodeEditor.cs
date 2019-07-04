@@ -9,7 +9,10 @@ public class BuildNodeEditor : Editor
 {
     private BuildNode m_Target;
 
-
+    private void OnEnable()
+    {
+        
+    }
 
     public override void OnInspectorGUI() {
         m_Target = target as BuildNode;

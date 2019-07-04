@@ -6,18 +6,14 @@ using UnityEngine.UI;
 
 public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
 {
-    [Tooltip("该节点的层级")]
+    [HideInInspector]
     public int hierarchy;
-    [Tooltip("该节点对应的建筑")]
+    [HideInInspector]
     public BuildingSO building;
     /// <summary>
     /// 是否允许建造
     /// </summary>
     public bool isBuild { get; private set; }
-
-    public BuildNode(BuildingSO building) {
-        this.building = building;
-    }
 
     public void SetAvailable() {
         isBuild = true;

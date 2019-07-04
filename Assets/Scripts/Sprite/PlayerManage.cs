@@ -117,6 +117,8 @@ public class PlayerManage : MonoBehaviour
             if (AppManage.Instance.openUI == null)
             {
                 AppManage.Instance.SetOpenUI(GameObject.Find("EscMenu"));
+              //  Time.timeScale = 0;
+              
             }
             else
             {
@@ -146,19 +148,19 @@ public class PlayerManage : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/TechnologyTree"));
+            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(0).gameObject);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Build"));
+            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(1).gameObject);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Relation"));
+            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(2).gameObject);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            AppManage.Instance.SetOpenUI(GameObject.Find("GameUI/Map"));
+            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(3).gameObject);
         }
 
     }

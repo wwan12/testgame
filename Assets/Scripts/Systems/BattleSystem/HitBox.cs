@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace BattleSystem
 {
@@ -38,7 +36,9 @@ namespace BattleSystem
                 else
                 {
                     DeadCallBack(this, hit);
+                    
                 }
+                Messenger.Broadcast(EventCode.ENEMY_DEAD,gameObject.name);
             }
         }
     }

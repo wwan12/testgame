@@ -24,7 +24,12 @@ public class TaskManager : MonoBehaviour
         lockTasks = new Queue<Task>();
         compeleTask = new List<string>();
 
-
+       Task[] tasks= Resources.LoadAll<Task>("");
+        initTasks.AddRange(tasks);
+        if (AppManage.Instance.isInGame)
+        {
+            ReadTask(AppManage.Instance.saveData.ongoingTasks);
+        }
     }
 
     // Update is called once per frame
@@ -112,27 +117,43 @@ public class TaskManager : MonoBehaviour
        
     }
 
-    public TaskState SaveTask()
+    public TaskState[] SaveTask()
     {
-        List<string> awake=new List<string>();
-        foreach (var item in freeTasks)
+        TaskState[] tasks = new TaskState[freeTasks.Count];
+        for (int i = 0; i < freeTasks.Count; i++)
         {
-            awake.Add(item.name);
+            TaskState taskState = new TaskState()
+            {
+                name = freeTasks[i].name,
+                progress = freeTasks[i].chainProgress,
+                completed = freeTasks[i].taskControl.intHeap,
+                total= freeTasks[i].taskControl.totalHeap,
+            };
+            tasks[i] = taskState;
         }
-
-        TaskState taskState = new TaskState() {
-            name = activatedTask.name,
-            progress = activatedTask.chainProgress,
-            complete = compeleTask.ToArray(),
-            awake = awake.ToArray(),
-        };
-        return taskState;
+       
+        
+        return tasks;
     }
 
 
-    public void ReadTask(TaskState tasks)
+    public void ReadTask(TaskState[] tasks)
     {
-
+        foreach (var item in tasks)
+        {
+            foreach (var init in initTasks)
+            {
+                if (init.name.Equals(item.name))
+                {
+                    init.taskControl.Recovery(item);
+                    init.taskControl.OnInProgress();
+                    freeTasks.Add(init);
+                    initTasks.Remove(init);
+                    break;
+                }
+            }
+            
+        }
     }
 
     [System.Serializable]
@@ -142,7 +163,8 @@ public class TaskManager : MonoBehaviour
     /// </summary>
         public string name;
         public int progress;
-        public string[] complete;
-        public string[] awake;
+        public Dictionary<string, int> completed;
+        public Dictionary<string,int> total;
+      
     }
 }

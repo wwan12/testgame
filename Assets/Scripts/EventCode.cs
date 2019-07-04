@@ -78,7 +78,10 @@ public class EventCode
     /// 状态改变
     /// </summary>
     public static readonly string PLAYER_STATE_CHANGE = "PLAYER_STATE_CHANGE";
-
+    /// <summary>
+    /// 某个对象被消灭
+    /// </summary>
+    public static readonly string ENEMY_DEAD = "ENEMY_DEAD";
     /// <summary>
     /// 添加一个电力节点
     /// </summary>

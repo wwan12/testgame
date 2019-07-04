@@ -12,11 +12,8 @@ public class TechnologyMenu : MonoBehaviour
 
     private GameObject[] hierarchys;
     private GameObject[] allTechnology;
-    private int researchProgress;
-    /// <summary>
-    /// 效率
-    /// </summary>
-    private float researchEfficiency;
+   // private int researchProgress;
+   
     public bool isTec;
     // Start is called before the first frame update
     void Start()
@@ -96,51 +93,30 @@ public class TechnologyMenu : MonoBehaviour
     }
  
 
-    public void StartTec(string tecName)
+   
+
+    public void SetProgress(string name,int p)
     {
+        if (p >= 100)
+        {
+            isTec = false;
+        }
+        else
+        {
+            isTec = true;
+        }
         foreach (var tec in allTechnology)
         {
-            if (tec.name.Equals(tecName))
+            if (tec.name.Equals(name))
             {
-                StartTec(tec.GetComponent<TechnologyNode>());
-            }
-        }
-      
-    }
-
-    public void StartTec(TechnologyNode tec)
-    {
-        isTec = true;
-        tec.tec.technologyControl.OnStart();
-        StartCoroutine(TecProgress(tec));
-    }
-
-    IEnumerator TecProgress(TechnologyNode tec)
-    {
-        Image progress=null;
-        foreach (var item in tec.gameObject.GetComponentsInChildren<Image>())
-        {
-            if (item.name.Equals("Progress"))
-            {
-                progress = item;
-            }
-        }
-         
-        while (true)
-        {
-            yield return new WaitForSeconds(tec.tec.researhTime / 100);
-            researchProgress++;
-            progress.fillAmount = researchProgress/100;
-            tec.tec.progress = researchProgress;
-            if (researchProgress >= 100)
-            {
-                //todo 研究完成
-                tec.tec.technologyControl.OnComplete(this);
-                Messenger.Broadcast(EventCode.AUDIO_EFFECT_PLAY,AudioCode.SYSTEM_COMPLETE);
-                tec.tec.isComplete = true;
-                tec.tec.progress = 0;
-                researchProgress = 0;
-                isTec = false;
+                foreach (var item in tec.GetComponentsInChildren<Image>())
+                {
+                    if (item.name.Equals("Progress"))
+                    {
+                        item.fillAmount=p/100;
+                        
+                    }
+                }
                 break;
             }
         }
@@ -173,10 +149,10 @@ public class TechnologyMenu : MonoBehaviour
                     {
                         TechnologyNode.SetComplete();
                     }
-                    if (pair.progress != 0)
-                    {
-                        StartTec(pair.name);
-                    }
+                    //if (pair.progress != 0)
+                    //{
+                    //    StartTec(pair.name);
+                    //}
                 }
 
             }

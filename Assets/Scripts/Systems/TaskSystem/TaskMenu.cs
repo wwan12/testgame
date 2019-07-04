@@ -97,10 +97,12 @@ public class TaskMenu : MonoBehaviour
         detailsLabel.GetComponent<Text>().text=task.note;
         detailsLabel.GetComponent<Button>().onClick.AddListener(SetAvailable);
     }
-
+    /// <summary>
+    /// 设为追踪
+    /// </summary>
     public void SetAvailable() {
         GameObject.FindObjectOfType<TaskManager>().activatedTask = showTask;
-        showTask.taskControl.OnInProgress();
+       // showTask.taskControl.OnInProgress();
        
     }
 }

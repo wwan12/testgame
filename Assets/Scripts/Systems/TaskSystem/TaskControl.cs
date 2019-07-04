@@ -7,11 +7,11 @@ public abstract class TaskControl
     /// <summary>
     /// 需要根据进度改变的堆
     /// </summary>
-    public List<int> intHeap;
+    public Dictionary<string,int> intHeap;
     /// <summary>
-    /// 不需要改变的堆，已完成的堆
+    /// 已完成的需要的堆
     /// </summary>
-    public List<int> CompHeap;
+    public Dictionary<string,int> totalHeap;
 
    
     /// <summary>
@@ -19,10 +19,29 @@ public abstract class TaskControl
     /// </summary>
     public abstract bool OnAwake();
 
+    public virtual void OnStart()
+    {
+        intHeap = new Dictionary<string, int>();
+        totalHeap = new Dictionary<string, int>();                
+    }
+    /// <summary>
+    /// 恢复任务状态
+    /// </summary>
+    /// <param name="state"></param>
+    public virtual void Recovery(TaskManager.TaskState state)
+    {
+        intHeap = state.completed;
+        totalHeap = state.total;
+       
+    }
+
     /// <summary>
     /// 被激活时调用
     /// </summary>
     public abstract void OnInProgress();
+
+
+
 
     /// <summary>
     /// 完成后实现类调用

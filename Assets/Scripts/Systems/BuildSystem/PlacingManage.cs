@@ -52,6 +52,7 @@ public class PlacingManage : MonoBehaviour {
         place = placeable.AddComponent<PlaceControl>();
         BuildControl build = placeable.GetComponent<BuildControl>();
         placeable.name = placeablePrefab.objectName;
+
         build.name = placeablePrefab.objectName;
         build.durable = placeablePrefab.durable;
         build.buildProgress = buildProgress;
@@ -60,6 +61,9 @@ public class PlacingManage : MonoBehaviour {
         build.buildTime = placeablePrefab.buildTime;
         build.type = placeablePrefab.type;
         build.cost = placeablePrefab.cost;
+        build.colType = placeablePrefab.res;
+        build.colNum = placeablePrefab.collectNum;
+     
 
         // prefabToPlace = placeablePrefab;
     }
