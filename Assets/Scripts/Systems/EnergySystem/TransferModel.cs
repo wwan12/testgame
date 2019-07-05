@@ -23,6 +23,9 @@ public class TransferModel : MonoBehaviour
     /// </summary>
     private float connectedCode;
     private float cutCode;
+
+    private readonly string TransferName = "Transfer";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,15 +39,12 @@ public class TransferModel : MonoBehaviour
         rangeDis.enabled = false;
 
         CircleCollider2D circleCollider= gameObject.AddComponent<CircleCollider2D>();
+        circleCollider.name = TransferName;
         circleCollider.radius = connectionScope;
         circleCollider.isTrigger = true;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
     /// <summary>
     /// 合并网格
     /// </summary>
@@ -124,13 +124,16 @@ public class TransferModel : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TransferModel e = collision.gameObject.GetComponent<TransferModel>();
-        if (e!=null)
-        {                    
-            energys.Add(e);           
+        if (collision.name.Equals(TransferName))
+        {
+            TransferModel e = collision.gameObject.GetComponent<TransferModel>();
+            if (e != null)
+            {
+                energys.Add(e);
 
+            }
         }
-       
+     
       
     }
     /// <summary>
@@ -139,10 +142,35 @@ public class TransferModel : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerExit2D(Collider2D collision)
     {
-        TransferModel e = collision.gameObject.GetComponent<TransferModel>();
-        if (e != null)
+        if (collision.name.Equals(TransferName))
         {
-            energys.Remove(e);
+            TransferModel e = collision.gameObject.GetComponent<TransferModel>();
+            if (e != null)
+            {
+                energys.Remove(e);
+            }         
         }
+      
     }
+
+
+#if UNITY_EDITOR
+
+ 
+    private void OnDrawGizmos()
+    {
+        // base.OnDrawGizmos();
+        foreach (var node in energys)
+        {
+            if (node != null)
+            {
+                Gizmos.color = Color.white;
+                Vector3 dir = transform.position - node.transform.position;
+                Gizmos.DrawLine(transform.position, dir.normalized + node.transform.position);
+            }
+        }
+       
+    }
+#endif
+
 }

@@ -49,6 +49,16 @@ public class BuildNode : MonoBehaviour,IPointerClickHandler,IPointerEnterHandler
         building.objectName = building.name;
         gameObject.GetComponentInChildren<Text>().text = building.objectName;
         gameObject.GetComponentInChildren<Image>().sprite = building.lowSource;
+        if (building.costc.Length>0)
+        {
+            building.cost = new Dictionary<string, int>();
+            foreach (var c in building.costc)
+            {
+                building.cost.Add(c.type.resName,c.num);
+            }
+        }
+       
+        
     }
 
     // Update is called once per frame

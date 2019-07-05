@@ -1214,7 +1214,7 @@ Camera:
   near clip plane: 0.1
   far clip plane: 5000
   field of view: 40
-  orthographic: 0
+  orthographic: 1
   orthographic size: 10
   m_Depth: -1
   m_CullingMask:
@@ -3223,7 +3223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95795337aabdf5c43ae56e66ed81779d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testBuild: {fileID: 0}
+  testBuild: {fileID: 11400000, guid: 0e8ad7e07dc239b499ada28fc1ee6e1f, type: 2}
   testEnemy: {fileID: 0}
   testAutoGen: {fileID: 0}
   saveImage: {fileID: 2800000, guid: c26c8a37eb0444545b41e6290f29845b, type: 3}
@@ -3923,8 +3923,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileGrid: {fileID: 560292499}
   building: {fileID: 0}
-  buildProgress: {fileID: 0}
-  dismantleProgress: {fileID: 0}
+  buildProgress: {fileID: 8913751982414182560, guid: 8c2f5b76cfe05344387df48666124b51,
+    type: 3}
+  dismantleProgress: {fileID: 8913751982414182560, guid: 8c2f5b76cfe05344387df48666124b51,
+    type: 3}
 --- !u!82 &2133753285
 AudioSource:
   m_ObjectHideFlags: 0

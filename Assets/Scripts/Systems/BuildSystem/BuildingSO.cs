@@ -39,8 +39,9 @@ public class BuildingSO : ScriptableObject
         public int num;
     }
     public ResourcePrefab[] costc;
+    [HideInInspector]
     public int costLength = 0;
-
+    [HideInInspector]
     public bool showPosition;
     public enum BuildType
     {

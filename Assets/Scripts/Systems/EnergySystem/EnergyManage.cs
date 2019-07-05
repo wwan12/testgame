@@ -142,4 +142,7 @@ public class EnergyManage : MonoBehaviour
         public float consumeEnergy;
         public float efficiency;
     }
+
+
+
 }

@@ -29,7 +29,9 @@ public class Game_mo_UI : MonoBehaviour
         Messenger.AddListener(EventCode.APP_SAVE_GAME,SaveShow);
         Messenger.AddListener(EventCode.APP_SAVEOVER_GAME, SaveOver);
 #if UNITY_EDITOR
-        isSave = true;
+        Game_mo_UI ui = GameObject.FindObjectOfType<Game_mo_UI>();
+        AppManage.Instance.HUD = ui.gameObject;
+        // isSave = true;
         GameObject.FindObjectOfType<MapManage>().CreateMap();
        // GameObject.FindObjectOfType<MapManage>().ChangeTile();
         gameObject.AddComponent<FPSOnGUIText>();

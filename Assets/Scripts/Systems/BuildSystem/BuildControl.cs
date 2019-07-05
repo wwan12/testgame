@@ -35,7 +35,7 @@ public abstract class BuildControl : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public int colNum;
-    private int progress = 0;
+    private float progress = 0;
     private bool ready;
  
 
@@ -60,6 +60,7 @@ public abstract class BuildControl : MonoBehaviour
             Right();                         
         }
     }
+    
     /// <summary>
     /// 当呗左键点中
     /// </summary>
@@ -115,17 +116,21 @@ public abstract class BuildControl : MonoBehaviour
     IEnumerator RemoveProgress()
     {
         GameObject dp= GameObject.Instantiate(dismantleProgress);
-        dp.transform.SetParent(AppManage.Instance.HUD.transform);
-        dp.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        dp.transform.SetParent(AppManage.Instance.HUD.transform,false);
+        Vector3 vector = gameObject.transform.position;
+        vector.y += 0.2f;
+        dp.transform.position = Camera.main.WorldToScreenPoint(vector);
+        dp.AddComponent<BuildProgress>().lockBuild=gameObject;
         while (progress < 100)
         {
             yield return new WaitForSeconds(dTime / 100);
             progress++;
-            dp.GetComponentInChildren<Image>().fillAmount = progress / 100;
+            dp.GetComponent<Image>().fillAmount = progress / 100;
         }
         progress = 0;
         RemoveComplete();
-        Destroy(gameObject);
+        Destroy(dp);
+        Destroy(gameObject);     
     }
 
     public void Build() {
@@ -155,17 +160,19 @@ public abstract class BuildControl : MonoBehaviour
     IEnumerator BuildProgress()
     {
         GameObject bp= GameObject.Instantiate(buildProgress);
-        bp.transform.SetParent(AppManage.Instance.HUD.transform);
-        bp.transform.position= Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        bp.transform.SetParent(AppManage.Instance.HUD.transform, false);
+        Vector3 vector = gameObject.transform.position;
+        vector.y += 0.2f;
+        bp.transform.position= Camera.main.WorldToScreenPoint(vector);
+        bp.AddComponent<BuildProgress>().lockBuild=gameObject;
         Color alpha= gameObject.GetComponent<SpriteRenderer>().color;
         while (progress < 100)
-        {
+        {         
             yield return new WaitForSeconds(buildTime / 100);
             progress++;
-            alpha.a = progress*(255/100);
+            alpha.a = progress / 100f * 255f;
             gameObject.GetComponent<SpriteRenderer>().color = alpha;
-            bp.GetComponentInChildren<Image>().fillAmount = progress / 100;
-
+            bp.GetComponent<Image>().fillAmount = progress / 100;          
         }
         progress = 0;
         ready = true;
@@ -175,14 +182,14 @@ public abstract class BuildControl : MonoBehaviour
 
     void BuildComplete()
     {
-        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
+        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;     
         AppManage.Instance.saveData.buildLocation.Add(position,gameObject.name);
         OnBuild();
     }
 
     void RemoveComplete()
     {
-        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;
+        string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;      
         AppManage.Instance.saveData.buildLocation.Remove(position);
         OnDismantle();
     }

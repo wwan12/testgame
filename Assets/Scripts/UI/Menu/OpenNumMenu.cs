@@ -23,12 +23,12 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        move.Play();
+       // move.Play();
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
-        move.RePlay();
+      //  move.RePlay();
     }
 
     void Open()
@@ -50,7 +50,7 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Start is called before the first frame update
     void Start()
     {
-        move = gameObject.GetComponent<EasyAnimation_Move>();
+      //  move = gameObject.GetComponent<EasyAnimation_Move>();
     }
 
     // Update is called once per frame

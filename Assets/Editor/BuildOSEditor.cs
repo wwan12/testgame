@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BuildingSO))]
+//[CustomEditor(typeof(BuildingSO))]
 public class BuildOSEditor : Editor
 {
     private BuildingSO m_Target;

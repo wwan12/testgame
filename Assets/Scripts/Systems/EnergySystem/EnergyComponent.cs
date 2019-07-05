@@ -75,4 +75,7 @@ public class EnergyComponent : MonoBehaviour
         supply,
         consumption,
     }
+
+
+
 }

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: "\u5B9E\u9A8C\u5BA4"
   m_EditorClassIdentifier: 
   objectName: Building Name
-  buildingPrefab: {fileID: 0}
-  lowSource: {fileID: 0}
-  buildTime: 0
-  dTime: 1
-  durable: 10
+  buildingPrefab: {fileID: 6353671655945730908, guid: f041ef87f33260344a3b48781fced8ef,
+    type: 3}
+  lowSource: {fileID: 21300000, guid: fa534a63c52e442fab833f8c4c218610, type: 3}
+  buildTime: 90
+  dTime: 3
+  durable: 20
   type: 0
-  res: {fileID: 0}
+  res: 0
   collectNum: 0
   collectInterval: 0
   hierarchy: 0

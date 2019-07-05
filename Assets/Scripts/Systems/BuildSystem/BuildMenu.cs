@@ -53,8 +53,9 @@ public class BuildMenu : MonoBehaviour
                 GameObject build= Resources.Load<GameObject>("prefabs/UI/BuildNode");
                 //  GameObject build = new GameObject("Node"+i);
                 build.GetComponent<BuildNode>().building = allBuildOS[i];
-                build = GameObject.Instantiate<GameObject>(build);              
-               // node.building = allBuildOS[i];
+                build = GameObject.Instantiate<GameObject>(build);
+         
+                // node.building = allBuildOS[i];
                 allBuild[i] = build;
             }
           
@@ -74,6 +75,10 @@ public class BuildMenu : MonoBehaviour
             RectTransform rect= l.AddComponent<RectTransform>();
             rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, lx*i, lx);
             rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0,ly);
+            VerticalLayoutGroup vertical = l.AddComponent<VerticalLayoutGroup>();          
+            vertical.childAlignment = TextAnchor.LowerLeft;           
+            vertical.childControlWidth = false;
+            vertical.childControlHeight = false;
             //rect.sizeDelta= new Vector2(lx, 1080);
             l.transform.SetParent(gameObject.transform,false);
             hierarchys[i] = l;
@@ -82,14 +87,10 @@ public class BuildMenu : MonoBehaviour
         for (int i = 0; i < allBuild.Length; i++)
         {
             GameObject h = hierarchys[allBuild[i].GetComponent<BuildNode>().hierarchy];
-            //   h = GameObject.Instantiate<GameObject>(h);
-            VerticalLayoutGroup vertical = h.AddComponent<VerticalLayoutGroup>();
-            vertical.childAlignment = TextAnchor.LowerLeft;
+            VerticalLayoutGroup vertical = h.GetComponent<VerticalLayoutGroup>();
             int top = (int)((h.transform.childCount + 1) * allBuild[i].GetComponent<RectTransform>().sizeDelta.y);
             int il = (h.transform.childCount + 1) * interval;
             vertical.padding = new RectOffset(20, 0, (int)ly - top - 20 - il, 20);
-            vertical.childControlWidth = false;
-            vertical.childControlHeight = false;
             if (!isOSRead)
             {
                 allBuild[i] = GameObject.Instantiate<GameObject>(allBuild[i]);

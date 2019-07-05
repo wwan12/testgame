@@ -15,5 +15,5 @@ MonoBehaviour:
   resName: "\u6C14\u4F53"
   resSprite: {fileID: 0}
   weight: 0
-  mapColor: {r: 0, g: 0, b: 0, a: 0}
-  type: 0
+  mapColor: {fileID: 0}
+  type: 2

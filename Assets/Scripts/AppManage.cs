@@ -63,8 +63,13 @@ public class AppManage
 #endif
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
-        RunOS = WINDOWSOS;      
+        RunOS = WINDOWSOS;
 
+#endif
+#if UNITY_EDITOR
+        LoadAllGame();
+        saveData = CreateSingleSave(0);
+        saveData.listIndex = 0;
 #endif
         GetDeviceInfo();
 
@@ -307,6 +312,9 @@ public class AppManage
         {
             allSave.singleSaves[saveIndex] = new SingleSave();
             saveData = allSave.singleSaves[saveIndex];
+            saveData.buildLocation = new Dictionary<string, string>();
+            saveData.buildNodes = new Dictionary<int, Dictionary<string, bool>>();
+            
         }
 
         return saveData;

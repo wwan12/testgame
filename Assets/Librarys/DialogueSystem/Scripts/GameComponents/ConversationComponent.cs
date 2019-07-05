@@ -24,12 +24,10 @@
         public void Trigger()
         {
             this.Model.GameConversations = GameObject
-                .Find( "GameConversations" )
-                .GetComponent<GameConversationsComponent>()
+               .FindObjectOfType<GameConversationsComponent>()
                 .Model;
             DialogueManager dialogueManager = GameObject
-                .Find( "DialogueManager" )
-                .GetComponent<DialogueManagerComponent>()
+                .FindObjectOfType<DialogueManagerComponent>()
                 .Model;
             this.controller.Trigger( dialogueManager );
         }

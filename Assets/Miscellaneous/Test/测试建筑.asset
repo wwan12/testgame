@@ -16,13 +16,15 @@ MonoBehaviour:
   buildingPrefab: {fileID: 1352056248989865545, guid: c4e73131f5dc46241ad54c22b590f39e,
     type: 3}
   lowSource: {fileID: 0}
-  buildTime: 3
+  buildTime: 10
   dTime: 1
   durable: 10
   type: 0
-  res: {fileID: 0}
+  res: 0
   collectNum: 0
   collectInterval: 0
+  hierarchy: 0
+  isBuild: 0
   costc: []
   costLength: 0
   showPosition: 0

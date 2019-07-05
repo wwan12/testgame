@@ -20,7 +20,7 @@ public class SupplyModel : MonoBehaviour
 
     public void StartSupply() {
         TransferModel transfer = gameObject.GetComponent<TransferModel>();
-        EnergyManage manage = GameObject.FindObjectOfType<EnergyManage>();
+        EnergyManage manage = FindObjectOfType<EnergyManage>();
         transfer.isSupply = true;
         if (transfer.energys.Count == 0)
         {

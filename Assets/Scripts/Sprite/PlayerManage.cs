@@ -30,6 +30,7 @@ public class PlayerManage : MonoBehaviour
     public float powerEfflux;
     public float satietyEfflux;
     private GameObject miniMapCamera;
+ 
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -58,6 +59,7 @@ public class PlayerManage : MonoBehaviour
         };
         miniMapCamera = GameObject.Find("MapCamera");
         Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, PlayerStart);
+
     }
 
     private void PlayerStart(AppManage.SingleSave save) {
@@ -87,6 +89,7 @@ public class PlayerManage : MonoBehaviour
     void LateUpdate()
     {
         miniMapCamera.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -10);
+       
     }
 
     /// <summary>
@@ -100,11 +103,13 @@ public class PlayerManage : MonoBehaviour
         Vector2 playerMove = now + new Vector2(H * moveSpeed, V * moveSpeed);
         // m_Rigidbody2D.AddForce(playerMove);
         v = Vector2.Distance(new Vector2(H * moveSpeed, 0), new Vector2(0, V * moveSpeed));
+        
         m_Rigidbody2D.MovePosition(Vector2.Lerp(playerMove, now, 1.5f * Time.deltaTime));
         //Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
         //Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
         //Quaternion newRotation = Quaternion.Lerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
         //GetComponent<Rigidbody>().MoveRotation(newRotation);
+    
     }
 
     private void Operate() {

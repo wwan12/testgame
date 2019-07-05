@@ -80,7 +80,7 @@ public class TechnologyManager : MonoBehaviour
                 yield return new WaitForSeconds(1f);
                 continue;
             }
-            yield return new WaitForSeconds(tec.researhTime / 100/researchEfficiency);
+            yield return new WaitForSeconds(tec.researhTime / 100f/researchEfficiency);
             tec.progress++;
             if (tec.progress >= 100)
             {

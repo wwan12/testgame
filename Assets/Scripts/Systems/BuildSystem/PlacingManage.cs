@@ -45,7 +45,8 @@ public class PlacingManage : MonoBehaviour {
         mousePosition.z = 0;
         //place = placeablePrefab.GetComponent<PlaceControl>();       
         placeable = Instantiate(placeablePrefab.buildingPrefab, mousePosition, Quaternion.identity);
-        BoxCollider2D boxCollider2D = placeable.GetComponent<BoxCollider2D>();
+        placeable.AddComponent<Rigidbody2D>();
+        BoxCollider2D boxCollider2D = placeable.AddComponent<BoxCollider2D>();
         boxCollider2D.isTrigger = true;
         boxCollider2D.size = new Vector2(boxCollider2D.size.x-boxCollider2D.size.x/20,boxCollider2D.size.y- boxCollider2D.size.y/20);
         
@@ -77,6 +78,7 @@ public class PlacingManage : MonoBehaviour {
     {
         //place = placeablePrefab.GetComponent<PlaceControl>();       
         GameObject place = Instantiate(placeablePrefab.buildingPrefab, initPosition, Quaternion.identity);
+        placeable.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         BoxCollider2D boxCollider2D = placeable.GetComponent<BoxCollider2D>();
       //  boxCollider2D.isTrigger = true;
         boxCollider2D.size = new Vector2(boxCollider2D.size.x - boxCollider2D.size.x / 20, boxCollider2D.size.y - boxCollider2D.size.y / 20);
@@ -129,6 +131,8 @@ public class PlacingManage : MonoBehaviour {
         Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, StartInit);
     }
 
+    Vector3 cachePosition=new Vector3();
+
     // Update is called once per frame
     void Update()
     {
@@ -137,10 +141,14 @@ public class PlacingManage : MonoBehaviour {
         if (placeable != null)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0;
-
             mousePosition = tileGrid.GetCellCenterWorld(tileGrid.WorldToCell(mousePosition));
-            placeable.transform.position = mousePosition;
+            mousePosition.z = 0;
+            if (!cachePosition.Equals(mousePosition))
+            {
+                cachePosition = mousePosition;
+                placeable.transform.position = mousePosition;
+            }
+            
         }
 
         // Code to detach the object once you click the mouse
@@ -149,6 +157,7 @@ public class PlacingManage : MonoBehaviour {
             if (place.isCheck)
             {
                 //检测是否有资源
+             
                 bool r = Messenger.BroadcastReturn<Dictionary<string, int>, bool>(EventCode.RESOURCE_CHECK, placeable.GetComponent<BuildControl>().cost);
                 StartBuild(r);
 
@@ -174,7 +183,7 @@ public class PlacingManage : MonoBehaviour {
         if (r)
         {
             placeable.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-            placeable.GetComponent<CircleCollider2D>().isTrigger = false;
+            placeable.GetComponent<BoxCollider2D>().isTrigger = false;
             placeable.GetComponent<SpriteRenderer>().color = Color.white;
             placeable.GetComponent<BuildControl>().Build();
 

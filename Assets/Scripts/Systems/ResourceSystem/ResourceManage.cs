@@ -25,7 +25,7 @@ public class ResourceManage : MonoBehaviour
         //}
         Messenger.AddListener<Dictionary<string, int>>(EventCode.RESOURCE_ADD, Add);
         Messenger.AddReturnListener<Dictionary<string, int>,bool>(EventCode.RESOURCE_CHECK, Check);
-        Messenger.AddListener<Dictionary<string, int>,string>(EventCode.RESOURCE_REDUCE, Remove);
+        Messenger.AddListener<Dictionary<string, int>>(EventCode.RESOURCE_REDUCE, Remove);
     }
 
     // Update is called once per frame
@@ -62,6 +62,10 @@ public class ResourceManage : MonoBehaviour
     /// <returns></returns>
     public bool Check(Dictionary<string, int> check)
     {
+        if (check==null)
+        {
+            return true;
+        }
         foreach (var c in check)
         {
             if (warehouse.ContainsKey(c.Key))
@@ -83,8 +87,12 @@ public class ResourceManage : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public void Remove(Dictionary<string, int> data,string nameAndId)
+    public void Remove(Dictionary<string, int> data)
     {
+        if (data==null)
+        {
+            return;
+        }
         if (!Check(data))
         {
             return;
@@ -110,7 +118,7 @@ public class ResourceManage : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public bool Remove(Dictionary<string, int> data)
+    public bool Remove(Dictionary<string, int> data,string nameId)
     {
         if (!Check(data))
         {
