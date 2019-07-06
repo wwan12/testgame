@@ -16,7 +16,7 @@ MonoBehaviour:
   buildingPrefab: {fileID: 6353671655945730908, guid: f041ef87f33260344a3b48781fced8ef,
     type: 3}
   lowSource: {fileID: 21300000, guid: fa534a63c52e442fab833f8c4c218610, type: 3}
-  buildTime: 90
+  buildTime: 3
   dTime: 3
   durable: 20
   type: 0

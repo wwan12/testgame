@@ -18,11 +18,7 @@ public class BuildMenu : MonoBehaviour
 
     private GameObject[] hierarchys;
 
-    /// <summary>
-    /// 缓存的展示板
-    /// </summary>
-    [HideInInspector]
-    public static GameObject CacheBoard;
+    public static GameObject board;
     /// <summary>
     /// 全局激活建筑
     /// </summary>

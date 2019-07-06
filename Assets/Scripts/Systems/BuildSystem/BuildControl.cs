@@ -54,6 +54,7 @@ public abstract class BuildControl : MonoBehaviour
         if (ready&&Input.GetKeyDown(KeyCode.Mouse0))
         {
             Left();
+           // Debug.LogWarning("l"+ready);
         }
         if (ready&&Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -121,6 +122,7 @@ public abstract class BuildControl : MonoBehaviour
         vector.y += 0.2f;
         dp.transform.position = Camera.main.WorldToScreenPoint(vector);
         dp.AddComponent<BuildProgress>().lockBuild=gameObject;
+        dp.transform.SetAsFirstSibling();
         while (progress < 100)
         {
             yield return new WaitForSeconds(dTime / 100);
@@ -165,6 +167,7 @@ public abstract class BuildControl : MonoBehaviour
         vector.y += 0.2f;
         bp.transform.position= Camera.main.WorldToScreenPoint(vector);
         bp.AddComponent<BuildProgress>().lockBuild=gameObject;
+        bp.transform.SetAsFirstSibling();
         Color alpha= gameObject.GetComponent<SpriteRenderer>().color;
         while (progress < 100)
         {         
