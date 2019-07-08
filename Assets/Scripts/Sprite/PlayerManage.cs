@@ -13,7 +13,7 @@ public class PlayerManage : MonoBehaviour
     [Tooltip("多用途菜单栏（文件夹样式）")]
     public GameObject menu;
     [Tooltip("与物品的交互范围半径")]
-    public float operationRange = 0.5f;
+    public float operationRange = 2f;
     [HideInInspector]
     public GameObject available;
     [HideInInspector]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/建筑")]
+[CreateAssetMenu(fileName = "自定义建筑", menuName = "自定义生成系统/建筑")]
 public class BuildingSO : ScriptableObject
 {
     [Tooltip("建筑名称")]

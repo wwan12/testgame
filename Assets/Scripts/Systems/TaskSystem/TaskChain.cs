@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/任务链")]
+[CreateAssetMenu(fileName = "自定义任务链", menuName = "自定义生成系统/任务链")]
 public class TaskChain : Task
 {
     [Tooltip("当前序号")]

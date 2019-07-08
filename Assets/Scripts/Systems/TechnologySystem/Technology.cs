@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/科技")]
+[CreateAssetMenu(fileName = "自定义科技", menuName = "自定义生成系统/科技")]
 public class Technology : ScriptableObject
 {
     [Tooltip("描述")]

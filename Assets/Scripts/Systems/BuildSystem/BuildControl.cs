@@ -51,12 +51,12 @@ public abstract class BuildControl : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (ready&&Input.GetKeyDown(KeyCode.Mouse0))
+        if (ready&&Input.GetKeyDown(KeyCode.Mouse0)&&FindObjectOfType<PlayerManage>().InOperationRange(gameObject.transform.position))
         {
             Left();
            // Debug.LogWarning("l"+ready);
         }
-        if (ready&&Input.GetKeyDown(KeyCode.Mouse1))
+        if (ready&&Input.GetKeyDown(KeyCode.Mouse1) && FindObjectOfType<PlayerManage>().InOperationRange(gameObject.transform.position))
         {
             Right();                         
         }

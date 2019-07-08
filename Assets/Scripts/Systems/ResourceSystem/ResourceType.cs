@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/新资源类型")]
+[CreateAssetMenu(fileName = "自定义资源类型", menuName = "自定义生成系统/新资源类型")]
 public class ResourceType : ScriptableObject
 {
 

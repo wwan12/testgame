@@ -49,7 +49,7 @@ namespace AI
         /// <summary>
         /// 跑动速度
         /// </summary>
-        public float runSpeed;          //f
+        public float runSpeed;          //
         /// <summary>
         /// 转身速度，建议0.1
         /// </summary>
@@ -103,7 +103,21 @@ namespace AI
             return false;
         }
 
+        void BehaviorTree()
+        {
+            if (true)
+            {
 
+            }
+        }
+
+
+        public enum State
+        {
+            ready,
+            fight,
+            calm,
+        }
     }
 }
 

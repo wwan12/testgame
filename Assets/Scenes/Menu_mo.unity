@@ -878,7 +878,7 @@ RectTransform:
   - {fileID: 792043233}
   - {fileID: 743304417}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1138,7 +1138,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1915336203}
           m_MethodName: RoleSelect
           m_Mode: 3
           m_Arguments:
@@ -1204,7 +1204,7 @@ PrefabInstance:
     - target: {fileID: 224667338120850726, guid: 7f3a9269b23a5b740805f1ba27d9bd0e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 224667338120850726, guid: 7f3a9269b23a5b740805f1ba27d9bd0e,
         type: 3}
@@ -1275,6 +1275,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_UiScaleMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114770939710722140, guid: 7f3a9269b23a5b740805f1ba27d9bd0e,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 114770939710722140, guid: 7f3a9269b23a5b740805f1ba27d9bd0e,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 1630447221925320, guid: 7f3a9269b23a5b740805f1ba27d9bd0e, type: 3}
       propertyPath: m_IsActive
@@ -1616,7 +1626,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1915336203}
           m_MethodName: RoleSelect
           m_Mode: 3
           m_Arguments:
@@ -1684,7 +1694,7 @@ PrefabInstance:
     - target: {fileID: 700872103261593847, guid: f7257f1912c57ad49bd1942c026944cd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 700872103261593847, guid: f7257f1912c57ad49bd1942c026944cd,
         type: 3}
@@ -2172,7 +2182,7 @@ PrefabInstance:
     - target: {fileID: 7943049619899472884, guid: 349c7b9fe660915498bf406eeac18ef0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7943049619899472884, guid: 349c7b9fe660915498bf406eeac18ef0,
         type: 3}
@@ -2757,7 +2767,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1915336203}
           m_MethodName: RoleSelect
           m_Mode: 3
           m_Arguments:
@@ -2790,7 +2800,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 6b5f2809e0d2cc84fb216907c7bdf8c2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3047,7 +3057,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1915336203}
           m_MethodName: RoleSelect
           m_Mode: 3
           m_Arguments:

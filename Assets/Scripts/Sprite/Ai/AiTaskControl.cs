@@ -5,21 +5,24 @@ using UnityEngine;
 
 namespace AI
 {
-
+    
     public class AiTaskControl : MonoBehaviour
     {
         Queue<Task> tasks = new Queue<Task>();
-        [HideInInspector]
-        public bool isRun;
         IEnumerator taskRun;
         Animator ani;
+        Task task;
+        float intervalTime=0.2f;
+        int intervalNums = 0;
         public AiState state;
-        public event EventHandler<Task> IdleCallBack;
+
         // Start is called before the first frame update
         void Start()
         {
+          
             ani =  gameObject.GetComponent<Animator>();
-            state = AiState.Idle;
+            state = AiState.Ready;
+            StartCoroutine(TaskRunner());
         }
 
         // Update is called once per frame
@@ -40,6 +43,7 @@ namespace AI
         /// <param name="task"></param>
         public void AddTaskNow(Task task)
         {
+            Stop();
             tasks.Clear();
             tasks.Enqueue(task);
         }
@@ -49,21 +53,10 @@ namespace AI
         /// <param name="task"></param>
         private void Implement(Task task)
         {
-            if (!isRun)
-            {
-                taskRun = TaskRunner();
-                StartCoroutine(taskRun);
-            }
-            if (task.taskName.Equals("Idle"))
-            {
-                state = AiState.Idle;
-                IdleCallBack(this, task);//在这里将task发送回去,供替换待机方法
-            }
-            else
-            {
-                state = AiState.beBusy;
-            }
-            task.task.Invoke();
+            
+            taskRun = task.task;
+            StartCoroutine(taskRun);
+          
         }
         /// <summary>
         /// 清除任务
@@ -76,34 +69,52 @@ namespace AI
         public void Stop()
         {
             StopCoroutine(taskRun);
-        }
-
-        private void TaskComplete()
-        {
-          //  state = AiState.Idle;
+            state = AiState.Ready;
         }
 
         IEnumerator TaskRunner (){
-            isRun = true;
-            while (isRun)
+            yield return new WaitForSeconds(intervalTime*10);
+            while (true)
             {
-                if (tasks.Count > 0)
+                if (state==AiState.Ready)
                 {
-                    Implement(tasks.Dequeue());
+                    if (tasks.Count > 0)
+                    {
+                        state = AiState.Execut;
+                        task = tasks.Dequeue();
+                        Implement(task);
+                    }
                 }
-                else {
-                    Task task = new Task(TaskComplete,"Idle");
-                    tasks.Enqueue(task);
-                }
-                yield return new WaitForEndOfFrame();
+                else
+                {
+                    if (task.taskComplete.Invoke())
+                    {
+                        task.taskResult.Invoke(true);
+                    }
+                    else
+                    {
+                        if (task.waitTime<intervalTime*intervalNums)
+                        {
+                            task.taskResult.Invoke(false);
+                            Stop();
+                        }
+                        intervalNums++;
+                    }
+                    
+                }     
+                yield return new WaitForSeconds(intervalTime);
             }
            
         }
         public enum AiState
         {
-            Idle,
-            beBusy,
+            Ready,
+            Execut,
         }
+
+        
+
+       
     }
 }
 

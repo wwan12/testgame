@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "自定义生成系统", menuName = "自定义生成系统/任务")]
+[CreateAssetMenu(fileName = "自定义任务", menuName = "自定义生成系统/任务")]
 public class Task : ScriptableObject
 {
    // [Tooltip("名称")]
