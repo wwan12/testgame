@@ -4,6 +4,12 @@ using UnityEngine;
 
 public abstract class FactionsControl : MonoBehaviour
 {
+    public Factions factions;
+
+    public bool atke;
+
+    public bool surrender;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +20,18 @@ public abstract class FactionsControl : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public abstract void OneRaid();
+
+    public abstract void OneVisitor();
+
+    public abstract void OneGift();
+
+    public abstract void OneTribute();
+
+    public  virtual void Surrender()
+    {
+
     }
 }

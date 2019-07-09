@@ -10,7 +10,7 @@ public class PlayerManage : MonoBehaviour
     private List<Buff> eventBuff;
     [Tooltip("角色信息栏")]
     public GameObject playerStateLabel;
-    [Tooltip("多用途菜单栏（文件夹样式）")]
+    [Tooltip("多用途菜单栏")]
     public GameObject menu;
     [Tooltip("与物品的交互范围半径")]
     public float operationRange = 2f;
@@ -30,7 +30,7 @@ public class PlayerManage : MonoBehaviour
     public float powerEfflux;
     public float satietyEfflux;
     private GameObject miniMapCamera;
- 
+    private GameObject escMenu;
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -121,9 +121,15 @@ public class PlayerManage : MonoBehaviour
         {
             if (AppManage.Instance.openUI == null)
             {
-                AppManage.Instance.SetOpenUI(GameObject.Find("EscMenu"));
-              //  Time.timeScale = 0;
-              
+                if (escMenu==null)
+                {
+                    escMenu = GameObject.Instantiate<GameObject>(GameObject.Find("EscMenu"));
+                    escMenu.transform.SetParent(AppManage.Instance.HUD.transform, false);                   
+                }
+                AppManage.Instance.SetOpenUI(escMenu);
+
+                //  Time.timeScale = 0;
+
             }
             else
             {
@@ -136,7 +142,12 @@ public class PlayerManage : MonoBehaviour
                 }
                 else
                 {
-                    AppManage.Instance.SetOpenUI(GameObject.Find("EscMenu"));
+                    if (escMenu == null)
+                    {
+                        escMenu = GameObject.Instantiate<GameObject>(GameObject.Find("EscMenu"));
+                        escMenu.transform.SetParent(AppManage.Instance.HUD.transform, false);
+                    }
+                    AppManage.Instance.SetOpenUI(escMenu);
                 }
                
                // AppManage.Instance.openUI = null;

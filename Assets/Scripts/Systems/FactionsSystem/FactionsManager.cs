@@ -59,6 +59,9 @@ public class FactionsManager : MonoBehaviour
         factionalRelations = f;
     }
 
+   
+
+
     public enum BadThings
     {
         small,
@@ -66,5 +69,6 @@ public class FactionsManager : MonoBehaviour
         major,
         noMercy,
     }
+
 }
 

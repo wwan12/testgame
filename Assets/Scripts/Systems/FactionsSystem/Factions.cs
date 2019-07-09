@@ -14,4 +14,6 @@ public class Factions : ScriptableObject
     [Tooltip("被发现是坏东西时惩罚系数")]
     public float punish;
 
+    public FactionsControl control;
+
 }

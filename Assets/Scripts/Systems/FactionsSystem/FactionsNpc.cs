@@ -26,10 +26,32 @@ public abstract class FactionsNpc : MonoBehaviour
 
     public abstract void Dead();
 
-    public virtual void SeeBad() {
-        int value=-10;
+    public virtual void SeeBad(FactionsManager.BadThings things) {
 
-        if (relations>600)
+        // FindObjectOfType<FactionsManager>().ChangeRelation(factions.factName,(int)inclination* FindObjectOfType<FactionsManager>().CalculationRel(relations,things));
+        relations += CalculationRel(relations,things);
+    }
+
+    public int CalculationRel(int relations, FactionsManager.BadThings things)
+    {
+        int value = -10;
+        switch (things)
+        {
+            case FactionsManager.BadThings.small:
+                break;
+            case FactionsManager.BadThings.medium:
+                value = -50;
+                break;
+            case FactionsManager.BadThings.major:
+                value = -300;
+                break;
+            case FactionsManager.BadThings.noMercy:
+                value = -800;
+                break;
+        }
+
+
+        if (relations > 600)
         {
             value += relations / 100;
         }
@@ -37,7 +59,7 @@ public abstract class FactionsNpc : MonoBehaviour
         {
             value += relations / 200;
         }
-        if (relations<-200)
+        if (relations < -200)
         {
             value -= relations / 200;
         }
@@ -45,9 +67,7 @@ public abstract class FactionsNpc : MonoBehaviour
         {
             value -= relations / 100;
         }
-       
-        FindObjectOfType<FactionsManager>().ChangeRelation(factions.factName,(int)inclination* value);
+        return value;
     }
 
-    
 }
