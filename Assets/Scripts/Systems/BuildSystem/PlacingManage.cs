@@ -53,7 +53,7 @@ public class PlacingManage : MonoBehaviour {
         place = placeable.AddComponent<PlaceControl>();
         BuildControl build = placeable.GetComponent<BuildControl>();
         placeable.name = placeablePrefab.objectName;
-
+        build.sprite = placeablePrefab.lowSource;
         build.name = placeablePrefab.objectName;
         build.durable = placeablePrefab.durable;
         build.buildProgress = buildProgress;

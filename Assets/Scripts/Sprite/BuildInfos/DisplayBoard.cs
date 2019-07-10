@@ -48,10 +48,12 @@ public class DisplayBoard : MonoBehaviour
         avt = !avt;
         if (avt)
         {
+            control.available = true;
             control.OnAvailable();
         }
         else
         {
+            control.available = false;
             control.OnNotAvailable();
         }      
     }

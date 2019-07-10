@@ -3,6 +3,7 @@ using External;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// 测试以及基础加载功能
 /// </summary>
@@ -16,8 +17,10 @@ public class Game_mo_UI : MonoBehaviour
 #endif
 
     public Texture saveImage;
+    private GameObject selectUI;
     private bool isSave;
     private int saveTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +28,13 @@ public class Game_mo_UI : MonoBehaviour
         //Physics.gravity = new Vector3(0, -1.0F, 0);
         ExternalRead read = new ExternalRead();
         read.ReadItems(this);
-        
+        selectUI = gameObject.transform.Find("SelectInfo").gameObject;
         Messenger.AddListener(EventCode.APP_SAVE_GAME,SaveShow);
         Messenger.AddListener(EventCode.APP_SAVEOVER_GAME, SaveOver);
+        Messenger.AddListener<SelectInfo>(EventCode.UI_SELECT_INFO, SelectInfo);
 #if UNITY_EDITOR
-        Game_mo_UI ui = GameObject.FindObjectOfType<Game_mo_UI>();
-        AppManage.Instance.HUD = ui.gameObject;
+       // Game_mo_UI ui = GameObject.FindObjectOfType<Game_mo_UI>();
+        AppManage.Instance.HUD = gameObject;
         // isSave = true;
         GameObject.FindObjectOfType<MapManage>().CreateMap();
        // GameObject.FindObjectOfType<MapManage>().ChangeTile();
@@ -49,6 +53,10 @@ public class Game_mo_UI : MonoBehaviour
         isSave = false;
     }
 
+    void SelectInfo(SelectInfo info)
+    {
+        selectUI.GetComponentInChildren<Image>();
+    }
 
     private void OnGUI()
     {
@@ -116,4 +124,19 @@ public class Game_mo_UI : MonoBehaviour
 
     
 
+}
+
+public class SelectInfo
+{
+    public Sprite head;
+    public string name;
+    public string eff;
+    public string state;
+
+    public SelectInfo(Sprite head,string name,string eff,string state) {
+        this.head = head;
+        this.name = name;
+        this.eff = eff;
+        this.state = state;
+    }
 }

@@ -4,6 +4,7 @@
 /// </summary>
 public class EventCode
 {
+    //整体事件
     /// <summary>
     /// 开始事件，需要延后初始化的组件订阅
     /// </summary>
@@ -22,7 +23,7 @@ public class EventCode
     /// </summary>
     public static readonly string APP_SAVEOVER_GAME = "APP_SAVEOVER_GAME";
 
-
+    //
     /// <summary>
     /// 往背包中添加一个物体
     /// </summary>
@@ -78,6 +79,11 @@ public class EventCode
     /// 状态改变
     /// </summary>
     public static readonly string PLAYER_STATE_CHANGE = "PLAYER_STATE_CHANGE";
+    /// <summary>
+    /// 更新选中UI
+    /// </summary>
+    public static readonly string UI_SELECT_INFO = "UI_SELECT_INFO";
+
     /// <summary>
     /// 某个对象被消灭
     /// </summary>

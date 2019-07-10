@@ -35,7 +35,7 @@ public class GraduateSchool : BuildControl
 
     public override void Right()
     {
-        Debug.LogWarning("right");
+     //  Debug.LogWarning("right");
         DisplayBoard.Show(this,gameObject.transform.position, explain);
     }
 

@@ -35,6 +35,10 @@ public abstract class BuildControl : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public int colNum;
+    [HideInInspector]
+    public bool available;
+    [HideInInspector]
+    public Sprite sprite;
     private float progress = 0;
     private bool ready;
  
@@ -52,7 +56,8 @@ public abstract class BuildControl : MonoBehaviour
     private void OnMouseOver()
     {
         if (ready&&Input.GetKeyDown(KeyCode.Mouse0)&&FindObjectOfType<PlayerManage>().InOperationRange(gameObject.transform.position))
-        {
+        {//todo 信息实现
+            Messenger.Broadcast<SelectInfo>(EventCode.UI_SELECT_INFO,new SelectInfo(sprite,  gameObject.name,"0%",available.ToString()));
             Left();
            // Debug.LogWarning("l"+ready);
         }
@@ -105,6 +110,8 @@ public abstract class BuildControl : MonoBehaviour
     {
         if (dTime != 0)
         {
+            ready = false;
+            available = false;
             StartCoroutine(RemoveProgress());
         }
         else
@@ -154,6 +161,7 @@ public abstract class BuildControl : MonoBehaviour
         else
         {
             ready = true;
+            available = true;
             BuildComplete();
         }
     }
@@ -179,6 +187,7 @@ public abstract class BuildControl : MonoBehaviour
         }
         progress = 0;
         ready = true;
+        available = true;
         Destroy(bp);
         BuildComplete();
     }
