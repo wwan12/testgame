@@ -46,7 +46,7 @@ public class AppManage
     /// </summary>
     public bool isInGame;
     public GameObject HUD;
-
+    public readonly int BuildLayer= 11;
     /// <summary>
     /// 初始化获取系统信息等
     /// </summary>

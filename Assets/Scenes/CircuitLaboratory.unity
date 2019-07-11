@@ -129,8 +129,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 670206318}
-  - component: {fileID: 670206319}
   - component: {fileID: 670206320}
+  - component: {fileID: 670206319}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -161,16 +161,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 670206317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1a00ae5fc23a1b46ab9253587330032, type: 3}
+  m_Script: {fileID: 11500000, guid: dc13f34ff49d4c946acb02506ecf4024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatModel: 1
-  outputPower: 2000
-  ratedPower: 0
-  connectionScope: 6
-  transfer: {fileID: 0}
-  supply: {fileID: 0}
-  Consumption: {fileID: 0}
+  powered: 0
+  inverted: 0
+  outputPower: 1000
 --- !u!212 &670206320
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -219,6 +215,105 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1050313445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050313448}
+  - component: {fileID: 1050313447}
+  - component: {fileID: 1050313446}
+  m_Layer: 0
+  m_Name: New Sprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1050313446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050313445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a67c9d5998c5b47ad34b1b51bfbb83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powered: 0
+  inverted: 0
+  node: {fileID: 1420618152}
+  delay: 0
+  ratedPower: 0
+  nowPower: 0
+  speed: 0
+--- !u!212 &1050313447
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050313445}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 97a3b52ceb3e78d49acd20116705b823, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.28, y: 1.28}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &1050313448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050313445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4, y: 4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420618148
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,8 +323,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1420618150}
-  - component: {fileID: 1420618149}
   - component: {fileID: 1420618151}
+  - component: {fileID: 1420618152}
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
@@ -237,25 +332,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1420618149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420618148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1a00ae5fc23a1b46ab9253587330032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whatModel: 2
-  outputPower: 0
-  ratedPower: 0
-  connectionScope: 1
-  transfer: {fileID: 0}
-  supply: {fileID: 0}
-  Consumption: {fileID: 0}
 --- !u!4 &1420618150
 Transform:
   m_ObjectHideFlags: 0
@@ -318,6 +394,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1420618152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420618148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53031fb7de259e546884ecb79a08024d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powered: 0
+  inverted: 0
+  nodes:
+  - {fileID: 670206319}
+  connectionScope: 7
+  effectiveScope: 3
 --- !u!1 &1622251027
 GameObject:
   m_ObjectHideFlags: 0

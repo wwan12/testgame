@@ -35,8 +35,16 @@ public abstract class BuildControl : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public int colNum;
+    /// <summary>
+    /// 是否启动
+    /// </summary>
     [HideInInspector]
     public bool available;
+    /// <summary>
+    /// 是否通电
+    /// </summary>
+    [HideInInspector]
+    public bool electrify;
     [HideInInspector]
     public Sprite sprite;
     private float progress = 0;
@@ -97,14 +105,7 @@ public abstract class BuildControl : MonoBehaviour
     /// </summary>
     public abstract void OnAvailable();
 
-    /// <summary>
-    /// todo 连接电力
-    /// </summary>
-    /// <returns></returns>
-    public bool TryConnect()
-    {
-        return true;
-    }
+
 
     public void RemoveBuild()
     {
