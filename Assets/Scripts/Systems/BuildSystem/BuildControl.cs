@@ -48,7 +48,7 @@ public abstract class BuildControl : MonoBehaviour
     [HideInInspector]
     public Sprite sprite;
     private float progress = 0;
-    private bool ready;
+    public bool ready;
  
 
     void Start()

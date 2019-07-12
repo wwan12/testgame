@@ -40,9 +40,6 @@ namespace Circuits
 			return inverted ? !pulsing : pulsing;
 		}
 
-        protected override int InputPower(int w)
-        {
-            throw new System.NotImplementedException();
-        }
+       
     }
 }

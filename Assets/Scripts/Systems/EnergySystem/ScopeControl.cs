@@ -31,16 +31,20 @@ public class ScopeControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       // CircuitNode[] newNodes = new CircuitNode[nodes.nodes.Length + 1];
-       // nodes.CopyTo(newNodes, 0);
-       // newNodes[newNodes.Length - 1] = collision.gameObject.GetComponent<CircuitNode>();
-       // nodes.nodes.Add(collision.gameObject.GetComponent<CircuitNode>());
+        // CircuitNode[] newNodes = new CircuitNode[nodes.nodes.Length + 1];
+        // nodes.CopyTo(newNodes, 0);
+        // newNodes[newNodes.Length - 1] = collision.gameObject.GetComponent<CircuitNode>();
+        // nodes.nodes.Add(collision.gameObject.GetComponent<CircuitNode>());
         //nodes = newNodes;
-        XorGate xgate= collision.gameObject.GetComponent<XorGate>();
-        if (xgate != null)
+        if (collision.gameObject.transform.root.gameObject.GetComponent<BuildControl>().ready)
         {
-            xgate.nodes.Add(gate);
+            XorGate xgate = collision.gameObject.GetComponent<XorGate>();
+            if (xgate != null)
+            {
+                xgate.nodes.Add(gate);
+            }
         }
+            
     }
 
     private void OnTriggerExit2D(Collider2D collision)

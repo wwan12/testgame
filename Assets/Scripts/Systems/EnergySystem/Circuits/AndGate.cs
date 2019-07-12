@@ -21,9 +21,6 @@ namespace Circuits
 			return inverted ? false : true;
 		}
 
-        protected override int InputPower(int w)
-        {
-            throw new System.NotImplementedException();
-        }
+       
     }
 }

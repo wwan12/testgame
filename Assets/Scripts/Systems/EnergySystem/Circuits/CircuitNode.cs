@@ -26,7 +26,9 @@ namespace Circuits
 
 		protected abstract bool EvaluateState();
 
-        protected abstract int InputPower();
+        public virtual void NeedPower(Relay relay) {
+
+        }
 
         private void FixedUpdate()
 		{

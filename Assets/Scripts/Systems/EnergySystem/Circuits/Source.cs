@@ -10,15 +10,31 @@ namespace Circuits
         [Tooltip("输出功率")]
         public int outputPower;
 
+        public int residual;
+
+        private void Start()
+        {
+            residual = outputPower;
+        }
+
         protected override bool EvaluateState()
 		{
 			return !inverted;
 		}
 
-        protected override int InputPower(int w)
+        public override void NeedPower(Relay relay)
         {
-            w += outputPower;
-            return w;
+            if (residual>(relay.ratedPower-relay.nowPower))
+            {
+                residual -=(relay.ratedPower - relay.nowPower);
+                relay.nowPower += (relay.ratedPower - relay.nowPower);
+                relay.StopCoroutine(relay.scan);
+            }
+            else
+            {
+                relay.nowPower += residual;
+                residual = 0;
+            }
         }
 
         

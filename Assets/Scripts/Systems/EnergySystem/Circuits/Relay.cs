@@ -16,6 +16,9 @@ namespace Circuits
         public int nowPower;
         [Tooltip("运行速度")]
         public float speed;
+
+        public IEnumerator scan;
+
         public bool HasNode()
 		{
 			return node != null;
@@ -41,15 +44,29 @@ namespace Circuits
 			return IsPowered();
 		}
 
-        protected override int InputPower(int w)
+        private void FixedUpdate()
         {
+            if (IsPowered()&&scan==null)
+            {
+                scan = GetPower();
+                StartCoroutine(scan);
+            }
+           
+        }
+
+        IEnumerator GetPower()
+        {
+
+            yield return new WaitForEndOfFrame();
             if (IsPowered())
             {
-                w -= ratedPower;
-            }
-            return w;
+                node.NeedPower(this);
 
+            }
+            scan = null;
         }
+
+           
 
         private IEnumerator DelayedPowerChange(bool value)
 		{

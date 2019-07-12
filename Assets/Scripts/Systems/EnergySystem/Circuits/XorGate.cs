@@ -60,9 +60,16 @@ namespace Circuits
 			return inverted ? !found : found;
 		}
 
-        protected override int InputPower()
+        public override void NeedPower(Relay relay)
         {
-            return w;
+            if (nodes.Count != 0)
+            {
+                foreach (var node in nodes)
+                {
+                    node.NeedPower(relay);
+                }
+            }
+                    
         }
 
         private void OnTriggerEnter2D(Collider2D collision)//将范围内发用点加入node
