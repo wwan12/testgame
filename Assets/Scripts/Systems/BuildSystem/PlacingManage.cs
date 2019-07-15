@@ -19,6 +19,25 @@ public class PlacingManage : MonoBehaviour {
     public GameObject dismantleProgress;
     private PlaceControl place = null;
 
+    private Dictionary<string, BuildControl> quote = new Dictionary<string, BuildControl>();
+
+    /// <summary>
+    /// 给建筑添加物品
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="info"></param>
+    public void BuildAddItem(Vector2 vector,ItemInfo info)
+    {
+        string k = vector.x + "|" + vector.y;
+        if (quote.ContainsKey(k))
+        {
+            quote[k].gameObject.GetComponent<BagManage>().BagAddItem(info);
+        }
+       
+    }
+
+
+
     /// <summary>
     /// 准备建造
     /// </summary>
@@ -95,6 +114,33 @@ public class PlacingManage : MonoBehaviour {
         build.Build();
         // prefabToPlace = placeablePrefab;
     }
+
+    /// <summary>
+    /// 在地图上设置建造完的建筑
+    /// </summary>
+    /// <param name="placeablePrefab"></param>
+    public void SetPlaceable(Vector3 initPosition, BuildingSO placeablePrefab,float progress)
+    {
+        //place = placeablePrefab.GetComponent<PlaceControl>();       
+        GameObject place = Instantiate(placeablePrefab.buildingPrefab, initPosition, Quaternion.identity);
+        placeable.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        BoxCollider2D boxCollider2D = placeable.GetComponent<BoxCollider2D>();
+        //  boxCollider2D.isTrigger = true;
+        boxCollider2D.size = new Vector2(boxCollider2D.size.x - boxCollider2D.size.x / 20, boxCollider2D.size.y - boxCollider2D.size.y / 20);
+        BuildControl build = placeable.GetComponent<BuildControl>();
+        placeable.name = placeablePrefab.objectName;
+        build.name = placeablePrefab.objectName;
+        build.durable = placeablePrefab.durable;
+        build.buildProgress = buildProgress;
+        build.dismantleProgress = dismantleProgress;
+        build.dTime = placeablePrefab.dTime;
+        build.buildTime = placeablePrefab.buildTime;
+        build.type = placeablePrefab.type;
+        build.cost = null;
+        build.progress = progress;
+        build.Build();
+    }
+
     /// <summary>
     /// 恢复已建造的建筑
     /// </summary>
@@ -105,7 +151,15 @@ public class PlacingManage : MonoBehaviour {
         {
             string[] position = b.Key.Split('|');
             Vector3 vector = new Vector3(float.Parse(position[0]), float.Parse(position[1]), 0);
-            SetPlaceable(vector, Resources.Load<BuildingSO>("Assets/BuildAssets/" + b.Value));
+            if (AppManage.Instance.saveData.building.ContainsKey(b.Key))
+            {
+                SetPlaceable(vector, Resources.Load<BuildingSO>("Assets/BuildAssets/" + b.Value), AppManage.Instance.saveData.building[b.Key]);
+            }
+            else
+            {
+                SetPlaceable(vector, Resources.Load<BuildingSO>("Assets/BuildAssets/" + b.Value));
+
+            }
 
         }
     }
@@ -114,11 +168,6 @@ public class PlacingManage : MonoBehaviour {
     {
         RecoveryBuilds(save.buildLocation);
     }
-
-    //  public void SetCommandManager(ServerCommands manager)
-    //  {
-    //      commandManager = manager;
-    //  }
 
     // Use this for initialization
     void Start()

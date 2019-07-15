@@ -29,6 +29,10 @@ public class EventCode
     /// </summary>
     public static readonly string BAG_ADD_ITEM = "BAG_ADD_ITEM";
     /// <summary>
+    /// 往背包使用一个物品
+    /// </summary>
+    public static readonly string BAG_USE_ITEM = "BAG_USE_ITEM";
+    /// <summary>
     /// 开始旁白对话，
     /// </summary>
     public static readonly string DIALOGUE_START_ASIDE = "DIALOGUE_START_ASIDE";

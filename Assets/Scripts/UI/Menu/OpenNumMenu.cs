@@ -31,7 +31,7 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
       //  move.RePlay();
     }
 
-    void Open()
+     public void Open()
     {
         if (cacheGameObject==null)
         {

@@ -29,8 +29,8 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
 
     void Start()
     {
-        hightLightColor = new Color(1f, 1f, 1f, 0.2f);
-        hideColor = new Color(1f, 1f, 1f, 0f);
+        hightLightColor = new Color(1f, 1f, 1f, 0.8f);
+        hideColor = new Color(1f, 1f, 1f, 0.22f);
         image = GetComponent<Image>();
         item = GetComponentInChildren<ItemInBagController>();
         if (item==null)
@@ -74,6 +74,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
             item.itemInfoPanel = itemInfoPanel;
             item.offset = new Vector2(gameObject.GetComponent<RectTransform>().sizeDelta.x, -gameObject.GetComponent<RectTransform>().sizeDelta.y);
             item.ShowItem();
+          
         }
 
     } 
@@ -90,7 +91,7 @@ public class LatticeController : MonoBehaviour, IDropHandler, IPointerEnterHandl
         }   
     }
 
-    bool IsInTypes(ItemType type)
+    public bool IsInTypes(ItemType type)
     {
         if (tagOfSupport == null||tagOfSupport.Length==0)
         {

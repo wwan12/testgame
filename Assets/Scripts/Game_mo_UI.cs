@@ -28,7 +28,7 @@ public class Game_mo_UI : MonoBehaviour
         //Physics.gravity = new Vector3(0, -1.0F, 0);
         ExternalRead read = new ExternalRead();
         read.ReadItems(this);
-        selectUI = gameObject.transform.Find("SelectInfo").gameObject;
+        selectUI = gameObject.transform.Find("LowerBackground/SelectInfo").gameObject;
         Messenger.AddListener(EventCode.APP_SAVE_GAME,SaveShow);
         Messenger.AddListener(EventCode.APP_SAVEOVER_GAME, SaveOver);
         Messenger.AddListener<SelectInfo>(EventCode.UI_SELECT_INFO, SelectInfo);

@@ -19,7 +19,9 @@ public class BagAutoEditor : Editor
 
         m_Target.itemInfoPanel = EditorGUILayout.ObjectField("物品信息显示框", m_Target.itemInfoPanel, typeof(GameObject), true) as GameObject;
         m_Target.itemInBag = EditorGUILayout.ObjectField("物体预制体", m_Target.itemInBag, typeof(GameObject), true) as GameObject;
+        m_Target.isDrag = EditorGUILayout.Toggle("是否可拖动", m_Target.isDrag);
         m_Target.isAuto = EditorGUILayout.Toggle("自动排版", m_Target.isAuto);
+
         if (m_Target.isAuto)
          {
              m_Target.Lattice = EditorGUILayout.ObjectField("格子预制体", m_Target.Lattice, typeof(GameObject), true) as GameObject;

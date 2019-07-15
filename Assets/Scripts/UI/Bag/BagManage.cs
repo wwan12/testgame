@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 //todo 丢弃物品，多线程优化,动态添加的格子无法管理
 
@@ -20,8 +21,8 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     public event EventHandler<ItemInfo> DiscardBagItemCallBack;
     [HideInInspector]
     public int bagCapacity = 0;//剩余容量
-    private LatticeController[] items;
-    private int[] bagItems;//背包中的数据
+    protected LatticeController[] items;
+    protected int[] bagItems;//背包中的数据
     public GameObject itemInfoPanel;
 
     public bool isAuto = false;
@@ -39,15 +40,18 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     public float autoLeft = 0;
     [Tooltip("格子大小")]
     public float autoSize = 0;
+    [Tooltip("是否可拖动")]
+    public bool isDrag;
 
     /// <summary>
     /// 回调方法，注册UseBagItemCallBack
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="itemInfo"></param>
-    private void UseItemCallBack(object obj, ItemInfo itemInfo)
+    protected virtual void UseItemCallBack(object obj, ItemInfo itemInfo)
     {
         UseBagItemCallBack(obj, itemInfo);
+        Messenger.Broadcast<ItemInfo>(EventCode.BAG_USE_ITEM,itemInfo);
     }
 
 
@@ -67,16 +71,16 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         GetLatticeItem(name).DiscardItem();
     }
     /// <summary>
-    /// 使用完某一个物品，提供给外部调用
+    ///修改物品数量
     /// </summary>
-    public void BagUsedItem(string name, int num)
+    public bool BagUsedItem(string name, int num)
     {
-        GetLatticeItem(name).AddNum(num);
+       return GetLatticeItem(name).AddNum(num);
     }
     /// <summary>
     /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false
     /// </summary>
-    public bool BagAddItem(int serialNumber, ItemInfo itemInfo)
+    public virtual bool BagAddItem(int serialNumber, ItemInfo itemInfo)
     {
         if (serialNumber>allCapacity)
         {
@@ -93,8 +97,8 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
         if (items[serialNumber].item.info.name.Equals(itemInfo.name))
         {
-            items[serialNumber].item.info.num+=itemInfo.num;
-            return true;
+           // items[serialNumber].item.info.num+=itemInfo.num;
+            return items[serialNumber].item.AddNum(itemInfo.num);
         }
         return false;
     }
@@ -102,7 +106,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 给背包添加一个新的物品，提供给外部调用
     /// </summary>
-    public void BagAddItem(ItemInfo itemInfo)
+    public virtual bool BagAddItem(ItemInfo itemInfo)
     {
         int index = HasItemInBag(itemInfo.name);
         if (index >= 0)
@@ -119,16 +123,16 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
                 if (items[i].item==null)
                 {
                     items[i].AddItem(item);
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
     }
     /// <summary>
     /// 根据名称获取物品
     /// </summary>
     /// <param name="obj"></param>
-    /// <param name="itemInfo"></param>
     public ItemInBagController GetLatticeItem(string name)
     {
         foreach (var item in items)
@@ -176,7 +180,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (items[i].item!=null)
             {
-                if (items[i].item.info.name.Equals(infoName) )
+                if (items[i].item.info.name.Equals(infoName)&& items[i].item.info.num< items[i].item.info.maxNum)
                 {
                     return i;
                 }
@@ -188,21 +192,29 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Vector3 worldPos;
-        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(transform as RectTransform, eventData.position, null, out worldPos))
+        if (isDrag)
         {
-            dragOffset = new Vector3(transform.position.x - worldPos.x, transform.position.y - worldPos.y, 0f);
-            transform.position = worldPos + dragOffset;
+            Vector3 worldPos;
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(transform as RectTransform, eventData.position, null, out worldPos))
+            {
+                dragOffset = new Vector3(transform.position.x - worldPos.x, transform.position.y - worldPos.y, 0f);
+                transform.position = worldPos + dragOffset;
+            }
         }
+       
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 worldPos;
-        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(transform as RectTransform, eventData.position, null, out worldPos))
+        if (isDrag)
         {
-            transform.position = worldPos + dragOffset;
+            Vector3 worldPos;
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(transform as RectTransform, eventData.position, null, out worldPos))
+            {
+                transform.position = worldPos + dragOffset;
+            }
         }
+      
     }
 
     
@@ -328,12 +340,17 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="perfabName"></param>
     public GameObject AddOtherUI(string prefabName)
     {
+        if (extUI.name.Equals(prefabName))
+        {
+            return extUI;
+        }
         if (extUI!=null)
         {
             extUI = null;
             Destroy(extUI);
         }
-        extUI= Resources.Load<GameObject>("prefab/"+prefabName);
+       
+        extUI= Resources.Load<GameObject>("prefabs/UI/" + prefabName);
         if (extUI==null)
         {
             return null;
@@ -344,6 +361,16 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, , trans.sizeDelta.x);
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, top + autoTop, trans.sizeDelta.y);
         return extUI;
+    }
+
+
+    public void AddOtherUIData(Dictionary<int,ItemInfo> dic)
+    {
+        foreach (var item in dic)
+        {
+            extUI.GetComponent<BagManage>().BagAddItem(item.Key, item.Value);
+        }
+        
     }
 
 

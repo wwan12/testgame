@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f5c291b93bdb724f842a2984c25ebec, type: 3}
   m_Name: "\u7D27\u6025\u6C42\u751F\u88C5\u7F6E"
   m_EditorClassIdentifier: 
-  note: 
+  note: "\u6FC0\u6D3B\u57FA\u7840\u751F\u5B58\u5EFA\u7B51\u5EFA\u9020\u8BB8\u53EF"
   hierarchy: 0
-  isResearch: 0
+  isResearch: 1
   isComplete: 0
   lowSource: {fileID: 0}
   researhTime: 0

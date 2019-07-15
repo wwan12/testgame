@@ -10,8 +10,6 @@ public class PlayerManage : MonoBehaviour
     private List<Buff> eventBuff;
     [Tooltip("角色信息栏")]
     public GameObject playerStateLabel;
-    [Tooltip("多用途菜单栏")]
-    public GameObject menu;
     [Tooltip("与物品的交互范围半径")]
     public float operationRange = 2f;
     [HideInInspector]
@@ -31,6 +29,8 @@ public class PlayerManage : MonoBehaviour
     public float satietyEfflux;
     private GameObject miniMapCamera;
     private GameObject escMenu;
+    public Dictionary<int,ItemInfo> equips; 
+
     public enum PlayerRole
     {
         BUSINESSMAN,      //
@@ -57,6 +57,7 @@ public class PlayerManage : MonoBehaviour
             powerEfflux=powerEfflux,
             satietyEfflux=satietyEfflux,
         };
+        equips = new Dictionary<int, ItemInfo>(10);
         miniMapCamera = GameObject.Find("MapCamera");
         Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, PlayerStart);
 
@@ -115,7 +116,10 @@ public class PlayerManage : MonoBehaviour
     private void Operate() {
         if (Input.GetKeyDown(KeyCode.E))//物品栏
         {
-            AppManage.Instance.SetOpenUI(GameObject.FindGameObjectWithTag("Bag"));
+            GameObject bag = GameObject.FindGameObjectWithTag("Bag");
+            bag.GetComponent<BagManage>().AddOtherUI("PlayerEquip");
+            bag.GetComponent<BagManage>().AddOtherUIData(equips);
+            AppManage.Instance.SetOpenUI(bag);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -123,7 +127,7 @@ public class PlayerManage : MonoBehaviour
             {
                 if (escMenu==null)
                 {
-                    escMenu = GameObject.Instantiate<GameObject>(GameObject.Find("EscMenu"));
+                    escMenu = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("prefabs/UI/EscMenu"));
                     escMenu.transform.SetParent(AppManage.Instance.HUD.transform, false);                   
                 }
                 AppManage.Instance.SetOpenUI(escMenu);
@@ -144,7 +148,7 @@ public class PlayerManage : MonoBehaviour
                 {
                     if (escMenu == null)
                     {
-                        escMenu = GameObject.Instantiate<GameObject>(GameObject.Find("EscMenu"));
+                        escMenu = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>("prefabs/UI/EscMenu"));
                         escMenu.transform.SetParent(AppManage.Instance.HUD.transform, false);
                     }
                     AppManage.Instance.SetOpenUI(escMenu);
@@ -164,19 +168,19 @@ public class PlayerManage : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(0).gameObject);
+            AppManage.Instance.HUD.transform.Find("menu").GetChild(0).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(1).gameObject);
+            AppManage.Instance.HUD.transform.Find("menu").GetChild(1).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(2).gameObject);
+            AppManage.Instance.HUD.transform.Find("menu").GetChild(2).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            AppManage.Instance.SetOpenUI(AppManage.Instance.HUD.transform.Find("menu").GetChild(3).gameObject);
+            AppManage.Instance.HUD.transform.Find("menu").GetChild(3).gameObject.GetComponent<OpenNumMenu>().Open();
         }
 
     }

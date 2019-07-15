@@ -113,10 +113,18 @@ public class AppManage
             group.blocksRaycasts = false;
         }
         openUI = ui;
-        group=openUI.GetComponent<CanvasGroup>()??openUI.AddComponent<CanvasGroup>();
-        group.alpha = group.alpha == 1 ? 0 : 1;
-        group.interactable = group.interactable ? false : true;
-        group.blocksRaycasts = group.blocksRaycasts ? false : true;      
+        if (openUI.GetComponent<CanvasGroup>()!=null)
+        {
+            group = openUI.GetComponent<CanvasGroup>();
+            group.alpha = group.alpha == 1 ? 0 : 1;
+            group.interactable = group.interactable ? false : true;
+            group.blocksRaycasts = group.blocksRaycasts ? false : true;
+        }
+        else
+        {
+            group = openUI.AddComponent<CanvasGroup>();
+        }
+        ui.transform.SetAsFirstSibling();
     }
     public void CloseOpenUI()
     {
@@ -176,7 +184,7 @@ public class AppManage
     private void CollectSaveData()
     {
         saveData.mapData = GameObject.FindObjectOfType<MapManage>().SaveMap();//获取地图数据
-        saveData.bagData = GameObject.FindObjectOfType<BagManage>().SaveBagData();//获取背包数据
+        saveData.bagData = GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().SaveBagData();//获取背包数据
         saveData.playerLocation[0] = GameObject.FindGameObjectWithTag("Player").transform.position.x;
         saveData.playerLocation[1] = GameObject.FindGameObjectWithTag("Player").transform.position.y;
         saveData.playerLocation[2] = GameObject.FindGameObjectWithTag("Player").transform.position.z;
@@ -247,6 +255,7 @@ public class AppManage
         //StartCallBack(this, saveData);
         // GameObject.FindObjectOfType<MapManage>().CreateMap();
         saveData.buildLocation = new Dictionary<string, string>();
+        saveData.building = new Dictionary<string, float>();
         CollectSaveData();
         SaveByBin();
         Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
@@ -257,11 +266,7 @@ public class AppManage
     /// <summary>
     /// 继续游戏
     /// </summary>
-    public void ContinueGame(MonoBehaviour mono) {        
-       // GameObject.FindObjectOfType<MapManage>().ReadMap(saveData.mapData);//恢复地图数据
-       // GameObject.FindObjectOfType<BagManage>().ReadBagData(saveData.bagData);//恢复背包数据
-        //GameObject.FindObjectOfType<>
-       
+    public void ContinueGame(MonoBehaviour mono) {              
         Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
         //  Messenger.Broadcast<SingleSave>(EventCode.APP_CONTINUE_GAME, saveData);
         isInGame = true;
@@ -313,6 +318,7 @@ public class AppManage
             allSave.singleSaves[saveIndex] = new SingleSave();
             saveData = allSave.singleSaves[saveIndex];
             saveData.buildLocation = new Dictionary<string, string>();
+            saveData.building = new Dictionary<string, float>();
             saveData.buildNodes = new Dictionary<int, Dictionary<string, bool>>();
             
         }
@@ -370,6 +376,10 @@ public class AppManage
         /// 格式是 x|y,name
         /// </summary>
         public Dictionary<string,string> buildLocation;
+        /// <summary>
+        /// 建造中的建筑 格式是 x|y, pro
+        /// </summary>
+        public Dictionary<string, float> building;
         public TechnologyManager.TecState[] tecStates;
         public TaskManager.TaskState[] ongoingTasks;
     }

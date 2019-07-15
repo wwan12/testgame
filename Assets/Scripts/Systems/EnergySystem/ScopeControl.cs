@@ -36,7 +36,7 @@ public class ScopeControl : MonoBehaviour
         // newNodes[newNodes.Length - 1] = collision.gameObject.GetComponent<CircuitNode>();
         // nodes.nodes.Add(collision.gameObject.GetComponent<CircuitNode>());
         //nodes = newNodes;
-        if (collision.gameObject.transform.root.gameObject.GetComponent<BuildControl>().ready)
+        if (collision.gameObject.transform.parent.gameObject.GetComponent<BuildControl>().ready)
         {
             XorGate xgate = collision.gameObject.GetComponent<XorGate>();
             if (xgate != null)

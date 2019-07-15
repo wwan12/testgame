@@ -270,8 +270,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -400, y: -320}
+  m_AnchoredPosition: {x: 0, y: 30}
+  m_SizeDelta: {x: -800, y: -540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &156482521
 MonoBehaviour:
@@ -293,12 +293,12 @@ MonoBehaviour:
   itemInBag: {fileID: 4404096848197245771, guid: ae79bc21cf42b724eaa9d87b62dffcd8,
     type: 3}
   allCapacity: 48
-  lineNum: 8
-  top: 0
-  left: 0
+  lineNum: 6
+  top: 12
+  left: 12
   autoTop: 12
   autoLeft: 12
-  autoSize: 108
+  autoSize: 64
 --- !u!114 &156482522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1344,10 +1344,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -4393,6 +4393,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035291479222095526, guid: c62970639f2395e4184be217ad68d06b,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c62970639f2395e4184be217ad68d06b, type: 3}

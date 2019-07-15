@@ -47,7 +47,8 @@ public abstract class BuildControl : MonoBehaviour
     public bool electrify;
     [HideInInspector]
     public Sprite sprite;
-    private float progress = 0;
+    [HideInInspector]
+    public float progress = 0;
     public bool ready;
  
 
@@ -184,12 +185,14 @@ public abstract class BuildControl : MonoBehaviour
             progress++;
             alpha.a = progress / 100f * 255f;
             gameObject.GetComponent<SpriteRenderer>().color = alpha;
-            bp.GetComponent<Image>().fillAmount = progress / 100;          
+            bp.GetComponent<Image>().fillAmount = progress / 100;
+            AppManage.Instance.saveData.building.Add(gameObject.transform.position.x+"|"+ gameObject.transform.position.y,progress);
         }
         progress = 0;
         ready = true;
         available = true;
         Destroy(bp);
+        AppManage.Instance.saveData.building.Remove(gameObject.transform.position.x + "|" + gameObject.transform.position.y);
         BuildComplete();
     }
 

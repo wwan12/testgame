@@ -65,15 +65,42 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
     /// 改变物品数量
     /// </summary>
     /// <param name="num"></param>
-    public void AddNum(int num)
+    public bool AddNum(int num)
     {
-        info.num += num;
-        if (info.num<0)
+        if (info.num + num > info.maxNum)
+        {
+            num = num - (info.maxNum - info.num);
+            info.num = info.maxNum;
+            int i = gameObject.transform.parent.GetComponent<LatticeController>().serialNumber;
+            gameObject.transform.parent.parent.GetComponent<BagManage>().BagAddItem(new ItemInfo()
+            {
+                sprite = info.sprite,
+                id = info.id,
+                name = info.name,
+                type = info.type,
+                note = info.note,
+                num = num,
+                weight = info.weight,
+                cost = info.cost,
+                isUse = info.isUse,
+                maxNum = info.maxNum,
+                equipInfo = info.equipInfo,
+            });
+            return false;
+        }
+        
+        if (info.num-num<0)
+        {           
+            return false;
+        }
+        if (info.num-num==0)
         {
             Destroy(this);
-            return;
+            return true;
         }
-        text.text = info.num.ToString();       
+        info.num += num;
+        text.text = info.num.ToString();
+        return true;
     }
     /// <summary>
     /// 将物品图标以及数量显示出来
