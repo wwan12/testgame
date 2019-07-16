@@ -1,18 +1,37 @@
 using BattleSystem;
 using UnityEngine;
-
+/// <summary>
+/// 格子类型
+/// </summary>
 public enum ItemType
 {
-    Material,//材料
+    /// <summary>
+    /// 材料
+    /// </summary>
+    Material,
     Consumables,//消耗品
     ExtEquip,
-    Armed_0_Equip,
-    Armed_1_Equip,
-    Exoskeleton_Equip,//外骨骼
-    Reactor_Equip,//反应堆
-    EnergyStorageCore_Equip,//储能电芯
-    AuxiliaryChip_Equip,//辅助芯片
-    Head_Equip,//头部装备
+    Armed_Equip,
+    /// <summary>
+    /// 外骨骼
+    /// </summary>
+    Exoskeleton_Equip,//
+    /// <summary>
+    /// 反应堆
+    /// </summary>
+    Reactor_Equip,//
+    /// <summary>
+    /// 储能电芯
+    /// </summary>
+    EnergyStorageCore_Equip,//
+    /// <summary>
+    /// 辅助芯片
+    /// </summary>
+    AuxiliaryChip_Equip,//
+    /// <summary>
+    /// 头部装备
+    /// </summary>
+    Head_Equip,//
     Leg_Equip,
     Body_Equip,
 }

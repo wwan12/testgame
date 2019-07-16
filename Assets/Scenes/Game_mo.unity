@@ -299,6 +299,7 @@ MonoBehaviour:
   autoTop: 12
   autoLeft: 12
   autoSize: 64
+  isDrag: 0
 --- !u!114 &156482522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1277,7 +1278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &713809985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2318,7 +2319,7 @@ PrefabInstance:
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 120
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 4903599015283231980, guid: 43ec179eb0dbffb41b4d1c00f53040ba,
         type: 3}
@@ -4217,7 +4218,7 @@ MonoBehaviour:
     VoiceVolume: 1
     DoubleTap: 1
     NextKey: z
-    Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
     Material: {fileID: 0}
 --- !u!114 &2133753287
 MonoBehaviour:

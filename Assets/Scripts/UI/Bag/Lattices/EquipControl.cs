@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BattleSystem;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +14,9 @@ public class EquipControl : BagManage
 
     public override bool BagAddItem(int serialNumber, ItemInfo itemInfo)
     {
-        // return base.BagAddItem(serialNumber, itemInfo);
-        return false;
+        InitEquip(itemInfo.equipInfo);
+        return base.BagAddItem(serialNumber, itemInfo);
+        //return false;
     }
 
     public override bool BagAddItem(ItemInfo itemInfo)
@@ -26,7 +28,12 @@ public class EquipControl : BagManage
                 GameObject item = GameObject.Instantiate(itemInBag);
                 item.name = itemInfo.name;
                 item.GetComponent<ItemInBagController>().info = itemInfo;
+                if (latt.item!=null)
+                {
+                    GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().BagAddItem(latt.item.info);
+                }
                 latt.AddItem(item);
+                InitEquip(itemInfo.equipInfo);
                 return true;
             }
            
@@ -41,10 +48,36 @@ public class EquipControl : BagManage
         if (GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().BagAddItem(itemInfo))
         {
 
-            BagUsedItem(itemInfo.name);
+            ((ItemInBagController)obj).DiscardItem();
+            SaveBagData();
         }
       
        // base.UseItemCallBack(obj, itemInfo);
+    }
+
+    public void InitEquip(Equip equip)
+    {
+        switch (equip.type)
+        {
+            case ItemType.ExtEquip:
+                break;
+            case ItemType.Armed_Equip:
+                break;
+            case ItemType.Exoskeleton_Equip:
+                break;
+            case ItemType.Reactor_Equip:
+                break;
+            case ItemType.EnergyStorageCore_Equip:
+                break;
+            case ItemType.AuxiliaryChip_Equip:
+                break;
+            case ItemType.Head_Equip:
+                break;
+            case ItemType.Leg_Equip:
+                break;
+            case ItemType.Body_Equip:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -53,12 +86,7 @@ public class EquipControl : BagManage
         
     }
 
-    
 
-    void UseEquip(object obj,ItemInfo info)
-    {
-
-    }
 
     //void NextLinksPaths()
     //{

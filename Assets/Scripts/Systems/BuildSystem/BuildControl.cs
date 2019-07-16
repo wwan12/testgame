@@ -156,6 +156,10 @@ public abstract class BuildControl : MonoBehaviour
             GetComponent<ResourceComponent>().Add(colType,colNum);
            // Messenger.AddListener<Vector3, ResourceType.AttributionType, Vector2Int, int>(EventCode);
         }
+        if (type==BuildingSO.BuildType.storage)
+        {
+
+        }
         if (buildTime != 0)
         {
             StartCoroutine(BuildProgress());

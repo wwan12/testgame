@@ -71,8 +71,7 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
         {
             num = num - (info.maxNum - info.num);
             info.num = info.maxNum;
-            int i = gameObject.transform.parent.GetComponent<LatticeController>().serialNumber;
-            gameObject.transform.parent.parent.GetComponent<BagManage>().BagAddItem(new ItemInfo()
+            return gameObject.transform.parent.parent.GetComponent<BagManage>().BagAddItem(new ItemInfo()
             {
                 sprite = info.sprite,
                 id = info.id,
@@ -85,17 +84,37 @@ public class ItemInBagController : MonoBehaviour, IBeginDragHandler, IDragHandle
                 isUse = info.isUse,
                 maxNum = info.maxNum,
                 equipInfo = info.equipInfo,
-            });
-            return false;
+            });          
         }
         
-        if (info.num-num<0)
-        {           
+        if (info.num+num<0)
+        {
+            
+            if (-num < gameObject.transform.parent.parent.GetComponent<BagManage>().GetTotalNum(info.name))
+            {
+                num = num + info.num;
+                Destroy(gameObject);
+                return gameObject.transform.parent.parent.GetComponent<BagManage>().BagAddItem(new ItemInfo()
+                {
+                    sprite = info.sprite,
+                    id = info.id,
+                    name = info.name,
+                    type = info.type,
+                    note = info.note,
+                    num = num,
+                    weight = info.weight,
+                    cost = info.cost,
+                    isUse = info.isUse,
+                    maxNum = info.maxNum,
+                    equipInfo = info.equipInfo,
+                });
+            }
+           
             return false;
         }
-        if (info.num-num==0)
+        if (info.num+num==0)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return true;
         }
         info.num += num;

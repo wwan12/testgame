@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Equip))]
+[CustomEditor(typeof(Arms))]
 public class EquipEditor : Editor
 {
-    private Equip m_Target;
+    private Arms m_Target;
 
     //重写OnInspectorGUI方法，当激活此面板区域时调用
     public override void OnInspectorGUI()
@@ -16,7 +16,7 @@ public class EquipEditor : Editor
         // base.OnInspectorGUI();
 
         //获取指定脚本对象
-        m_Target = target as Equip;
+        m_Target = target as Arms;
 
         m_Target.range = EditorGUILayout.FloatField("射程", m_Target.range);
         m_Target.minRange = EditorGUILayout.FloatField("最小射程", m_Target.minRange);

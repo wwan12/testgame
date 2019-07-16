@@ -50,6 +50,17 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="itemInfo"></param>
     protected virtual void UseItemCallBack(object obj, ItemInfo itemInfo)
     {
+        if (extUI!=null)
+        {
+            if (extUI.GetComponent<BagManage>().BagAddItem(itemInfo))
+            {
+
+                extUI.GetComponent<BagManage>().SaveBagData();
+                ((ItemInBagController)obj).DiscardItem();
+                //BagUsedItem(itemInfo.);
+            }            
+        }
+      
         UseBagItemCallBack(obj, itemInfo);
         Messenger.Broadcast<ItemInfo>(EventCode.BAG_USE_ITEM,itemInfo);
     }
@@ -71,14 +82,25 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         GetLatticeItem(name).DiscardItem();
     }
     /// <summary>
+    /// 删除一个物品，无视数量
+    /// </summary>
+    public void BagUsedItem(int sel,string name)
+    {
+        GetLatticeItem(sel).DiscardItem();
+    }
+    /// <summary>
     ///修改物品数量
     /// </summary>
     public bool BagUsedItem(string name, int num)
     {
+        if (num<0&&-num>GetTotalNum(name))
+        {
+            return false;
+        }
        return GetLatticeItem(name).AddNum(num);
     }
     /// <summary>
-    /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false
+    /// 给背包指定格子添加物品，当该格子被其他物品占用时返回false,这个方法是不安全的
     /// </summary>
     public virtual bool BagAddItem(int serialNumber, ItemInfo itemInfo)
     {
@@ -153,6 +175,23 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         return items[index].item==null?null: items[index].item;
     }
+    /// <summary>
+    /// 获取物品在背包内的总数量
+    /// </summary>
+    /// <param name="name"></param>
+    public int GetTotalNum(string name)
+    {
+        int num = 0;
+        foreach (var item in items)
+        {
+            if (item.item != null && item.item.info.name.Equals(name))
+            {
+                num += item.item.info.num;
+            }
+        }
+        return num;
+    }
+
     /// <summary>
     /// -1没有找到
     /// </summary>
@@ -285,7 +324,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <summary>
     /// 0在第几格，1物品名称，2数量
     /// </summary>
-    public string SaveBagData()
+    public virtual string SaveBagData()
     {
         StringBuilder saveData = new StringBuilder();
         for (int i = 0; i < items.Length; i++)
@@ -307,7 +346,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// 读取并恢复背包数据
     /// </summary>
     /// <param name="save"></param>
-    public void ReadBagData(string save) {
+    public virtual void ReadBagData(string save) {
         string[] datas = save.Split('|');
         for (int i = 0; i < datas.Length; i++)
         {
@@ -338,11 +377,12 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// 添加其他交互页面
     /// </summary>
     /// <param name="perfabName"></param>
-    public GameObject AddOtherUI(string prefabName)
+    public void AddOtherUI(string prefabName)
     {
         if (extUI.name.Equals(prefabName))
         {
-            return extUI;
+         //   extUI.GetComponent<BagManage>().ReadBagData();
+            return;
         }
         if (extUI!=null)
         {
@@ -353,19 +393,20 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         extUI= Resources.Load<GameObject>("prefabs/UI/" + prefabName);
         if (extUI==null)
         {
-            return null;
+            return;
         }
         extUI = GameObject.Instantiate(extUI);
         extUI.transform.SetParent(gameObject.transform, false);
         // RectTransform trans = gameObject.GetComponent<RectTransform>();
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, , trans.sizeDelta.x);
         // trans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, top + autoTop, trans.sizeDelta.y);
-        return extUI;
+        return;
     }
 
 
     public void AddOtherUIData(Dictionary<int,ItemInfo> dic)
     {
+        //extUI.GetComponent<BagManage>().
         foreach (var item in dic)
         {
             extUI.GetComponent<BagManage>().BagAddItem(item.Key, item.Value);
@@ -393,7 +434,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         bagItems = new int[allCapacity];
         bagCapacity = allCapacity;
         AddOtherUI("PlayerEquip");
-        Messenger.AddListener<ItemInfo>(EventCode.BAG_ADD_ITEM, BagAddItem);
+        Messenger.AddReturnListener<ItemInfo,bool>(EventCode.BAG_ADD_ITEM, BagAddItem);
         Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, StartInit);
         // StartCoroutine(test());
     }

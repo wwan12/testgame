@@ -254,8 +254,9 @@ public class AppManage
     public void StartNewGame(MonoBehaviour mono) {
         //StartCallBack(this, saveData);
         // GameObject.FindObjectOfType<MapManage>().CreateMap();
-        saveData.buildLocation = new Dictionary<string, string>();
-        saveData.building = new Dictionary<string, float>();
+       // saveData.buildLocation = new Dictionary<string, string>();
+       // saveData.building = new Dictionary<string, float>();
+       // saveData.otherData = new Dictionary<string, string>();
         CollectSaveData();
         SaveByBin();
         Messenger.Broadcast<SingleSave>(EventCode.APP_START_GAME, saveData);
@@ -320,7 +321,7 @@ public class AppManage
             saveData.buildLocation = new Dictionary<string, string>();
             saveData.building = new Dictionary<string, float>();
             saveData.buildNodes = new Dictionary<int, Dictionary<string, bool>>();
-            
+            saveData.otherData = new Dictionary<string, string>();
         }
 
         return saveData;
@@ -370,7 +371,10 @@ public class AppManage
         public float[] playerLocation = new float[3];
         public string mapData = "";
         public string bagData = "";
-        public string otherData = "";
+        /// <summary>
+        /// 其他数据: 建筑存储为 build_storage_x|y，data 
+        /// </summary>
+        public Dictionary<string,string> otherData;
         public Dictionary<int, Dictionary<string, bool>> buildNodes;
         /// <summary>
         /// 格式是 x|y,name
@@ -387,7 +391,7 @@ public class AppManage
 
     private IEnumerator AutoSave() {
         while (isInGame) {
-            yield return new WaitForSeconds(60 * 2);
+            yield return new WaitForSeconds(60 * 3);
             SaveGame();
         }
        

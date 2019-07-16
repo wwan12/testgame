@@ -6,7 +6,7 @@ namespace BattleSystem
 {
     public class AttackerComponent : MonoBehaviour
     {
-        public Equip equip;
+        public Arms equip;
         public AttackModel attackModel;
         public Vector3 equipAttackPosition;
         public event EventHandler<Hit> AttackCallBack;
@@ -37,7 +37,7 @@ namespace BattleSystem
         /// <summary>
         /// 唤醒，启动所有监听,在下一次睡眠前只能唤醒一次
         /// </summary>
-        public void Awaken(Equip equip_alpha)
+        public void Awaken(Arms equip_alpha)
         {
             equip = equip_alpha;
             if (equip.range != 0f)

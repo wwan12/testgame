@@ -83,8 +83,8 @@ public class PlacingManage : MonoBehaviour {
         build.cost = placeablePrefab.cost;
         build.colType = placeablePrefab.res;
         build.colNum = placeablePrefab.collectNum;
-     
 
+        placeable.layer = 11;
         // prefabToPlace = placeablePrefab;
     }
 
@@ -112,6 +112,7 @@ public class PlacingManage : MonoBehaviour {
         build.type = placeablePrefab.type;
         build.cost = null;
         build.Build();
+        placeable.layer = 11;
         // prefabToPlace = placeablePrefab;
     }
 
@@ -139,6 +140,7 @@ public class PlacingManage : MonoBehaviour {
         build.cost = null;
         build.progress = progress;
         build.Build();
+        placeable.layer = 11;
     }
 
     /// <summary>
