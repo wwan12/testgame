@@ -12,8 +12,8 @@ using System.Collections.Generic;
 public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
 	private Vector3 dragOffset;
-    private GameObject extUI;
-   
+    private  GameObject extUI;
+    public GameObject equip;
 
    // public GameObject bagItem;
 
@@ -379,6 +379,10 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="perfabName"></param>
     public void AddOtherUI(string prefabName)
     {
+        CanvasGroup group= equip.GetComponent<CanvasGroup>();
+        group.alpha = 0;
+        group.interactable = false;
+        group.blocksRaycasts = false;
         if (extUI.name.Equals(prefabName))
         {
          //   extUI.GetComponent<BagManage>().ReadBagData();
@@ -403,6 +407,25 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         return;
     }
 
+    /// <summary>
+    /// 添加其他交互页面
+    /// </summary>
+    /// <param name="perfabName"></param>
+    public void AddOtherUI(GameObject ui)
+    {
+      
+        if (extUI != null)
+        {
+            extUI = null;
+            Destroy(extUI);
+        }
+
+      //  extUI = ui;
+        extUI = GameObject.Instantiate(ui);
+        extUI.transform.SetParent(gameObject.transform, false);
+       // return;
+    }
+
 
     public void AddOtherUIData(Dictionary<int,ItemInfo> dic)
     {
@@ -414,6 +437,14 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         
     }
 
+
+    public void ShowEquip()
+    {
+        CanvasGroup group = equip.GetComponent<CanvasGroup>();
+        group.alpha = 1;
+        group.interactable = true;
+        group.blocksRaycasts = true;
+    }
 
     // Use this for initialization
     void Start()

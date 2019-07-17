@@ -9,8 +9,9 @@ public class BuildMenu : MonoBehaviour
     public int hierarchy;
     [Tooltip("是否从磁盘读取")]
     public bool isOSRead=true;
-
-    private readonly string OS_PATH = "Assets/BuildAssets"; 
+    [Tooltip("归属的页签")]
+    public string tagName;
+    private readonly string OS_PATH = "Assets/BuildAssets/"; 
     [Tooltip("建筑UI节点s")]
     public GameObject[] allBuild;
     [Tooltip("上下间隔")]
@@ -42,7 +43,7 @@ public class BuildMenu : MonoBehaviour
     {
         if (isOSRead)
         {
-           BuildingSO[] allBuildOS= Resources.LoadAll<BuildingSO>(OS_PATH);
+           BuildingSO[] allBuildOS= Resources.LoadAll<BuildingSO>(OS_PATH+ tagName);
             allBuild = new GameObject[allBuildOS.Length];
             for (int i = 0; i < allBuildOS.Length; i++)
             {
@@ -69,7 +70,7 @@ public class BuildMenu : MonoBehaviour
             GameObject l = new GameObject("Hierarchy"+i);
            // l = GameObject.Instantiate<GameObject>(l);
             RectTransform rect= l.AddComponent<RectTransform>();
-            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, lx*i, lx);
+            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, lx*i+100, lx);
             rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0,ly);
             VerticalLayoutGroup vertical = l.AddComponent<VerticalLayoutGroup>();          
             vertical.childAlignment = TextAnchor.LowerLeft;           

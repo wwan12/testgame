@@ -19,7 +19,7 @@ public class DisplayBoard : MonoBehaviour
         
     }
 
-    public static void Show(BuildControl control,Vector3 position, string explain) {
+    public static void ShowDisplayBoard(BuildControl control,Vector3 position, string explain) {
 
         if (BuildMenu.board!=null)
         {
@@ -36,6 +36,24 @@ public class DisplayBoard : MonoBehaviour
        // board.transform.position = Camera.main.WorldToScreenPoint(position);转到被点击建筑
        
     }
+
+    //public static void ShowStorageBoard(BuildControl control, Vector3 position, string explain)
+    //{
+
+    //    if (BuildMenu.board != null)
+    //    {
+    //        Destroy(BuildMenu.board);
+    //        BuildMenu.board = null;
+    //    }
+    //    GameObject board = Resources.Load<GameObject>("prefabs/UI/StorageBoard");
+    //    board = GameObject.Instantiate<GameObject>(board);
+    //    board.GetComponent<DisplayBoard>().control = control;
+    //    board.GetComponentInChildren<Text>().text = explain;
+    //    board.transform.SetParent(AppManage.Instance.HUD.transform, false);
+    //    board.transform.SetAsFirstSibling();
+    //    BuildMenu.board = board;
+    //}
+
 
     public void Close()
     {       

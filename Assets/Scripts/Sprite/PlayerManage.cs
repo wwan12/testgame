@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class PlayerManage : MonoBehaviour
     public float satietyEfflux;
     private GameObject miniMapCamera;
     private GameObject escMenu;
-    public Dictionary<int,ItemInfo> equips; 
+    public List<Equip> equips; 
 
     public enum PlayerRole
     {
@@ -57,7 +58,7 @@ public class PlayerManage : MonoBehaviour
             powerEfflux=powerEfflux,
             satietyEfflux=satietyEfflux,
         };
-        equips = new Dictionary<int, ItemInfo>(10);
+        equips = new List<Equip>(10);
         miniMapCamera = GameObject.Find("MapCamera");
         Messenger.AddListener<AppManage.SingleSave>(EventCode.APP_START_GAME, PlayerStart);
 
@@ -65,7 +66,9 @@ public class PlayerManage : MonoBehaviour
 
     private void PlayerStart(AppManage.SingleSave save) {
         gameObject.transform.position = new Vector3(save.playerLocation[0], save.playerLocation[1], save.playerLocation[2]);//恢复人物位置
+        GameObject.FindObjectOfType<EquipControl>().ReadBagData("");        
         StartCoroutine(TimeGoneUpdataState());
+
     }
 
     // Update is called once per frame
@@ -117,8 +120,7 @@ public class PlayerManage : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))//物品栏
         {
             GameObject bag = GameObject.FindGameObjectWithTag("Bag");
-            bag.GetComponent<BagManage>().AddOtherUI("PlayerEquip");
-            bag.GetComponent<BagManage>().AddOtherUIData(equips);
+            bag.GetComponent<BagManage>().ShowEquip();         
             AppManage.Instance.SetOpenUI(bag);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -168,22 +170,39 @@ public class PlayerManage : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            AppManage.Instance.HUD.transform.Find("menu").GetChild(0).gameObject.GetComponent<OpenNumMenu>().Open();
+            AppManage.Instance.HUD.transform.Find("Menu").GetChild(0).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            AppManage.Instance.HUD.transform.Find("menu").GetChild(1).gameObject.GetComponent<OpenNumMenu>().Open();
+            AppManage.Instance.HUD.transform.Find("Menu").GetChild(1).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            AppManage.Instance.HUD.transform.Find("menu").GetChild(2).gameObject.GetComponent<OpenNumMenu>().Open();
+            AppManage.Instance.HUD.transform.Find("Menu").GetChild(2).gameObject.GetComponent<OpenNumMenu>().Open();
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            AppManage.Instance.HUD.transform.Find("menu").GetChild(3).gameObject.GetComponent<OpenNumMenu>().Open();
+            AppManage.Instance.HUD.transform.Find("Menu").GetChild(3).gameObject.GetComponent<OpenNumMenu>().Open();
         }
 
     }
+    public void Equip(ItemInfo equip)
+    {
+
+    }
+
+    public Equip GetEquip(ItemType type)
+    {
+        foreach (var equip in equips)
+        {
+            if (equip.type.Equals(type))
+            {
+                return equip;
+            }
+        }
+        return null;
+    }
+
 
     private void MonitorState(){
         

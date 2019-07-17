@@ -83,7 +83,7 @@ public class PlacingManage : MonoBehaviour {
         build.cost = placeablePrefab.cost;
         build.colType = placeablePrefab.res;
         build.colNum = placeablePrefab.collectNum;
-
+        build.capacity = placeablePrefab.capacity;
         placeable.layer = 11;
         // prefabToPlace = placeablePrefab;
     }
@@ -110,7 +110,8 @@ public class PlacingManage : MonoBehaviour {
         build.dTime = placeablePrefab.dTime;
         build.buildTime = 0;
         build.type = placeablePrefab.type;
-        build.cost = null;
+        build.cost = new Dictionary<string, int>();
+        build.capacity = placeablePrefab.capacity;
         build.Build();
         placeable.layer = 11;
         // prefabToPlace = placeablePrefab;
@@ -139,8 +140,10 @@ public class PlacingManage : MonoBehaviour {
         build.type = placeablePrefab.type;
         build.cost = null;
         build.progress = progress;
+        build.capacity = placeablePrefab.capacity;
         build.Build();
         placeable.layer = 11;
+
     }
 
     /// <summary>

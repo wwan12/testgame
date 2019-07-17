@@ -372,7 +372,7 @@ public class AppManage
         public string mapData = "";
         public string bagData = "";
         /// <summary>
-        /// 其他数据: 建筑存储为 build_storage_x|y，data 
+        /// 其他数据:装备为 equip_人物名称 建筑存储为 build_storage_x|y，data 
         /// </summary>
         public Dictionary<string,string> otherData;
         public Dictionary<int, Dictionary<string, bool>> buildNodes;

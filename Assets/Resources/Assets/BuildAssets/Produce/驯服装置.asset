@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab6d889c4cc632e47863e1f3be452b63, type: 3}
-  m_Name: "\u7EED\u7535\u5668"
+  m_Name: "\u9A6F\u670D\u88C5\u7F6E"
   m_EditorClassIdentifier: 
-  objectName: Building Name
-  buildingPrefab: {fileID: 682800510912959682, guid: 3862e233be5900b46a3776b44ed76aba,
-    type: 3}
+  objectName: "\u9A6F\u670D\u88C5\u7F6E"
+  buildingPrefab: {fileID: 0}
   lowSource: {fileID: 0}
-  buildTime: 1
+  buildTime: 0
   dTime: 1
   durable: 10
   type: 0
@@ -25,6 +24,7 @@ MonoBehaviour:
   collectInterval: 0
   hierarchy: 0
   isBuild: 0
+  capacity: 0
   costc: []
   costLength: 0
   showPosition: 0

@@ -31,7 +31,8 @@ public class BuildingSO : ScriptableObject
     public int hierarchy;
     [Tooltip("初始是否允许建造")]
     public bool isBuild;
-
+    [Tooltip("储存栏的容量")]
+    public int capacity;
     [System.Serializable]
     public struct ResourcePrefab
     {

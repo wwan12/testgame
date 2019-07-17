@@ -14,7 +14,7 @@ public class EquipControl : BagManage
 
     public override bool BagAddItem(int serialNumber, ItemInfo itemInfo)
     {
-        InitEquip(itemInfo.equipInfo);
+        InitEquip(itemInfo);
         return base.BagAddItem(serialNumber, itemInfo);
         //return false;
     }
@@ -33,7 +33,7 @@ public class EquipControl : BagManage
                     GameObject.FindGameObjectWithTag("Bag").GetComponent<BagManage>().BagAddItem(latt.item.info);
                 }
                 latt.AddItem(item);
-                InitEquip(itemInfo.equipInfo);
+                InitEquip(itemInfo);
                 return true;
             }
            
@@ -55,8 +55,25 @@ public class EquipControl : BagManage
        // base.UseItemCallBack(obj, itemInfo);
     }
 
-    public void InitEquip(Equip equip)
+
+    public override string SaveBagData()
     {
+
+        AppManage.Instance.saveData.otherData.Add("equip_player", base.SaveBagData());
+
+        return "";
+    }
+
+    public override void ReadBagData(string save)
+    {
+
+        base.ReadBagData(AppManage.Instance.saveData.otherData["equip_player"]);
+
+    }
+
+    public void InitEquip(ItemInfo equip)
+    {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManage>().Equip(equip);
         switch (equip.type)
         {
             case ItemType.ExtEquip:

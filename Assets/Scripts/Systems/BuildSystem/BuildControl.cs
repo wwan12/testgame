@@ -36,6 +36,11 @@ public abstract class BuildControl : MonoBehaviour
     [HideInInspector]
     public int colNum;
     /// <summary>
+    /// 如果是储存建筑，可以储存的数量
+    /// </summary>
+    [HideInInspector]
+    public int capacity;
+    /// <summary>
     /// 是否启动
     /// </summary>
     [HideInInspector]
@@ -50,11 +55,15 @@ public abstract class BuildControl : MonoBehaviour
     [HideInInspector]
     public float progress = 0;
     public bool ready;
- 
+
+    public Dictionary<int, ItemInfo> storages;
 
     void Start()
     {
-        
+        if (type == BuildingSO.BuildType.storage)
+        {
+            storages = new Dictionary<int, ItemInfo>();
+        }
     }
 
     // Update is called once per frame
@@ -72,6 +81,15 @@ public abstract class BuildControl : MonoBehaviour
         }
         if (ready&&Input.GetKeyDown(KeyCode.Mouse1) && FindObjectOfType<PlayerManage>().InOperationRange(gameObject.transform.position))
         {
+            if (type==BuildingSO.BuildType.storage)
+            {
+                GameObject bag = GameObject.FindGameObjectWithTag("Bag");
+                GameObject sui = Resources.Load<GameObject>("prefabs/UI/StorageBoard");
+                sui.GetComponent<StorageControl>().allCapacity = capacity;
+                bag.GetComponent<BagManage>().AddOtherUI(sui);
+                bag.GetComponent<BagManage>().AddOtherUIData(storages);
+                AppManage.Instance.SetOpenUI(bag);
+            }
             Right();                         
         }
     }
@@ -211,6 +229,10 @@ public abstract class BuildControl : MonoBehaviour
     {
         string position = gameObject.transform.position.x + "|" + gameObject.transform.position.y;      
         AppManage.Instance.saveData.buildLocation.Remove(position);
+        if (type==BuildingSO.BuildType.storage)
+        {
+            AppManage.Instance.saveData.otherData.Remove("build_storage_"+position);
+        }      
         OnDismantle();
     }
 }

@@ -18,6 +18,8 @@ public class TechnologyMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        allTechnology = new GameObject[GameObject.FindObjectOfType<TechnologyManager>().allTechnology.Length];
         for (int i = 0; i < GameObject.FindObjectOfType<TechnologyManager>().allTechnology.Length; i++)
         {
             GameObject Technology = Resources.Load<GameObject>("prefabs/UI/TechnologyNode");
@@ -44,7 +46,7 @@ public class TechnologyMenu : MonoBehaviour
             // l = GameObject.Instantiate<GameObject>(l);
             RectTransform rect = l.AddComponent<RectTransform>();
             rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, lx * i, lx);
-            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, ly);
+            rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, 1080);
             //rect.sizeDelta= new Vector2(lx, 1080);
             l.transform.SetParent(gameObject.transform, false);
             hierarchys[i] = l;
