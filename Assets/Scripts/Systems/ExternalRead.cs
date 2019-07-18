@@ -48,14 +48,16 @@ namespace External
 
                 for (int i = 0; i < jd.Count; i++)
                 {
-                    Item bitem = new Item();
-                    bitem.id = jd[i]["id"].ToString();
-                    bitem.name = jd[i]["名称"].ToString();
-                    bitem.cost = float.Parse(jd[i]["价值"].ToString());
-                    bitem.icon = jd[i]["图标"].ToString();
-                    bitem.note = jd[i]["说明"].ToString();
-                    bitem.superposition = int.Parse(jd[i]["叠加数量"].ToString());
-                    bitem.type = (ItemType)Enum.ToObject(typeof(ItemType), int.Parse(jd[i]["物品类型"].ToString()));
+                    Item bitem = new Item
+                    {
+                        id = jd[i]["id"].ToString(),
+                        name = jd[i]["名称"].ToString(),
+                        cost = float.Parse(jd[i]["价值"].ToString()),
+                        icon = jd[i]["图标"].ToString(),
+                        note = jd[i]["说明"].ToString(),
+                        superposition = int.Parse(jd[i]["叠加数量"].ToString()),
+                        type = (ItemType)Enum.ToObject(typeof(ItemType), int.Parse(jd[i]["物品类型"].ToString()))
+                    };
                     items.Add(bitem);
                 }
             }
@@ -84,10 +86,6 @@ namespace External
 
 
         }
-        public void ReadItems() {
- }
-
-
         
     }
 }

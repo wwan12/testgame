@@ -92,15 +92,5 @@ public class EventCode
     /// 某个对象被消灭
     /// </summary>
     public static readonly string ENEMY_DEAD = "ENEMY_DEAD";
-    /// <summary>
-    /// 添加一个电力节点
-    /// </summary>
-    [Obsolete]
-    public static readonly string ADD_POWER_NODE = "ADD_POWER_NODE";
-
-    /// <summary>
-    /// 移除一个电力节点
-    /// </summary>
-    [Obsolete]
-    public static readonly string REMOVE_POWER_NODE = "ADD_POWER_NODE";
+   
 }

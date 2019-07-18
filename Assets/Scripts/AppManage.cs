@@ -352,7 +352,7 @@ public class AppManage
     }
 
     [System.Serializable]
-    public class Save: EventArgs
+    public class Save
     {
         public int listLe=0;//3个存档位
 
@@ -360,9 +360,10 @@ public class AppManage
 
     }
     [System.Serializable]
-    public class SingleSave : EventArgs
+    public class SingleSave
     {
-        public int roleId = 0;
+        public string storyName;
+      //  public int roleId = 0;
         public int listIndex = 0;
         public string portraitName = "";
         public int money = 0;

@@ -43,11 +43,10 @@ public class OpenNumMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             group.blocksRaycasts = false;
         
             cacheGameObject.transform.SetParent(canvas.transform, false);
-          //  cacheGameObject.transform.SetAsFirstSibling();
         }
      
         AppManage.Instance.SetOpenUI(cacheGameObject);
-        cacheGameObject.transform.SetAsFirstSibling();
+     
     }
 
     // Start is called before the first frame update
