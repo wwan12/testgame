@@ -411,7 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff320710edc849f419dd0ef7eb478d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extUI: {fileID: 0}
+  equip: {fileID: 0}
   bagCapacity: 0
   itemInfoPanel: {fileID: 7662786519467740472, guid: 3f3c27ef31db654498e6987d6f43f575,
     type: 3}

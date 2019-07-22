@@ -10,6 +10,7 @@ public class StorageControl : BagManage
     // Start is called before the first frame update
     void Start()
     {
+       // lineNum=
         if (LockObj.layer == AppManage.Instance.BuildLayer)
         {
             if (AppManage.Instance.saveData.otherData.ContainsKey("build_storage_" + LockObj.transform.position.x + "|" + LockObj.transform.position.y))
@@ -24,6 +25,12 @@ public class StorageControl : BagManage
     void Update()
     {
         
+    }
+
+    protected override void AutoXY(float x, float y)
+    {
+        //  base.AutoXY(x, y);
+        GetComponent<RectTransform>().sizeDelta =new Vector2(x,y);
     }
 
     public override bool BagAddItem(int serialNumber, ItemInfo itemInfo)

@@ -260,7 +260,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 
    
     /// <summary>
-    /// 
+    /// 如果bu存在
     /// </summary>
     void NotExistItems() {
         items = new LatticeController[allCapacity];
@@ -274,7 +274,8 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         {    
             AutoAddLattice(i,j==0?0:j/lineNum);
             j++;
-        }       
+        }
+        AutoXY(lineNum*autoSize+lineNum*autoLeft+left,j/lineNum*autoSize+ j / lineNum * autoTop+top);
         for (int i = 0; i < items.Length; i++)
          {         
             items[i].serialNumber = i;
@@ -360,19 +361,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         itemInfo.num = int.Parse(data[2]);
         return itemInfo;
     }
-    [Obsolete]
-    public ItemInfo ArticlesToItem(ArticlesAttachment articles,int num)
-    {
-        ItemInfo itemInfo = new ItemInfo
-        {
-            id = articles.id,
-            name = articles.name,
-            note = articles.note,
-            num = num,
-            sprite = articles.gameObject.GetComponent<SpriteRenderer>().sprite
-        };
-        return itemInfo;
-    }
+
     /// <summary>
     /// 添加其他交互页面
     /// </summary>
@@ -413,7 +402,10 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
     /// <param name="perfabName"></param>
     public void AddOtherUI(GameObject ui)
     {
-      
+        CanvasGroup group = equip.GetComponent<CanvasGroup>();
+        group.alpha = 0;
+        group.interactable = false;
+        group.blocksRaycasts = false;
         if (extUI != null)
         {
             extUI = null;
@@ -454,6 +446,7 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
         autoLeft = Screen.width / (1920 / autoLeft);
         left = Screen.width / (1920 / left);
         top = Screen.height / (1080 / top);
+        AutoXY(GetComponent<RectTransform>().sizeDelta.x, GetComponent<RectTransform>().sizeDelta.y);
         if (isAuto)
         {
             NotExistItems();
@@ -478,5 +471,9 @@ public class BagManage : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     void StartInit(AppManage.SingleSave save) {
         ReadBagData(save.bagData);
+    }
+    protected virtual void AutoXY(float x,float y)
+    {
+
     }
 }
